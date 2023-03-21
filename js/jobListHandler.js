@@ -207,7 +207,6 @@ buttonRetryJobList.addEventListener("click", function () {
 });
 
 function fetchJobList(postId = "") {
-  console.log("postId", postId);
   buttonRetryJobList.disabled = true;
   buttonRetryJobList.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
