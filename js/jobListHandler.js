@@ -9,12 +9,12 @@ const logoutBtn = document.getElementById("button-logout-yes");
 logoutBtn.addEventListener("click", clearSession);
 
 if (token) {
-  topbarWithAuth.classList.remove("hidden");
-  topbarNotAuth.classList.add("hidden");
+  topbarWithAuth.removeAttribute("style");
+  topbarNotAuth.setAttribute("style", "display: none");
   topbarUsername.innerHTML = myData.userData.username;
 } else {
-  topbarWithAuth.classList.add("hidden");
-  topbarNotAuth.classList.remove("hidden");
+  topbarNotAuth.removeAttribute("style");
+  topbarWithAuth.setAttribute("style", "display: none");
   topbarUsername.innerHTML = "...";
   topBarPostJobButton.addEventListener("click", function () {
     location.href = "index.html?postJob=true";
