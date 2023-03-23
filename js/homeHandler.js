@@ -129,7 +129,10 @@ const format = {
 let selectedVisibilityItem = null;
 var visibilityListData = [];
 
-function populateVisibility() {
+const retryVisibility = document.getElementById("retry-visibility-btn");
+retryVisibility.addEventListener("click", fetchVisibilityProduct);
+
+function populateVisibility(allData = []) {
   const listLoader = document.getElementById("visibility-list-loader");
   const listEmpty = document.getElementById("visibility-list-empty");
   const listContainer = document.getElementById("visibility-list-container");
@@ -137,7 +140,7 @@ function populateVisibility() {
 
   var totalRecord = [];
 
-  visibilityListData.forEach((item) => {
+  allData.forEach((item) => {
     if (item.metadata.type === "visibility" && item.active == true) {
       const card = listBody.cloneNode(true);
       const divs = card.getElementsByTagName("div");
@@ -163,7 +166,7 @@ function populateVisibility() {
         visibilityPrice = parseInt(item.metadata.price, 10);
         totalPriceElement.innerHTML = `RM ${visibilityPrice}`;
         selectedVisibilityItem = item;
-        populateVisibility(); // update background color
+        populateVisibility(visibilityListData); // update background color
       });
 
       totalRecord.push(card);
@@ -404,12 +407,15 @@ function fetchVisibilityProduct() {
     .then((data) => {
       if (data?.message) {
         alert(data.message);
+        populateVisibility(visibilityListData);
       } else {
         visibilityListData = data.data;
+        populateVisibility(data.data);
       }
     })
     .catch((error) => {
       console.error(error);
+      populateVisibility(visibilityListData);
     });
 }
 
@@ -836,9 +842,14 @@ function fetchMyJobs() {
           nextStepTitle[0].innerHTML = `Next step: Activate`;
           firstBtn.innerHTML = "Activate";
           firstBtn.addEventListener("click", function () {
+            if (visibilityListData.length == 0) {
+              fetchVisibilityProduct();
+            } else {
+              populateVisibility(visibilityListData);
+            }
+
             $("#payJobModal").modal("show");
             $("#payJobModal").on("shown.bs.modal", function () {
-              populateVisibility();
               selectedJobId = item.id;
               const payJobTitle = document.getElementById(
                 "pay-job-title-modal"
@@ -1502,7 +1513,6 @@ function fetchAllJobs() {
 function firstCall() {
   fetchMyJobs();
   fetchAllJobs();
-  fetchVisibilityProduct();
 }
 
 firstCall();
