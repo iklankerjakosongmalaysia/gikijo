@@ -6,7 +6,7 @@ let submitResetPasswordBtn = document.querySelector(
 document
   .getElementById("return-to-login-btn")
   .addEventListener("click", function () {
-    window.location.href = "/index.html";
+    window.location.href = "/index";
   });
 
 document

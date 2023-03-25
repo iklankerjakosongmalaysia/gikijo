@@ -1,7 +1,7 @@
 const myData = getSavedData("userData");
 const token = myData?.authToken;
 if (token) {
-  location.href = "home.html";
+  location.href = "home";
 }
 
 $(document).ready(function () {
@@ -21,7 +21,7 @@ function openRegisterTab() {
 }
 
 document.getElementById("find-job-btn").addEventListener("click", function () {
-  location.href = "job-list.html";
+  location.href = "job-list";
 });
 
 document
@@ -124,7 +124,7 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         saveData("userData", data);
         submitLoginBtn.disabled = false;
         submitLoginBtn.innerHTML = "Login";
-        location.href = "home.html";
+        location.href = "home";
       }
     })
     .catch((error) => {

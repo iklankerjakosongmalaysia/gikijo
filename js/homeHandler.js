@@ -17,9 +17,9 @@ if (token) {
   topbarWithAuth.setAttribute("style", "display: none");
   topbarUsername.innerHTML = "...";
   topBarPostJobButton.addEventListener("click", function () {
-    location.href = "index.html?postJob=true";
+    location.href = "index?postJob=true";
   });
-  location.href = "index.html";
+  location.href = "index";
 }
 
 $(function () {
@@ -419,8 +419,8 @@ function fetchVisibilityProduct() {
     });
 }
 
-const successUrl = "https://iklankerjakosongmalaysia.netlify.app/success.html";
-const cancelUrl = "https://iklankerjakosongmalaysia.netlify.app/cancel.html";
+const successUrl = "https://iklankerjakosongmalaysia.netlify.app/success";
+const cancelUrl = "https://iklankerjakosongmalaysia.netlify.app/cancel";
 
 // Add a submit event listener to the form
 buyVisibilityForm.addEventListener("submit", function (event) {

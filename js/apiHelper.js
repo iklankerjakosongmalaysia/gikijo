@@ -46,7 +46,7 @@ function fetchAPI(
             alert("Your session has expired. Please log in again to continue.");
             localStorage.clear();
             sessionStorage.clear();
-            location.href = "/index.html";
+            location.href = "/index";
           } else {
             return data;
           }

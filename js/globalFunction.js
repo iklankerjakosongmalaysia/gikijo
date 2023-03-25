@@ -81,7 +81,7 @@ function clearSession() {
   // clear session data, such as removing the token from local storage
   localStorage.removeItem("userData");
   // redirect user to login page
-  window.location.href = "/index.html";
+  window.location.href = "/index";
 }
 
 function disableButton(button, text, toggle) {
@@ -135,7 +135,7 @@ function getSavedData(key) {
 const currentUrl = window.location.pathname.substring(
   window.location.pathname.lastIndexOf("/")
 );
-const excludedPages = ["/index.html", "/reset-password.html", "/job-list.html"];
+const excludedPages = ["/index", "/reset-password", "/job-list"];
 
 if (!excludedPages.includes(currentUrl)) {
   window.onload = function () {
@@ -143,7 +143,7 @@ if (!excludedPages.includes(currentUrl)) {
     const token = myData.authToken;
     if (token == null) {
       alert("You are not logged in. Please log in and try again");
-      location.href = "/index.html";
+      location.href = "/index";
     }
   };
 }
