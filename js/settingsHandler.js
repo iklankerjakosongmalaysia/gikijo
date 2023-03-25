@@ -17,9 +17,9 @@ if (token) {
   topbarWithAuth.setAttribute("style", "display: none");
   topbarUsername.innerHTML = "...";
   topBarPostJobButton.addEventListener("click", function () {
-    location.href = "index.html?postJob=true";
+    location.href = "index?postJob=true";
   });
-  location.href = "index.html";
+  location.href = "index";
 }
 
 const newPasswordForm = document.getElementById("input-new-password");
