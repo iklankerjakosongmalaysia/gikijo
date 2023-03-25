@@ -378,7 +378,7 @@ channelForm.addEventListener("submit", function (event) {
               showAlert(
                 "alert-post-container",
                 "Great!",
-                "your post has been successfully published. You can now view it by clicking on the 'View Active Post' button",
+                "your post has been successfully published. You can now view it by clicking on the 'View Live Post' button",
                 "success",
                 "my-post-alert",
                 15000
@@ -782,9 +782,9 @@ function fetchMyJobs() {
             jobTimeline[0].innerHTML = `This job slot has expired at ${expired_date}`;
           } else {
             if (item.is_free == true) {
-              jobTimeline[0].innerHTML = `Free ∙ ${item.payment_info.max_active_post} max active post ∙ ${item.payment_info.day_visibility} days (${active_date} - ${expired_date})`;
+              jobTimeline[0].innerHTML = `Free ∙ ${item.payment_info.max_active_post} max live post ∙ ${item.payment_info.day_visibility} days (${active_date} - ${expired_date})`;
             } else {
-              jobTimeline[0].innerHTML = `Paid ∙ ${item.payment_info.max_active_post} max active post ∙ ${item.payment_info.day_visibility} days (${active_date} - ${expired_date})`;
+              jobTimeline[0].innerHTML = `Paid ∙ ${item.payment_info.max_active_post} max live post ∙ ${item.payment_info.day_visibility} days (${active_date} - ${expired_date})`;
             }
           }
         } else {
@@ -896,7 +896,7 @@ function fetchMyJobs() {
           progressContainer.firstChild.nodeValue = "3/3 steps";
           nextStepTitle[0].innerHTML = `Completed`;
           secondBtn.classList.remove("hidden");
-          secondBtn.innerHTML = `View Active Post <span class="badge badge-light">${item.telegram.length}</span>`;
+          secondBtn.innerHTML = `View Live Post <span class="badge badge-light">${item.telegram.length}</span>`;
           secondBtn.addEventListener("click", function () {
             $("#postedJobModal").modal("show");
             openJobId = item.id;
