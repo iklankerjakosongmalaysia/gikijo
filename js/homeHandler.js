@@ -782,9 +782,9 @@ function fetchMyJobs() {
             jobTimeline[0].innerHTML = `This job slot has expired at ${expired_date}`;
           } else {
             if (item.is_free == true) {
-              jobTimeline[0].innerHTML = `Free ∙ Maximum of ${item.payment_info.max_active_post} published post at a time ∙ Active for ${item.payment_info.day_visibility} days (${active_date} - ${expired_date})`;
+              jobTimeline[0].innerHTML = `Free ∙ Maximum of ${item.payment_info.max_active_post} published post at a time ∙ Active for ${item.payment_info.day_visibility} day (${active_date} - ${expired_date})`;
             } else {
-              jobTimeline[0].innerHTML = `Paid ∙ Maximum of ${item.payment_info.max_active_post} published post at a time ∙ Active for ${item.payment_info.day_visibility} days (${active_date} - ${expired_date})`;
+              jobTimeline[0].innerHTML = `Paid ∙ Maximum of ${item.payment_info.max_active_post} published post at a time ∙ Active for ${item.payment_info.day_visibility} day (${active_date} - ${expired_date})`;
             }
           }
         } else {
