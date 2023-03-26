@@ -223,7 +223,11 @@ function populateChannel() {
     const title = divs[0].getElementsByTagName("h7");
     const iconExternalLink = divs[0].getElementsByTagName("i");
 
-    title[0].innerHTML = `${item.source_name} ∙ ${item.name}`;
+    if (item.is_new) {
+      title[0].innerHTML = `${item.source_name} ∙ ${item.name} <span class="badge badge-danger">New</span>`;
+    } else {
+      title[0].innerHTML = `${item.source_name} ∙ ${item.name}`;
+    }
 
     iconExternalLink[0].addEventListener("click", function () {
       window.open(item.url, "_blank");
@@ -279,10 +283,15 @@ function populateChannelDashboard(data) {
     const divs = card.getElementsByTagName("div");
 
     const title = divs[0].getElementsByTagName("a");
-    const subscribers = divs[0].getElementsByTagName("h6");
+    const subscribers = divs[0].getElementsByTagName("h7");
     const description = divs[0].getElementsByTagName("p");
 
-    title[0].innerHTML = item.name;
+    if (item.is_new) {
+      title[0].innerHTML = `${item.name} <span class="badge badge-danger">New</span>`;
+    } else {
+      title[0].innerHTML = `${item.name}`;
+    }
+
     title[0].setAttribute("href", item.url);
     title[1].innerHTML = "View";
 
