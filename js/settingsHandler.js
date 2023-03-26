@@ -97,17 +97,17 @@ feedbackForm.addEventListener("submit", function (event) {
   submitFeedbackBtn.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-  const feedbackType = document.getElementById("feedback-type").value;
-  const feedbackTitle = document.getElementById("input-feedback-title").value;
+  const feedbackType = document.getElementById("feedback-type");
+  const feedbackTitle = document.getElementById("input-feedback-title");
   const feedbackDescription = document.getElementById(
     "input-feedback-description"
-  ).value;
+  );
 
   const options = {
     body: JSON.stringify({
-      type: feedbackType,
-      title: feedbackTitle,
-      description: feedbackDescription,
+      type: feedbackType.value,
+      title: feedbackTitle.value,
+      description: feedbackDescription.value,
     }),
   };
 
@@ -137,6 +137,8 @@ feedbackForm.addEventListener("submit", function (event) {
             "my-settings-alert",
             15000
           );
+          feedbackTitle.value = "";
+          feedbackDescription.value = "";
         }
       }
       submitFeedbackBtn.disabled = false;
