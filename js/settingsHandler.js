@@ -152,6 +152,15 @@ feedbackForm.addEventListener("submit", function (event) {
 deleteProfileForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
+  if (
+    confirm(
+      "Are you sure you want to delete your profile? This action cannot be undone."
+    )
+  ) {
+  } else {
+    return;
+  }
+
   let submitDeleteProfileBtn = document.getElementById(
     "submit-delete-profile-btn"
   );
