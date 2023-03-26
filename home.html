@@ -1868,6 +1868,67 @@
                   </div>
                   <!-- end third tab content -->
                 </div>
+                <div
+                  class="tab-pane fade"
+                  id="admin-feedback"
+                  role="tabpanel"
+                  aria-labelledby="admin-feedback-tab"
+                >
+                  <!-- fourth tab content -->
+                  <!-- Content Dashboard -->
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-light mt-3 mb-2"
+                      id="admin-refresh-feedback-list"
+                    >
+                      <i class="fas fa-sync mr-2"></i>Refresh
+                    </button>
+                  </div>
+                  <div
+                    class="text-center p-5"
+                    id="admin-all-feedback-card-loading"
+                  >
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <div id="admin-all-feedback-card-empty" class="hidden">
+                    <div class="container mt-5">
+                      <div
+                        class="row justify-content-center align-items-center"
+                      >
+                        <div class="col-md-6 text-center">
+                          <div class="empty-box-icon">
+                            <i class="fas fa-box-open fa-3x"></i>
+                          </div>
+                          <h1 class="mt-4">Empty List</h1>
+                          <p>There are currently no job ads available.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table
+                      class="table-bordered table mt-2 hidden"
+                      id="admin-all-feedback-table-parent"
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">Type</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">Describtion</th>
+                          <th scope="col">Username</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody id="admin-all-feedback-table-body"></tbody>
+                    </table>
+                  </div>
+
+                  <!-- end fourth tab content -->
+                </div>
                 <!-- Accessable from all tabs -->
                 <!-- Onboarding Modal -->
                 <div

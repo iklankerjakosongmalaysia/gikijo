@@ -47,14 +47,21 @@ function resetRefreshBtn() {
 }
 
 const adminRefreshBtn = document.getElementById("admin-refresh-job-list");
-adminRefreshBtn.addEventListener("click", adminRefreshJobList);
+adminRefreshBtn.addEventListener("click", adminRefreshMaster);
 
-function adminRefreshJobList() {
+const adminRefreshFeedbackBtn = document.getElementById(
+  "admin-refresh-feedback-list"
+);
+adminRefreshFeedbackBtn.addEventListener("click", adminRefreshMaster);
+
+function adminRefreshMaster() {
   adminRefreshBtn.innerHTML = `Refreshing...`;
-  fetchAllJobs(); // update refresh button innerHTML inside fetchAllJobs
+  adminRefreshFeedbackBtn.innerHTML = `Refreshing...`;
+  fetchAdminMaster(); // update refresh button innerHTML inside fetchAdminMaster
 }
 function adminResetRefreshBtn() {
   adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
+  adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
 }
 
 const refreshChannelBtn = document.getElementById("refresh-channel-list");
@@ -86,11 +93,18 @@ let tabs = [
 ];
 
 if (myData.userData.role_id === 1) {
-  tabs.push({
-    id: "admin-tab",
-    title: "All Jobs",
-    content: "admin",
-  });
+  tabs.push(
+    {
+      id: "admin-tab",
+      title: "Jobs (admin)",
+      content: "admin",
+    },
+    {
+      id: "admin-feedback-tab",
+      title: "Feedbacks (admin)",
+      content: "admin-feedback",
+    }
+  );
 }
 
 let tabHTML = "";
@@ -1220,7 +1234,7 @@ function expiredJob() {
       } else {
         // delay of 2 seconds before calling fetchMyJobs
         setTimeout(() => {
-          fetchAllJobs();
+          fetchAdminMaster();
           $("#actionModal").modal("hide");
           expiredBtn.disabled = false;
           expiredBtn.innerHTML = "Expired this post";
@@ -1315,15 +1329,15 @@ function deleteJob(jobId, telegramData, deleteBtn, type) {
             deleteBtn.innerHTML = `<i class="fa fa-trash ml-1"></i>`;
             deleting = false;
           } else {
-            // delay of 2 seconds before calling fetchAllJobs
+            // delay of 2 seconds before calling fetchAdminMaster
             setTimeout(() => {
               if (type === "admin") {
-                fetchAllJobs();
+                fetchAdminMaster();
               }
               if (type === "employer") {
                 fetchMyJobs();
               }
-              // delay of 2 seconds before calling fetchAllJobs
+              // delay of 2 seconds before calling fetchAdminMaster
               setTimeout(() => {
                 deleteBtn.disabled = false;
                 deleteBtn.innerHTML = `<i class="fa fa-trash ml-1"></i>`;
@@ -1348,10 +1362,203 @@ function deleteJob(jobId, telegramData, deleteBtn, type) {
   }
 }
 
-function fetchAllJobs() {
+function populateToAdminAllJobs(data) {
+  const loadingAdminAllJobCard = document.getElementById(
+    "admin-all-job-card-loading"
+  );
+  const emptyCard = document.getElementById("admin-all-job-card-empty");
+  const parentTable = document.getElementById("admin-all-job-table-parent");
+  const tableBody = document.getElementById("admin-all-job-table-body");
+  // Clear the table before appending the new data
+  while (tableBody.firstChild) {
+    tableBody.removeChild(tableBody.firstChild);
+  }
+
+  adminJobListState = data;
+  var totalRecord = [];
+
+  data.forEach((item) => {
+    let isPaid_isFree = false;
+    let badge = `<span class="badge badge-pill badge-danger">Not Active</span>`;
+
+    let resent_used = "";
+    let active_date = "-";
+    let expired_date = "-";
+    let day_visibility = "-";
+
+    let version_type = "-";
+
+    if (item?.payment_info?.payment_status == "paid") {
+      isPaid_isFree = true;
+      version_type = "Paid";
+    }
+    if (item.is_free == true) {
+      isPaid_isFree = true;
+      version_type = "Free";
+    }
+
+    if (item.timestamp_active && item.timestamp_expired) {
+      resent_used = item.telegram.length - 1; // minus the first time post
+      let activeDate = new Date(item.timestamp_active);
+      let expiredDate = new Date(item.timestamp_expired);
+
+      active_date = activeDate.toLocaleString("en-US", format);
+      expired_date = expiredDate.toLocaleString("en-US", format);
+      if (item?.payment_info?.payment_status == "paid") {
+        day_visibility = item.payment_info.day_visibility;
+      } else {
+        day_visibility = 0;
+      }
+    } else {
+      active_date = "-";
+      expired_date = "-";
+      day_visibility = "-";
+    }
+
+    if (isPaid_isFree === false) {
+    } else if (isPaid_isFree === true && item.status_id === 1) {
+      badge = `<span class="badge badge-pill badge-success">Active</span>`;
+    } else if (isPaid_isFree === true && item.status_id === 2) {
+      badge = `<span class="badge badge-pill badge-success">Active</span>`;
+    } else if (isPaid_isFree === true && item.status_id === 3) {
+      badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
+    }
+
+    let row = document.createElement("tr");
+    let jobId = document.createElement("td");
+    jobId.innerText = item.custom_id;
+    let jobTitle = document.createElement("td");
+    jobTitle.innerText = item.title;
+    let companyName = document.createElement("td");
+    companyName.innerText = item.company_name;
+    let postedAt = document.createElement("td");
+    postedAt.innerText = active_date;
+    let expiredAt = document.createElement("td");
+    expiredAt.innerText = expired_date;
+    let days = document.createElement("td");
+    days.innerText = day_visibility;
+    let version = document.createElement("td");
+    version.innerHTML = version_type;
+
+    let button = document.createElement("button");
+
+    if (item.timestamp_active && item.timestamp_expired) {
+      let expiredDate = new Date(item.timestamp_expired);
+
+      // Get the current date and time
+      let currentDate = new Date();
+
+      // Compare the two dates
+      if (
+        expiredDate.getTime() < currentDate.getTime() &&
+        item.status_id !== 3
+      ) {
+        badge = `<span class="badge badge-pill badge-warning">Action needed</span>`;
+        button.classList.add("btn", "btn-primary");
+      } else {
+        button.classList.add("btn", "btn-secondary");
+      }
+    } else {
+      button.classList.add("btn", "btn-secondary");
+    }
+
+    button.setAttribute("type", "button");
+    button.setAttribute("data-telegram", JSON.stringify(item.telegram));
+    button.innerHTML = `View All <span class="badge badge-light">${item.telegram.length}</span>`;
+    button.onclick = function () {
+      $("#actionModal").modal("show");
+      adminOpenJobId = item.id;
+      adminFilterJob();
+    };
+
+    let status = document.createElement("td");
+    status.innerHTML = badge;
+
+    let action = document.createElement("td");
+    action.appendChild(button);
+
+    row.appendChild(jobId);
+    row.appendChild(jobTitle);
+    row.appendChild(companyName);
+    row.appendChild(postedAt);
+    row.appendChild(expiredAt);
+    row.appendChild(days);
+    row.appendChild(status);
+    row.appendChild(version);
+    row.appendChild(action);
+    totalRecord.push(item);
+    document.getElementById("admin-all-job-table-body").appendChild(row);
+  });
+
+  loadingAdminAllJobCard.classList.add("hidden");
+
+  if (totalRecord.length === 0) {
+    emptyCard.classList.remove("hidden");
+    parentTable.classList.add("hidden");
+  } else {
+    emptyCard.classList.add("hidden");
+    parentTable.classList.remove("hidden");
+  }
+}
+
+function populateToAdminAllFeedbacks(data) {
+  const loadingAdminAllJobCard = document.getElementById(
+    "admin-all-feedback-card-loading"
+  );
+  const emptyCard = document.getElementById("admin-all-feedback-card-empty");
+  const parentTable = document.getElementById(
+    "admin-all-feedback-table-parent"
+  );
+  const tableBody = document.getElementById("admin-all-feedback-table-body");
+  // Clear the table before appending the new data
+  while (tableBody.firstChild) {
+    tableBody.removeChild(tableBody.firstChild);
+  }
+
+  var totalRecord = [];
+
+  data.forEach((item) => {
+    let row = document.createElement("tr");
+    let type = document.createElement("td");
+    type.innerText = item.type;
+    let title = document.createElement("td");
+    title.innerText = item.title;
+    let description = document.createElement("td");
+    description.innerText = item.description;
+    let username = document.createElement("td");
+    username.innerText = item.user_data.username;
+    let email = document.createElement("td");
+    email.innerText = item.user_data.email;
+
+    let createdAt = document.createElement("td");
+    let newCreatedAt = new Date(item.created_at);
+    createdAt.innerText = newCreatedAt.toLocaleString("en-US", format);
+
+    row.appendChild(type);
+    row.appendChild(title);
+    row.appendChild(description);
+    row.appendChild(username);
+    row.appendChild(email);
+    row.appendChild(createdAt);
+    totalRecord.push(item);
+    document.getElementById("admin-all-feedback-table-body").appendChild(row);
+  });
+
+  loadingAdminAllJobCard.classList.add("hidden");
+
+  if (totalRecord.length === 0) {
+    emptyCard.classList.remove("hidden");
+    parentTable.classList.add("hidden");
+  } else {
+    emptyCard.classList.add("hidden");
+    parentTable.classList.remove("hidden");
+  }
+}
+
+function fetchAdminMaster() {
   if (myData.userData.role_id === 1) {
     fetchAPI(
-      "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/jobs",
+      "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/master",
       "GET",
       token
     )
@@ -1359,149 +1566,10 @@ function fetchAllJobs() {
         if (data?.message) {
           alert(data.message);
         } else {
-          const loadingAdminAllJobCard = document.getElementById(
-            "admin-all-job-card-loading"
-          );
-          const emptyCard = document.getElementById("admin-all-job-card-empty");
-          const parentTable = document.getElementById(
-            "admin-all-job-table-parent"
-          );
-          const tableBody = document.getElementById("admin-all-job-table-body");
-          // Clear the table before appending the new data
-          while (tableBody.firstChild) {
-            tableBody.removeChild(tableBody.firstChild);
-          }
-
-          adminJobListState = data;
-          var totalRecord = [];
-
-          data.forEach((item) => {
-            let isPaid_isFree = false;
-            let badge = `<span class="badge badge-pill badge-danger">Not Active</span>`;
-
-            let resent_used = "";
-            let active_date = "-";
-            let expired_date = "-";
-            let day_visibility = "-";
-
-            let version_type = "-";
-
-            if (item?.payment_info?.payment_status == "paid") {
-              isPaid_isFree = true;
-              version_type = "Paid";
-            }
-            if (item.is_free == true) {
-              isPaid_isFree = true;
-              version_type = "Free";
-            }
-
-            if (item.timestamp_active && item.timestamp_expired) {
-              resent_used = item.telegram.length - 1; // minus the first time post
-              let activeDate = new Date(item.timestamp_active);
-              let expiredDate = new Date(item.timestamp_expired);
-
-              active_date = activeDate.toLocaleString("en-US", format);
-              expired_date = expiredDate.toLocaleString("en-US", format);
-              if (item?.payment_info?.payment_status == "paid") {
-                day_visibility = item.payment_info.day_visibility;
-              } else {
-                day_visibility = 0;
-              }
-            } else {
-              active_date = "-";
-              expired_date = "-";
-              day_visibility = "-";
-            }
-
-            if (isPaid_isFree === false) {
-            } else if (isPaid_isFree === true && item.status_id === 1) {
-              badge = `<span class="badge badge-pill badge-success">Active</span>`;
-            } else if (isPaid_isFree === true && item.status_id === 2) {
-              badge = `<span class="badge badge-pill badge-success">Active</span>`;
-            } else if (isPaid_isFree === true && item.status_id === 3) {
-              badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
-            }
-
-            let row = document.createElement("tr");
-            let jobId = document.createElement("td");
-            jobId.innerText = item.custom_id;
-            let jobTitle = document.createElement("td");
-            jobTitle.innerText = item.title;
-            let companyName = document.createElement("td");
-            companyName.innerText = item.company_name;
-            let postedAt = document.createElement("td");
-            postedAt.innerText = active_date;
-            let expiredAt = document.createElement("td");
-            expiredAt.innerText = expired_date;
-            let days = document.createElement("td");
-            days.innerText = day_visibility;
-            let version = document.createElement("td");
-            version.innerHTML = version_type;
-
-            let button = document.createElement("button");
-
-            if (item.timestamp_active && item.timestamp_expired) {
-              let expiredDate = new Date(item.timestamp_expired);
-
-              // Get the current date and time
-              let currentDate = new Date();
-
-              // Compare the two dates
-              if (
-                expiredDate.getTime() < currentDate.getTime() &&
-                item.status_id !== 3
-              ) {
-                badge = `<span class="badge badge-pill badge-warning">Action needed</span>`;
-                button.classList.add("btn", "btn-primary");
-              } else {
-                button.classList.add("btn", "btn-secondary");
-              }
-            } else {
-              button.classList.add("btn", "btn-secondary");
-            }
-
-            button.setAttribute("type", "button");
-            button.setAttribute("data-telegram", JSON.stringify(item.telegram));
-            button.innerHTML = `View All <span class="badge badge-light">${item.telegram.length}</span>`;
-            button.onclick = function () {
-              $("#actionModal").modal("show");
-              adminOpenJobId = item.id;
-              adminFilterJob();
-            };
-
-            let status = document.createElement("td");
-            status.innerHTML = badge;
-
-            let action = document.createElement("td");
-            action.appendChild(button);
-
-            row.appendChild(jobId);
-            row.appendChild(jobTitle);
-            row.appendChild(companyName);
-            row.appendChild(postedAt);
-            row.appendChild(expiredAt);
-            row.appendChild(days);
-            row.appendChild(status);
-            row.appendChild(version);
-            row.appendChild(action);
-            totalRecord.push(item);
-            document
-              .getElementById("admin-all-job-table-body")
-              .appendChild(row);
-          });
-
-          loadingAdminAllJobCard.classList.add("hidden");
-
-          if (totalRecord.length === 0) {
-            emptyCard.classList.remove("hidden");
-            parentTable.classList.add("hidden");
-          } else {
-            emptyCard.classList.add("hidden");
-            parentTable.classList.remove("hidden");
-          }
+          populateToAdminAllJobs(data.job);
+          populateToAdminAllFeedbacks(data.feedback);
+          adminResetRefreshBtn();
         }
-
-        adminResetRefreshBtn();
       })
       .catch((error) => {
         console.error(error);
@@ -1512,7 +1580,7 @@ function fetchAllJobs() {
 
 function firstCall() {
   fetchMyJobs();
-  fetchAllJobs();
+  fetchAdminMaster();
 }
 
 firstCall();
