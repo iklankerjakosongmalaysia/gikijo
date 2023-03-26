@@ -1,4 +1,4 @@
-const myData = getSavedData("userData");
+const myData = getSavedData("masterData");
 const token = myData?.authToken;
 
 const topbarNotAuth = document.getElementById("topbar-not-auth");

@@ -79,7 +79,7 @@ function generateUniqueID() {
 
 function clearSession() {
   // clear session data, such as removing the token from local storage
-  localStorage.removeItem("userData");
+  localStorage.removeItem("masterData");
   // redirect user to login page
   window.location.href = "/index";
 }
@@ -139,7 +139,7 @@ const excludedPages = ["/index", "/reset-password", "/job-list"];
 
 if (!excludedPages.includes(currentUrl)) {
   window.onload = function () {
-    const myData = getSavedData("userData");
+    const myData = getSavedData("masterData");
     const token = myData.authToken;
     if (token == null) {
       alert("You are not logged in. Please log in and try again");

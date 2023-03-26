@@ -1,4 +1,4 @@
-const myData = getSavedData("userData");
+const myData = getSavedData("masterData");
 const token = myData?.authToken;
 if (token) {
   location.href = "home";
@@ -121,7 +121,10 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
           );
         }
       } else {
-        saveData("userData", data);
+        saveData("masterData", {
+          userData: data.userData,
+          authToken: data.authToken,
+        });
         submitLoginBtn.disabled = false;
         submitLoginBtn.innerHTML = "Login";
         location.href = "home";

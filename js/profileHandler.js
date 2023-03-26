@@ -1,4 +1,4 @@
-const myData = getSavedData("userData");
+const myData = getSavedData("masterData");
 const token = myData?.authToken;
 
 const topbarNotAuth = document.getElementById("topbar-not-auth");
@@ -26,20 +26,12 @@ const profileUsernameForm = document.getElementById("input-username");
 const profileEmailForm = document.getElementById("input-email");
 const profileCompanyName = document.getElementById("input-company-name");
 
-function fetchMe() {
-  fetchAPI(
-    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/auth/me",
-    "GET",
-    token
-  )
-    .then((data) => {
-      if (data) {
-        profileUsernameForm.value = data.username;
-        profileEmailForm.value = data.email;
-        profileCompanyName.value = data.company_name;
-      }
-    })
-    .catch((error) => {});
+function populateToProfileForm() {
+  if (myData?.userData) {
+    profileUsernameForm.value = myData.userData.username;
+    profileEmailForm.value = myData.userData.email;
+    profileCompanyName.value = myData.userData.company_name;
+  }
 }
 
 // Add a submit event listener to the form
@@ -74,6 +66,16 @@ profileForm.addEventListener("submit", function (event) {
           "my-post-alert",
           15000
         );
+
+        saveData("masterData", {
+          userData: {
+            ...myData.userData,
+            username: data.username,
+            email: data.email,
+            company_name: data.company_name,
+          },
+          authToken: myData.authToken,
+        });
       }
       submitPayBtn.disabled = false;
       submitPayBtn.innerHTML = "Update";
@@ -84,4 +86,4 @@ profileForm.addEventListener("submit", function (event) {
     });
 });
 
-fetchMe();
+populateToProfileForm();
