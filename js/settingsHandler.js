@@ -154,7 +154,7 @@ deleteProfileForm.addEventListener("submit", function (event) {
 
   if (
     confirm(
-      "Are you sure you want to delete your profile? This action cannot be undone."
+      "Are you sure you want to delete your account? This action cannot be undone."
     )
   ) {
   } else {
@@ -197,7 +197,7 @@ deleteProfileForm.addEventListener("submit", function (event) {
           showAlert(
             "alert-settings-container",
             "Success!",
-            "your profile has been deleted",
+            "your account has been deleted",
             "success",
             "my-settings-alert",
             15000
@@ -206,10 +206,10 @@ deleteProfileForm.addEventListener("submit", function (event) {
         }
       }
       submitDeleteProfileBtn.disabled = false;
-      submitDeleteProfileBtn.innerHTML = "Delete profile";
+      submitDeleteProfileBtn.innerHTML = "Delete Account";
     })
     .catch((error) => {
       submitDeleteProfileBtn.disabled = false;
-      submitDeleteProfileBtn.innerHTML = "Delete profile";
+      submitDeleteProfileBtn.innerHTML = "Delete Account";
     });
 });
