@@ -202,6 +202,7 @@
                   <div id="alert-login-container">
                     <!-- show alert body here -->
                   </div>
+
                   <form id="login-form">
                     <div class="form-group mt-3">
                       <label>Email</label>
@@ -237,11 +238,43 @@
                     >
                       Login
                     </button>
-                    <p class="text-center mt-4" id="go-to-register-tab">
-                      Don't have an account?
-                      <strong class="text-primary">Register</strong>
-                    </p>
                   </form>
+
+                  <div class="row mt-2 mb-2">
+                    <div class="col-5">
+                      <hr />
+                    </div>
+                    <div class="col-2 text-center">
+                      <span class="px-3 bg-white">or</span>
+                    </div>
+                    <div class="col-5">
+                      <hr />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <a
+                        class="btn btn-outline-dark btn-block"
+                        role="button"
+                        style="text-transform: none"
+                        id="button-continue-with-google"
+                      >
+                        <img
+                          width="20px"
+                          style="margin-bottom: 3px; margin-right: 5px"
+                          alt="Google sign-in"
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                        />
+                        Continue with Google
+                      </a>
+                    </div>
+                  </div>
+
+                  <p class="text-center mt-4" id="go-to-register-tab">
+                    Don't have an account?
+                    <strong class="text-primary">Register</strong>
+                  </p>
                 </div>
                 <div
                   class="tab-pane fade"
@@ -308,23 +341,6 @@
                     </div>
                     <!-- Confirmation -->
 
-                    <div class="form-check mb-3">
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="flexCheckChecked"
-                        required="true"
-                      />
-                      <label
-                        class="form-check-label small"
-                        for="flexCheckChecked"
-                      >
-                        I agree to the
-                        <a href="terms-privacy-policy.txt" target="_blank"
-                          >Terms and Privacy Policy</a
-                        >
-                      </label>
-                    </div>
                     <button
                       type="submit"
                       class="btn btn-primary btn-user btn-block"
@@ -332,11 +348,51 @@
                     >
                       Register
                     </button>
-                    <p class="text-center mt-4" id="go-to-login-tab">
-                      Already have an account?
-                      <strong class="text-primary">Log In</strong>
-                    </p>
                   </form>
+
+                  <div class="row mt-2 mb-2">
+                    <div class="col-5">
+                      <hr />
+                    </div>
+                    <div class="col-2 text-center">
+                      <span class="px-3 bg-white">or</span>
+                    </div>
+                    <div class="col-5">
+                      <hr />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <a
+                        class="btn btn-outline-dark btn-block"
+                        role="button"
+                        style="text-transform: none"
+                        id="button-signup-with-google"
+                      >
+                        <img
+                          width="20px"
+                          style="margin-bottom: 3px; margin-right: 5px"
+                          alt="Google sign-in"
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                        />
+                        Sign up with Google
+                      </a>
+                    </div>
+                  </div>
+
+                  <label class="form-check-label small mt-3">
+                    By signing up or registering for an account means you agree
+                    to the
+                    <a href="terms-privacy-policy.txt" target="_blank"
+                      >Terms and Privacy Policy.</a
+                    >
+                  </label>
+
+                  <p class="text-center mt-4" id="go-to-login-tab">
+                    Already have an account?
+                    <strong class="text-primary">Log In</strong>
+                  </p>
                 </div>
               </div>
             </div>
