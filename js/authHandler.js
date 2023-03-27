@@ -370,15 +370,11 @@ function continueOauth(code) {
         alert(data.message);
       } else {
         if (data?.authToken) {
-          console.log("asdsa", {
+          saveData("masterData", {
             userData: data.userData,
             authToken: data.authToken,
           });
-          // saveData("masterData", {
-          //   userData: data.userData,
-          //   authToken: data.authToken,
-          // });
-          // window.location.href = successUrl;
+          window.location.href = successUrl;
         } else {
           alert("Token not found");
         }
@@ -388,5 +384,3 @@ function continueOauth(code) {
       console.log("error", error);
     });
 }
-
-function signupOauth(code) {}
