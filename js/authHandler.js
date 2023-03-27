@@ -329,8 +329,8 @@ document
     alert("hi");
   });
 
-var redirectUrl = "https://iklankerjakosongmalaysia.netlify.app/";
-var successUrl = "https://iklankerjakosongmalaysia.netlify.app/home";
+var redirectUrl = "iklankerjakosongmalaysia.netlify.app";
+var successUrl = "iklankerjakosongmalaysia.netlify.app/home";
 
 function initGoogleSignin() {
   const options = {
