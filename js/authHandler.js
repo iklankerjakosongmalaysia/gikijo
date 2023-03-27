@@ -353,10 +353,10 @@ function initGoogleCode(type) {
 window.onload = function () {
   var curUrl = new URL(document.location.href);
   var code = curUrl.searchParams.get("code");
-  var action = curUrl.searchParams.get("action");
+  var type = curUrl.searchParams.get("type");
 
   console.log("code", code);
-  console.log("action", action);
+  console.log("type", type);
   // if (code) {
   //   loginOauth(code);
   // }
