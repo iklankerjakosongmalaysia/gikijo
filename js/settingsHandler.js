@@ -68,7 +68,16 @@ changePasswordForm.addEventListener("submit", function (event) {
       options
     )
       .then((data) => {
-        if (data) {
+        if (data.message) {
+          showAlert(
+            "alert-settings-container",
+            "Error!",
+            data.message,
+            "danger",
+            "my-settings-alert",
+            15000
+          );
+        } else {
           showAlert(
             "alert-settings-container",
             "Success!",
