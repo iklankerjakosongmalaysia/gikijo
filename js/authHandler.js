@@ -329,7 +329,7 @@ document
     alert("hi");
   });
 
-var redirectUrl = "https://iklankerjakosongmalaysia.netlify.app";
+var redirectUrl = "https://iklankerjakosongmalaysia.netlify.app/index";
 var successUrl = "https://iklankerjakosongmalaysia.netlify.app/home";
 
 function initGoogleSignin() {
