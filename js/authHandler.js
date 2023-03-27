@@ -334,7 +334,7 @@ var successUrl = "https://iklankerjakosongmalaysia.netlify.app/home";
 
 function initGoogleCode() {
   fetchAPI(
-    `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init?redirect_uri=${redirectUrl}&type=login`,
+    `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init?redirect_uri=${redirectUrl}`,
     "GET",
     null
   )
