@@ -318,21 +318,21 @@ document
   });
 
 document
-  .getElementById("button-login-with-google")
+  .getElementById("button-continue-login-with-google")
   .addEventListener("click", function () {
-    initGoogleCode("login");
+    initGoogleCode();
   });
 
 document
-  .getElementById("button-signup-with-google")
+  .getElementById("button-continue-signup-with-google")
   .addEventListener("click", function () {
-    initGoogleCode("signup");
+    initGoogleCode();
   });
 
 var redirectUrl = "https://iklankerjakosongmalaysia.netlify.app";
 var successUrl = "https://iklankerjakosongmalaysia.netlify.app/home";
 
-function initGoogleCode(type) {
+function initGoogleCode() {
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init?redirect_uri=${redirectUrl}&type=login`,
     "GET",
@@ -353,18 +353,15 @@ function initGoogleCode(type) {
 window.onload = function () {
   var curUrl = new URL(document.location.href);
   var code = curUrl.searchParams.get("code");
-  var type = curUrl.searchParams.get("type");
 
-  console.log("code", code);
-  console.log("type", type);
-  // if (code) {
-  //   loginOauth(code);
-  // }
+  if (code) {
+    continueOauth(code);
+  }
 };
 
-function loginOauth(code) {
+function continueOauth(code) {
   fetchAPI(
-    `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/login?redirect_uri=${redirectUrl}&code=${code}`,
+    `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/continue?redirect_uri=${redirectUrl}&code=${code}`,
     "GET",
     null
   )
@@ -373,11 +370,15 @@ function loginOauth(code) {
         alert(data.message);
       } else {
         if (data?.authToken) {
-          saveData("masterData", {
+          console.log("asdsa", {
             userData: data.userData,
             authToken: data.authToken,
           });
-          window.location.href = successUrl;
+          // saveData("masterData", {
+          //   userData: data.userData,
+          //   authToken: data.authToken,
+          // });
+          // window.location.href = successUrl;
         } else {
           alert("Token not found");
         }
