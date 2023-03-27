@@ -318,21 +318,21 @@ document
   });
 
 document
-  .getElementById("button-continue-with-google")
+  .getElementById("button-login-with-google")
   .addEventListener("click", function () {
-    initGoogleCode();
+    initGoogleCode("login");
   });
 
 document
   .getElementById("button-signup-with-google")
   .addEventListener("click", function () {
-    alert("hi");
+    initGoogleCode("signup");
   });
 
 var redirectUrl = "https://iklankerjakosongmalaysia.netlify.app";
 var successUrl = "https://iklankerjakosongmalaysia.netlify.app/home";
 
-function initGoogleCode() {
+function initGoogleCode(type) {
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init?redirect_uri=${redirectUrl}`,
     "GET",
@@ -342,6 +342,8 @@ function initGoogleCode() {
       if (data?.message) {
         alert(data.message);
       } else {
+        console.log("asd", data.authUrl);
+        return;
         window.location.href = data.authUrl;
       }
     })
@@ -369,12 +371,11 @@ function loginOauth(code) {
         alert(data.message);
       } else {
         if (data?.authToken) {
-          console.log("asdas", data);
-          // saveData("masterData", {
-          //   userData: data.userData,
-          //   authToken: data.authToken,
-          // });
-          // window.location.href = successUrl;
+          saveData("masterData", {
+            userData: data.userData,
+            authToken: data.authToken,
+          });
+          window.location.href = successUrl;
         } else {
           alert("Token not found");
         }
