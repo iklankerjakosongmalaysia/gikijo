@@ -359,7 +359,7 @@ window.onload = function () {
 };
 
 function loginOauth(code) {
-  console.log("code", code);
+  console.log("codedd", code);
   const options = {
     body: JSON.stringify({
       code: code,
