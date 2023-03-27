@@ -333,20 +333,12 @@ var redirectUrl = "iklankerjakosongmalaysia.netlify.app";
 var successUrl = "iklankerjakosongmalaysia.netlify.app/home";
 
 function initGoogleSignin() {
-  const options = {
-    body: JSON.stringify({
-      redirect_uri: redirectUrl,
-    }),
-  };
-
   fetchAPI(
-    "https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init",
-    "POST",
-    null,
-    options
+    `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init?redirect_uri=${redirectUrl}`,
+    "GET",
+    null
   )
     .then((data) => {
-      console.log("data1", data);
       if (data?.message) {
         alert(data.message);
       } else {
