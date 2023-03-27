@@ -365,14 +365,13 @@ function loginOauth(code) {
     null
   )
     .then((data) => {
+      console.log("data", data);
       if (data?.message) {
         alert(data.message);
       } else {
         if (data?.authToken) {
           // saveData("userData", data);
           // window.location.href = successUrl;
-
-          console.log("code", data);
         } else {
           alert("Token not found");
         }
