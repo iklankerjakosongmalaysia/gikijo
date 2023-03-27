@@ -359,19 +359,10 @@ window.onload = function () {
 };
 
 function loginOauth(code) {
-  console.log("codedd", code);
-  const options = {
-    body: JSON.stringify({
-      code: code,
-      redirect_uri: redirectUrl,
-    }),
-  };
-
   fetchAPI(
-    "https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/login",
-    "POST",
-    null,
-    options
+    `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/login?redirect_uri=${redirectUrl}&code=${code}`,
+    "GET",
+    null
   )
     .then((data) => {
       if (data?.message) {
