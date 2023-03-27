@@ -365,12 +365,15 @@ function loginOauth(code) {
     null
   )
     .then((data) => {
-      console.log("data", data);
       if (data?.message) {
         alert(data.message);
       } else {
         if (data?.authToken) {
-          // saveData("userData", data);
+          console.log("asdas", data);
+          // saveData("masterData", {
+          //   userData: data.userData,
+          //   authToken: data.authToken,
+          // });
           // window.location.href = successUrl;
         } else {
           alert("Token not found");
