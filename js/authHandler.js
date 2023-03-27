@@ -346,6 +346,7 @@ function initGoogleSignin() {
     options
   )
     .then((data) => {
+      console.log("data1", data);
       if (data?.message) {
         alert(data.message);
       } else {
