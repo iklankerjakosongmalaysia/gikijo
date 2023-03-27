@@ -340,7 +340,7 @@ function initGoogleSignin() {
   };
 
   fetchAPI(
-    "https://x8ki-letl-twmt.n7.xano.io/api:bQZrLIyT/oauth/google/init",
+    "https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init",
     "POST",
     null,
     options
