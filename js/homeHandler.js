@@ -933,7 +933,7 @@ function fetchMyJobs() {
           firstBtn.classList.replace("btn-primary", "btn-secondary");
           firstBtn.addEventListener("click", function () {
             alert(
-              "We're sorry, but the job slot you're trying to post to has expired, and all job postings associated with this slot will no longer be available on our channels. To post a new job opportunity, please create a new job slot."
+              "We're sorry, but the job slot you're trying to post has expired, and all job postings associated with this slot will no longer be available on our channels. To post a new job opportunity, please create a new job slot."
             );
           });
 
