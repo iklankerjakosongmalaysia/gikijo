@@ -195,7 +195,7 @@ deleteProfileForm.addEventListener("submit", function (event) {
   )
     .then((data) => {
       if (data) {
-        if (data.payload === 0) {
+        if (data?.message) {
           showAlert(
             "alert-settings-container",
             "Error!",
