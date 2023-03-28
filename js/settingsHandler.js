@@ -27,7 +27,7 @@ const repeatNewPasswordForm = document.getElementById(
   "input-repeat-new-password"
 );
 
-const currentPasswordForm = document.getElementById("input-current-password");
+const currentEmailForm = document.getElementById("input-current-email");
 
 // Add a submit event listener to the form
 changePasswordForm.addEventListener("submit", function (event) {
@@ -179,11 +179,11 @@ deleteProfileForm.addEventListener("submit", function (event) {
   submitDeleteProfileBtn.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-  const currentPassword = currentPasswordForm.value;
+  const currentEmail = currentEmailForm.value;
 
   const options = {
     body: JSON.stringify({
-      password: currentPassword,
+      email: currentEmail,
     }),
   };
 
