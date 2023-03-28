@@ -212,7 +212,9 @@ deleteProfileForm.addEventListener("submit", function (event) {
           "my-settings-alert",
           15000
         );
-        clearSession();
+        setTimeout(() => {
+          clearSession();
+        }, 2000);
       }
 
       submitDeleteProfileBtn.disabled = false;
