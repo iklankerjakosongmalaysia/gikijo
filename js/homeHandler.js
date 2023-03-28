@@ -1092,8 +1092,6 @@ document
       var location = document.getElementById("input-free-job-location").value;
       var apply_link = document.getElementById("input-free-job-url").value;
 
-      const custom_job_Id = generateUniqueID();
-
       const options = {
         body: JSON.stringify({
           title: title,
@@ -1103,7 +1101,6 @@ document
           max_salary: max_salary,
           location: location,
           apply_link: apply_link,
-          custom_id: custom_job_Id,
           is_free: true,
         }),
       };
@@ -1170,8 +1167,6 @@ document
       var location = document.getElementById("input-paid-job-location").value;
       var apply_link = document.getElementById("input-paid-job-url").value;
 
-      const custom_job_Id = generateUniqueID();
-
       const options = {
         body: JSON.stringify({
           title: title,
@@ -1184,7 +1179,6 @@ document
           benefit: benefit,
           additional_info: additional_info,
           apply_link: apply_link,
-          custom_id: custom_job_Id,
           is_free: false,
         }),
       };
