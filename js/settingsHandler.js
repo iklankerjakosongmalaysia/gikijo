@@ -194,28 +194,27 @@ deleteProfileForm.addEventListener("submit", function (event) {
     options
   )
     .then((data) => {
-      if (data) {
-        if (data?.message) {
-          showAlert(
-            "alert-settings-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-settings-alert",
-            15000
-          );
-        } else {
-          showAlert(
-            "alert-settings-container",
-            "Success!",
-            "your account has been deleted",
-            "success",
-            "my-settings-alert",
-            15000
-          );
-          clearSession();
-        }
+      if (data?.message) {
+        showAlert(
+          "alert-settings-container",
+          "Error!",
+          data.message,
+          "danger",
+          "my-settings-alert",
+          15000
+        );
+      } else {
+        showAlert(
+          "alert-settings-container",
+          "Success!",
+          "your account has been deleted",
+          "success",
+          "my-settings-alert",
+          15000
+        );
+        clearSession();
       }
+
       submitDeleteProfileBtn.disabled = false;
       submitDeleteProfileBtn.innerHTML = "Delete Account";
     })
