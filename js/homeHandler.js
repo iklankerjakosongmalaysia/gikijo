@@ -625,6 +625,9 @@ document
       var max_salary = document.getElementById(
         "input-edit-job-max-salary"
       ).value;
+      var salary_type = document.getElementById(
+        "input-edit-job-salary-type"
+      ).value;
       var requirement = document.getElementById(
         "input-edit-job-requirement"
       ).value;
@@ -643,6 +646,7 @@ document
           ssm_number: ssm_number,
           min_salary: min_salary,
           max_salary: max_salary,
+          salary_type: salary_type,
           location: location,
           requirement: requirement,
           benefit: benefit,
@@ -779,6 +783,8 @@ function fetchMyJobs() {
                 item.min_salary;
               document.getElementById("input-edit-job-max-salary").value =
                 item.max_salary;
+              document.getElementById("input-edit-job-salary-type").value =
+                item.salary_type;
               document.getElementById("input-edit-job-requirement").value =
                 item.requirement;
               document.getElementById("input-edit-job-benefit").value =
@@ -817,8 +823,8 @@ function fetchMyJobs() {
         listItem[0].innerHTML = `<b>Title of the job opening:</b> ${item.title}`;
         listItem[1].innerHTML = `<b>Company name:</b> ${item.company_name} (${item.ssm_number})`;
 
-        if (item.min_salary !== 0 && item.max_salary !== 0) {
-          listItem[2].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} monthly`;
+        if (item.min_salary > 0) {
+          listItem[2].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
         } else {
           listItem[2].innerHTML = `<b>Salary:</b> Not Stated`;
         }
@@ -1089,6 +1095,9 @@ document
       var max_salary = document.getElementById(
         "input-free-job-max-salary"
       ).value;
+      var salary_type = document.getElementById(
+        "input-free-job-salary-type"
+      ).value;
       var location = document.getElementById("input-free-job-location").value;
       var apply_link = document.getElementById("input-free-job-url").value;
 
@@ -1099,6 +1108,7 @@ document
           ssm_number: ssm_number,
           min_salary: min_salary,
           max_salary: max_salary,
+          salary_type: salary_type,
           location: location,
           apply_link: apply_link,
           is_free: true,
@@ -1157,6 +1167,9 @@ document
       var max_salary = document.getElementById(
         "input-paid-job-max-salary"
       ).value;
+      var salary_type = document.getElementById(
+        "input-paid-job-salary-type"
+      ).value;
       var requirement = document.getElementById(
         "input-paid-job-requirement"
       ).value;
@@ -1174,6 +1187,7 @@ document
           ssm_number: ssm_number,
           min_salary: min_salary,
           max_salary: max_salary,
+          salary_type: salary_type,
           location: location,
           requirement: requirement,
           benefit: benefit,

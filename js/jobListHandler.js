@@ -80,8 +80,8 @@ function populateContent(data, userInput) {
 
     listItem[0].innerHTML = `<i class="fas fa-building"></i> ${item.company_name} (${item.ssm_number})`;
 
-    if (item.min_salary !== 0 && item.max_salary !== 0) {
-      listItem[1].innerHTML = `<i class="fas fa-money-bill-wave"></i> MYR ${item.min_salary} - ${item.max_salary} monthly`;
+    if (item.min_salary > 0) {
+      listItem[1].innerHTML = `<i class="fas fa-money-bill-wave"></i> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
     } else {
       listItem[1].innerHTML = `<i class="fas fa-money-bill-wave"></i> Not Stated`;
     }
