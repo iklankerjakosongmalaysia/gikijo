@@ -638,6 +638,17 @@ document
       var location = document.getElementById("input-edit-job-location").value;
       var apply_link = document.getElementById("input-edit-job-url").value;
 
+      if (min_salary) {
+        if (min_salary <= max_salary) {
+          // proceed
+        } else {
+          alert("Maximum salary should be greater than minimum salary");
+          submitEditJobBtn.disabled = false;
+          submitEditJobBtn.innerHTML = "Submit";
+          return;
+        }
+      }
+
       const options = {
         body: JSON.stringify({
           job_id: selectedJobId,
@@ -1101,6 +1112,17 @@ document
       var location = document.getElementById("input-free-job-location").value;
       var apply_link = document.getElementById("input-free-job-url").value;
 
+      if (min_salary) {
+        if (min_salary <= max_salary) {
+          // proceed
+        } else {
+          alert("Maximum salary should be greater than minimum salary");
+          submitFreeJobBtn.disabled = false;
+          submitFreeJobBtn.innerHTML = "Create";
+          return;
+        }
+      }
+
       const options = {
         body: JSON.stringify({
           title: title,
@@ -1179,6 +1201,17 @@ document
       ).value;
       var location = document.getElementById("input-paid-job-location").value;
       var apply_link = document.getElementById("input-paid-job-url").value;
+
+      if (min_salary) {
+        if (min_salary <= max_salary) {
+          // proceed
+        } else {
+          alert("Maximum salary should be greater than minimum salary");
+          submitPaidJobBtn.disabled = false;
+          submitPaidJobBtn.innerHTML = "Create";
+          return;
+        }
+      }
 
       const options = {
         body: JSON.stringify({
