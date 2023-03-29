@@ -1529,9 +1529,15 @@ function populateToAdminAllFeedbacks(data) {
     let description = document.createElement("td");
     description.innerText = item.description;
     let username = document.createElement("td");
-    username.innerText = item.user_data.username;
     let email = document.createElement("td");
-    email.innerText = item.user_data.email;
+
+    if (item?.user_data) {
+      username.innerText = item.user_data.username;
+      email.innerText = item.user_data.email;
+    } else {
+      username.innerText = "-";
+      email.innerText = "-";
+    }
 
     let createdAt = document.createElement("td");
     let newCreatedAt = new Date(item.created_at);
