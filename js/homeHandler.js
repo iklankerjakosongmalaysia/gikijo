@@ -790,7 +790,6 @@ function fetchMyJobs() {
                 item.company_name;
               document.getElementById("input-edit-company-ssm").value =
                 item.ssm_number;
-              s;
               document.getElementById("input-edit-job-title").value =
                 item.title;
               document.getElementById("input-edit-job-type").value = item.type;
