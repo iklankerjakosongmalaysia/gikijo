@@ -619,6 +619,7 @@ document
       ).value;
       var ssm_number = document.getElementById("input-edit-company-ssm").value;
       var title = document.getElementById("input-edit-job-title").value;
+      var type = document.getElementById("input-edit-job-type").value;
       var min_salary = document.getElementById(
         "input-edit-job-min-salary"
       ).value;
@@ -655,6 +656,7 @@ document
           title: title,
           company_name: company_name,
           ssm_number: ssm_number,
+          type: type,
           min_salary: min_salary,
           max_salary: max_salary,
           salary_type: salary_type,
@@ -834,37 +836,39 @@ function fetchMyJobs() {
         listItem[0].innerHTML = `<b>Title of the job opening:</b> ${item.title}`;
         listItem[1].innerHTML = `<b>Company name:</b> ${item.company_name} (${item.ssm_number})`;
 
+        listItem[2].innerHTML = `<b>Type:</b> ${item.type}`;
+
         if (item.min_salary > 0) {
-          listItem[2].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
+          listItem[3].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
         } else {
-          listItem[2].innerHTML = `<b>Salary:</b> Not Stated`;
+          listItem[3].innerHTML = `<b>Salary:</b> Not Stated`;
         }
 
-        listItem[3].innerHTML = `<b>Location:</b> ${item.location}`;
+        listItem[4].innerHTML = `<b>Location:</b> ${item.location}`;
 
         if (item.is_free == true) {
-          listItem[4].innerHTML = "";
           listItem[5].innerHTML = "";
           listItem[6].innerHTML = "";
+          listItem[7].innerHTML = "";
         } else {
-          listItem[4].innerHTML = `<b>Requirements:</b><br>${item.requirement.replace(
+          listItem[5].innerHTML = `<b>Requirements:</b><br>${item.requirement.replace(
             /\n/g,
             "<br>"
           )}`;
-          listItem[5].innerHTML = `<b>Benefits:</b><br>${item.benefit.replace(
+          listItem[6].innerHTML = `<b>Benefits:</b><br>${item.benefit.replace(
             /\n/g,
             "<br>"
           )}`;
-          listItem[6].innerHTML = `<b>Additional Information:</b><br>${item.additional_info.replace(
+          listItem[7].innerHTML = `<b>Additional Information:</b><br>${item.additional_info.replace(
             /\n/g,
             "<br>"
           )}`;
         }
 
         if (item.is_free == true) {
-          listItem[7].innerHTML = `<b>Job application URL:</b> <a href="${item.apply_link_free}" target="_blank"> ${item.apply_link_free}</a>`;
+          listItem[8].innerHTML = `<b>Job application URL:</b> <a href="${item.apply_link_free}" target="_blank"> ${item.apply_link_free}</a>`;
         } else {
-          listItem[7].innerHTML = `<b>Job application URL:</b> <a href="${item.apply_link}" target="_blank"> ${item.apply_link}</a>`;
+          listItem[8].innerHTML = `<b>Job application URL:</b> <a href="${item.apply_link}" target="_blank"> ${item.apply_link}</a>`;
         }
 
         const nextStepTitle = divs[0].getElementsByTagName("strong");
@@ -1100,6 +1104,7 @@ document
       ).value;
       var ssm_number = document.getElementById("input-free-company-ssm").value;
       var title = document.getElementById("input-free-job-title").value;
+      var type = document.getElementById("input-free-job-type").value;
       var min_salary = document.getElementById(
         "input-free-job-min-salary"
       ).value;
@@ -1128,6 +1133,7 @@ document
           title: title,
           company_name: company_name,
           ssm_number: ssm_number,
+          type: type,
           min_salary: min_salary,
           max_salary: max_salary,
           salary_type: salary_type,
@@ -1183,6 +1189,7 @@ document
       ).value;
       var ssm_number = document.getElementById("input-paid-company-ssm").value;
       var title = document.getElementById("input-paid-job-title").value;
+      var type = document.getElementById("input-paid-job-type").value;
       var min_salary = document.getElementById(
         "input-paid-job-min-salary"
       ).value;
@@ -1218,6 +1225,7 @@ document
           title: title,
           company_name: company_name,
           ssm_number: ssm_number,
+          type: type,
           min_salary: min_salary,
           max_salary: max_salary,
           salary_type: salary_type,

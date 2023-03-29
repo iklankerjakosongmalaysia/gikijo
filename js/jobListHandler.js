@@ -80,31 +80,33 @@ function populateContent(data, userInput) {
 
     listItem[0].innerHTML = `<i class="fas fa-building"></i> ${item.company_name} (${item.ssm_number})`;
 
+    listItem[1].innerHTML = `<i class="fas fa-tag"></i> ${item.type}`;
+
     if (item.min_salary > 0) {
-      listItem[1].innerHTML = `<i class="fas fa-money-bill-wave"></i> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
+      listItem[2].innerHTML = `<i class="fas fa-money-bill-wave"></i> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
     } else {
-      listItem[1].innerHTML = `<i class="fas fa-money-bill-wave"></i> Not Stated`;
+      listItem[2].innerHTML = `<i class="fas fa-money-bill-wave"></i> Not Stated`;
     }
 
-    listItem[2].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
+    listItem[3].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
 
     if (item.is_free == true) {
-      listItem[3].innerHTML = "";
       listItem[4].innerHTML = "";
       listItem[5].innerHTML = "";
+      listItem[6].innerHTML = "";
       applyButton[0].addEventListener("click", function () {
         window.open(item.apply_link_free, "_blank");
       });
     } else {
-      listItem[3].innerHTML = `<br>Requirement<br>${item.requirement.replace(
+      listItem[4].innerHTML = `<br>Requirement<br>${item.requirement.replace(
         /\n/g,
         "<br>"
       )}`;
-      listItem[4].innerHTML = `<br>Benefit<br>${item.benefit.replace(
+      listItem[5].innerHTML = `<br>Benefit<br>${item.benefit.replace(
         /\n/g,
         "<br>"
       )}`;
-      listItem[5].innerHTML = `<br>Additional Information<br>${item.additional_info.replace(
+      listItem[6].innerHTML = `<br>Additional Information<br>${item.additional_info.replace(
         /\n/g,
         "<br>"
       )}`;
