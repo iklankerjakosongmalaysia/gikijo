@@ -497,14 +497,14 @@
                             <h5>1. Create your new job slot</h5>
                             <p class="text-justify">
                               To begin, click the "Create a New Job Slot" button
-                              and select either the free or paid option. Fill
+                              and select either the Free or Plus option. Fill
                               out the required job information on the form, and
                               then click "Create" to generate your job slot.
                             </p>
 
                             <h5>2. Activate your job slot</h5>
                             <p class="text-justify">
-                              For paid job slots, click on the "Activate" button
+                              For Plus job slots, click on the "Activate" button
                               and complete the payment process to activate your
                               job slot. Free job slots do not require
                               activation.
@@ -581,7 +581,7 @@
                                 data-toggle="tab"
                                 href="#my-free-slot"
                                 role="tab"
-                                aria-controls="my-free-slot"
+                                aria-controls="my-Free-slot"
                                 aria-selected="false"
                                 >Free</a
                               >
@@ -595,17 +595,17 @@
                                 role="tab"
                                 aria-controls="my-paid-slot"
                                 aria-selected="true"
-                                >Paid</a
+                                >Plus</a
                               >
                             </li>
                             <li class="nav-item">
                               <a
                                 class="nav-link"
-                                id="my-paid-vs-free-slot-tab"
+                                id="my-paid-vs-Free-slot-tab"
                                 data-toggle="tab"
-                                href="#my-paid-vs-free-slot"
+                                href="#my-paid-vs-Free-slot"
                                 role="tab"
-                                aria-controls="my-paid-vs-free-slot"
+                                aria-controls="my-paid-vs-Free-slot"
                                 aria-selected="false"
                               >
                                 <span
@@ -619,12 +619,12 @@
                           <div class="tab-content">
                             <div
                               class="tab-pane fade show active"
-                              id="my-free-slot"
+                              id="my-Free-slot"
                               role="tabpanel"
-                              aria-labelledby="my-free-slot-tab"
+                              aria-labelledby="my-Free-slot-tab"
                             >
                               <!-- tab content -->
-                              <form id="free-job-form" class="mt-2">
+                              <form id="Free-job-form" class="mt-2">
                                 <!-- Content Create Job -->
                                 <div>
                                   <div class="form-group">
@@ -633,7 +633,7 @@
                                       maxlength="80"
                                       type="text"
                                       class="form-control"
-                                      id="input-free-company-name"
+                                      id="input-Free-company-name"
                                       placeholder=""
                                       required
                                     />
@@ -644,7 +644,7 @@
                                       maxlength="30"
                                       type="text"
                                       class="form-control"
-                                      id="input-free-company-ssm"
+                                      id="input-Free-company-ssm"
                                       placeholder=""
                                       required
                                     />
@@ -655,7 +655,7 @@
                                       maxlength="70"
                                       type="text"
                                       class="form-control"
-                                      id="input-free-job-title"
+                                      id="input-Free-job-title"
                                       placeholder="e.g. Internship for Business Studies"
                                       required
                                     />
@@ -664,7 +664,7 @@
                                     <label>Type</label>
                                     <select
                                       class="form-control"
-                                      id="input-free-job-type"
+                                      id="input-Free-job-type"
                                       required
                                     >
                                       <option value="Full-time">
@@ -697,7 +697,7 @@
                                             type="number"
                                             step="any"
                                             class="form-control"
-                                            id="input-free-job-min-salary"
+                                            id="input-Free-job-min-salary"
                                             placeholder="e.g. 1200"
                                           />
                                         </div>
@@ -711,7 +711,7 @@
                                             type="number"
                                             step="any"
                                             class="form-control"
-                                            id="input-free-job-max-salary"
+                                            id="input-Free-job-max-salary"
                                             placeholder="e.g. 2800"
                                           />
                                         </div>
@@ -720,7 +720,7 @@
                                         <div class="input-group">
                                           <select
                                             class="form-control"
-                                            id="input-free-job-salary-type"
+                                            id="input-Free-job-salary-type"
                                           >
                                             <option value="monthly">
                                               monthly
@@ -746,9 +746,9 @@
                                     <textarea
                                       maxlength="500"
                                       class="form-control"
-                                      id="input-free-job-requirement"
+                                      id="input-Free-job-requirement"
                                       rows="3"
-                                      placeholder="This field only available for paid version"
+                                      placeholder="This field only available for Plus version"
                                       required
                                       disabled
                                     ></textarea>
@@ -758,9 +758,9 @@
                                     <textarea
                                       maxlength="500"
                                       class="form-control"
-                                      id="input-free-job-benefit"
+                                      id="input-Free-job-benefit"
                                       rows="3"
-                                      placeholder="This field only available for paid version"
+                                      placeholder="This field only available for Plus version"
                                       required
                                       disabled
                                     ></textarea>
@@ -770,9 +770,9 @@
                                     <textarea
                                       maxlength="500"
                                       class="form-control"
-                                      id="input-free-job-additional-info"
+                                      id="input-Free-job-additional-info"
                                       rows="3"
-                                      placeholder="This field only available for paid version"
+                                      placeholder="This field only available for Plus version"
                                       disabled
                                     ></textarea>
                                   </div>
@@ -782,7 +782,7 @@
                                       maxlength="50"
                                       type="text"
                                       class="form-control"
-                                      id="input-free-job-location"
+                                      id="input-Free-job-location"
                                       placeholder="e.g Shah Alam, Selangor"
                                       required
                                     />
@@ -790,12 +790,12 @@
                                   <div class="form-group">
                                     <label
                                       >Job application URL (ads may appear in
-                                      the free version).</label
+                                      the Free version).</label
                                     >
                                     <input
                                       type="text"
                                       class="form-control"
-                                      id="input-free-job-url"
+                                      id="input-Free-job-url"
                                       placeholder=""
                                       pattern="^(http:\/\/|https:\/\/)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
                                       title="Please enter a valid URL starting with http:// or https://"
@@ -820,7 +820,7 @@
                                   <button
                                     type="submit"
                                     class="btn btn-primary"
-                                    id="submit-free-job-btn"
+                                    id="submit-Free-job-btn"
                                   >
                                     Create
                                   </button>
@@ -1035,9 +1035,9 @@
                             </div>
                             <div
                               class="tab-pane fade"
-                              id="my-paid-vs-free-slot"
+                              id="my-paid-vs-Free-slot"
                               role="tabpanel"
-                              aria-labelledby="my-paid-vs-free-slot-tab"
+                              aria-labelledby="my-paid-vs-Free-slot-tab"
                             >
                               <div class="table-responsive">
                                 <table
@@ -1047,7 +1047,7 @@
                                     <tr>
                                       <th scope="col"></th>
                                       <th scope="col"><strong>Free</strong></th>
-                                      <th scope="col"><strong>Paid</strong></th>
+                                      <th scope="col"><strong>Plus</strong></th>
                                     </tr>
                                   </thead>
                                   <tbody>
@@ -2068,7 +2068,7 @@
                         </p>
                         <h5>2. Activate your Job Slot</h5>
                         <p class="text-justify">
-                          Activate paid job slots with a simple payment process.
+                          Activate Plus job slots with a simple payment process.
                           Free job slots do not require activation.
                         </p>
                         <h5>3. Post your Job Slot</h5>

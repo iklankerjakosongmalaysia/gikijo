@@ -761,7 +761,7 @@ function fetchMyJobs() {
             var labelJobUrl = document.getElementById("label-edit-job-url");
 
             if (item.is_free == true) {
-              var disableText = "This field only available for paid version";
+              var disableText = "This field only available for Plus version";
               requirement.value = "";
               requirement.disabled = true;
               requirement.placeholder = disableText;
@@ -772,7 +772,7 @@ function fetchMyJobs() {
               additonal_information.disabled = true;
               additonal_information.placeholder = disableText;
               labelJobUrl.textContent = `Job application URL (ads may appear in
-              the free version).`;
+              the Free version).`;
             } else {
               requirement.disabled = false;
               requirement.placeholder = "";
@@ -827,7 +827,7 @@ function fetchMyJobs() {
             if (item.is_free == true) {
               jobTimeline[0].innerHTML = `Free ∙ Maximum of ${item.payment_info.max_active_post} published post at a time ∙ Active for ${item.payment_info.day_visibility} day (${active_date} - ${expired_date})`;
             } else {
-              jobTimeline[0].innerHTML = `Paid ∙ Maximum of ${item.payment_info.max_active_post} published post at a time ∙ Active for ${item.payment_info.day_visibility} day (${active_date} - ${expired_date})`;
+              jobTimeline[0].innerHTML = `Plus ∙ Maximum of ${item.payment_info.max_active_post} published post at a time ∙ Active for ${item.payment_info.day_visibility} day (${active_date} - ${expired_date})`;
             }
           }
         } else {
@@ -1449,7 +1449,7 @@ function populateToAdminAllJobs(data) {
 
     if (item?.payment_info?.payment_status == "paid") {
       isPaid_isFree = true;
-      version_type = "Paid";
+      version_type = "Plus";
     }
     if (item.is_free == true) {
       isPaid_isFree = true;
