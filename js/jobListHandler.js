@@ -254,16 +254,10 @@ buttonRetryJobList.addEventListener("click", function () {
 });
 
 function fetchJobList(postId = "") {
-  buttonRetryJobList.disabled = true;
-  buttonRetryJobList.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
-
   fetchAPI("https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/job/list", "GET")
     .then((data) => {
       if (data?.message) {
         alert(data.message);
-        buttonRetryJobList.disabled = false;
-        buttonRetryJobList.innerHTML = "Retry";
       } else {
         var jobList = [];
 
@@ -287,13 +281,9 @@ function fetchJobList(postId = "") {
 
         populateContent(reversedJobList, postId);
         populateChannel();
-        buttonRetryJobList.disabled = false;
-        buttonRetryJobList.innerHTML = "Retry";
       }
     })
     .catch((error) => {
-      buttonRetryJobList.disabled = false;
-      buttonRetryJobList.innerHTML = "Retry";
       populateChannel();
       populateContent(jobData, "");
       console.error(error);
