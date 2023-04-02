@@ -90,11 +90,25 @@ function populateContent(data, userInput) {
 
     listItem[3].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
 
+    const copyLink = `${item.channel_data.url}?postId=${item.custom_id}`;
+
     if (item.is_free == true) {
       listItem[4].innerHTML = "";
       listItem[5].innerHTML = "";
       listItem[6].innerHTML = "";
+
       applyButton[0].addEventListener("click", function () {
+        navigator.clipboard
+          .writeText(copyLink)
+          .then(() => {
+            applyButton[0].innerHTML = "Link copied!";
+          })
+          .catch((error) => {
+            console.error("Failed to copy link: ", error);
+          });
+      });
+
+      applyButton[1].addEventListener("click", function () {
         window.open(item.apply_link_free, "_blank");
       });
     } else {
@@ -110,7 +124,19 @@ function populateContent(data, userInput) {
         /\n/g,
         "<br>"
       )}`;
+
       applyButton[0].addEventListener("click", function () {
+        navigator.clipboard
+          .writeText(copyLink)
+          .then(() => {
+            applyButton[0].innerHTML = "Link copied!";
+          })
+          .catch((error) => {
+            console.error("Failed to copy link: ", error);
+          });
+      });
+
+      applyButton[1].addEventListener("click", function () {
         window.open(item.apply_link, "_blank");
       });
     }
@@ -249,6 +275,8 @@ function fetchJobList(postId = "") {
     .catch((error) => {
       buttonRetryJobList.disabled = false;
       buttonRetryJobList.innerHTML = "Retry";
+      populateChannel();
+      populateContent(jobData, "");
       console.error(error);
     });
 }
