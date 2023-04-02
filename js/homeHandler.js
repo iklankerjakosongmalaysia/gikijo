@@ -27,42 +27,104 @@ $(function () {
 });
 
 const refreshBtn = document.getElementById("refresh-job-list");
-refreshBtn.addEventListener("click", refreshJobList);
+let can_refreshBtn = true;
 
-const refreshPurchaseHistoryhBtn = document.getElementById(
+refreshBtn.addEventListener("click", function () {
+  if (can_refreshBtn) {
+    can_refreshBtn = false;
+    fetchMyJobs();
+    let countdown = 20;
+    refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    let countdownInterval = setInterval(function () {
+      countdown--;
+      if (countdown > 0) {
+        refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+      } else {
+        clearInterval(countdownInterval);
+        can_refreshBtn = true;
+        refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
+      }
+    }, 1000);
+  } else {
+    refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+  }
+});
+
+const refreshPurchaseHistoryBtn = document.getElementById(
   "purchase-history-refresh-list"
 );
+let can_refreshPurchaseHistoryBtn = true;
 
-refreshPurchaseHistoryhBtn.addEventListener("click", refreshJobList);
-
-function refreshJobList() {
-  refreshBtn.innerHTML = `Refreshing...`;
-  refreshPurchaseHistoryhBtn.innerHTML = `Refreshing...`;
-  fetchMyJobs(); // update refresh button innerHTML inside fetchMyJobs
-}
-
-function resetRefreshBtn() {
-  refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
-  refreshPurchaseHistoryhBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
-}
+refreshPurchaseHistoryBtn.addEventListener("click", function () {
+  if (can_refreshPurchaseHistoryBtn) {
+    can_refreshPurchaseHistoryBtn = false;
+    fetchMyJobs();
+    let countdown = 20;
+    refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    let countdownInterval = setInterval(function () {
+      countdown--;
+      if (countdown > 0) {
+        refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+      } else {
+        clearInterval(countdownInterval);
+        can_refreshPurchaseHistoryBtn = true;
+        refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
+      }
+    }, 1000);
+  } else {
+    refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+  }
+});
 
 const adminRefreshBtn = document.getElementById("admin-refresh-job-list");
-adminRefreshBtn.addEventListener("click", adminRefreshMaster);
+let can_adminRefreshBtn = true;
+
+adminRefreshBtn.addEventListener("click", function () {
+  if (can_adminRefreshBtn) {
+    can_adminRefreshBtn = false;
+    fetchAdminMaster();
+    let countdown = 20;
+    adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    let countdownInterval = setInterval(function () {
+      countdown--;
+      if (countdown > 0) {
+        adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+      } else {
+        clearInterval(countdownInterval);
+        can_adminRefreshBtn = true;
+        adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
+      }
+    }, 1000);
+  } else {
+    adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+  }
+});
 
 const adminRefreshFeedbackBtn = document.getElementById(
   "admin-refresh-feedback-list"
 );
-adminRefreshFeedbackBtn.addEventListener("click", adminRefreshMaster);
+let can_adminRefreshFeedbackBtn = true;
 
-function adminRefreshMaster() {
-  adminRefreshBtn.innerHTML = `Refreshing...`;
-  adminRefreshFeedbackBtn.innerHTML = `Refreshing...`;
-  fetchAdminMaster(); // update refresh button innerHTML inside fetchAdminMaster
-}
-function adminResetRefreshBtn() {
-  adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
-  adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
-}
+adminRefreshFeedbackBtn.addEventListener("click", function () {
+  if (can_adminRefreshFeedbackBtn) {
+    can_adminRefreshFeedbackBtn = false;
+    fetchAdminMaster();
+    let countdown = 20;
+    adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    let countdownInterval = setInterval(function () {
+      countdown--;
+      if (countdown > 0) {
+        adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+      } else {
+        clearInterval(countdownInterval);
+        can_adminRefreshFeedbackBtn = true;
+        adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
+      }
+    }, 1000);
+  } else {
+    adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+  }
+});
 
 const refreshChannelBtn = document.getElementById("refresh-channel-list");
 refreshChannelBtn.addEventListener("click", firstCall);
@@ -997,11 +1059,9 @@ function fetchMyJobs() {
           parentTable.appendChild(item);
         });
       }
-      resetRefreshBtn();
     })
     .catch((error) => {
       console.error(error);
-      resetRefreshBtn();
     });
 }
 
@@ -1633,12 +1693,10 @@ function fetchAdminMaster() {
         } else {
           populateToAdminAllJobs(data.job);
           populateToAdminAllFeedbacks(data.feedback);
-          adminResetRefreshBtn();
         }
       })
       .catch((error) => {
         console.error(error);
-        adminResetRefreshBtn();
       });
   }
 }

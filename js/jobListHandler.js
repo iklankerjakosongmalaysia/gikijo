@@ -230,8 +230,27 @@ function populateChannel() {
 }
 
 const buttonRetryJobList = document.getElementById("button-retry-job-list");
+let canClickRetryButton = true;
+
 buttonRetryJobList.addEventListener("click", function () {
-  fetchJobList();
+  if (canClickRetryButton) {
+    canClickRetryButton = false;
+    fetchJobList();
+    let countdown = 20;
+    buttonRetryJobList.textContent = `Retry (available again in ${countdown} seconds)`;
+    let countdownInterval = setInterval(function () {
+      countdown--;
+      if (countdown > 0) {
+        buttonRetryJobList.textContent = `Retry (available again in ${countdown} seconds)`;
+      } else {
+        clearInterval(countdownInterval);
+        canClickRetryButton = true;
+        buttonRetryJobList.textContent = "Retry";
+      }
+    }, 1000);
+  } else {
+    buttonRetryJobList.textContent = "Please wait before clicking again.";
+  }
 });
 
 function fetchJobList(postId = "") {
