@@ -536,6 +536,21 @@
                               updated job slot.
                             </p>
                           </div>
+                          <div class="alert alert-secondary" role="alert">
+                            <h4 class="alert-heading">
+                              User Guidelines and Consequences for Policy
+                              Violations
+                            </h4>
+                            <p class="text-justify">
+                              To view our Policy on Responsible Use and
+                              Violations, please click on the following link:
+                              <a href="policy-violation.txt" target="_blank"
+                                ><b>Policy</b></a
+                              >. This policy outlines guidelines for using our
+                              platform in a responsible and respectful manner,
+                              as well as the consequences for policy violations.
+                            </p>
+                          </div>
                           <div class="alert alert-primary" role="alert">
                             <h4 class="alert-heading">
                               Let us know if you're having issues
@@ -1983,13 +1998,52 @@
                           >
                             Close
                           </button>
-                          <button
-                            type="button"
-                            class="btn btn-danger"
-                            id="expired-this-post-btn"
-                          >
-                            Expired this slot
-                          </button>
+
+                          <div class="dropdown">
+                            <button
+                              class="btn btn-danger dropdown-toggle"
+                              type="button"
+                              id="dropdownMenu2"
+                              data-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false"
+                            >
+                              More
+                            </button>
+                            <div
+                              class="dropdown-menu"
+                              aria-labelledby="dropdownMenu2"
+                            >
+                              <button
+                                class="dropdown-item"
+                                type="button"
+                                id="expired-slot-btn"
+                              >
+                                Expired Slot
+                              </button>
+                              <button
+                                class="dropdown-item"
+                                type="button"
+                                id="undo-expired-slot-btn"
+                              >
+                                Undo Expiry
+                              </button>
+                              <button
+                                class="dropdown-item"
+                                type="button"
+                                id="block-slot-btn"
+                              >
+                                Block Slot
+                              </button>
+                              <button
+                                class="dropdown-item"
+                                type="button"
+                                id="unblock-slot-btn"
+                              >
+                                Unblock Slot
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

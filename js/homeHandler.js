@@ -1025,6 +1025,21 @@ function fetchMyJobs() {
           progressContainer.firstChild.nodeValue = "3/3 steps";
           nextStepTitle[0].innerHTML = "Completed";
           secondBtn.classList.add("hidden");
+        } else if (isPaid_isFree === true && item.status_id === 4) {
+          badge = `<span class="badge badge-pill badge-dark">Blocked</span>`;
+
+          firstBtn.innerHTML = `Post ${item.telegram.length}/${item.payment_info.max_active_post}`;
+          firstBtn.classList.replace("btn-primary", "btn-secondary");
+          firstBtn.addEventListener("click", function () {
+            alert(
+              "Your job slot has been blocked and all related posts have been removed due to policy violation. To appeal this decision, please submit a request through the 'Feedback' section in your account settings and include the Job Slot ID for reference."
+            );
+          });
+
+          progressContainer.style.width = "100%";
+          progressContainer.firstChild.nodeValue = "3/3 steps";
+          nextStepTitle[0].innerHTML = "Completed";
+          secondBtn.classList.add("hidden");
         }
 
         const customId = divs[0].getElementsByTagName("h6");
@@ -1328,7 +1343,7 @@ document
     }
   });
 
-const expiredBtn = document.getElementById("expired-this-post-btn");
+const expiredBtn = document.getElementById("expired-slot-btn");
 expiredBtn.addEventListener("click", expiredJob);
 
 function expiredJob() {
@@ -1350,20 +1365,145 @@ function expiredJob() {
     .then((data) => {
       if (data?.message) {
         alert(data.message);
+        expiredBtn.disabled = false;
+        expiredBtn.innerHTML = "Expired Slot";
       } else {
         // delay of 2 seconds before calling fetchMyJobs
         setTimeout(() => {
           fetchAdminMaster();
           $("#actionModal").modal("hide");
           expiredBtn.disabled = false;
-          expiredBtn.innerHTML = "Expired this post";
+          expiredBtn.innerHTML = "Expired Slot";
         }, 2000);
       }
     })
     .catch((error) => {
       $("#actionModal").modal("hide");
       expiredBtn.disabled = false;
-      expiredBtn.innerHTML = "Expired this post";
+      expiredBtn.innerHTML = "Expired Slot";
+    });
+}
+
+const undoExpiredBtn = document.getElementById("undo-expired-slot-btn");
+undoExpiredBtn.addEventListener("click", undoExpiredJob);
+
+function undoExpiredJob() {
+  undoExpiredBtn.disabled = true;
+  undoExpiredBtn.innerHTML = loadingText;
+
+  const options = {
+    body: JSON.stringify({
+      job_id: adminOpenJobId,
+    }),
+  };
+
+  fetchAPI(
+    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/job/undo/expired",
+    "PUT",
+    token,
+    options
+  )
+    .then((data) => {
+      if (data?.message) {
+        alert(data.message);
+        undoExpiredBtn.disabled = false;
+        undoExpiredBtn.innerHTML = "Undo Expiry";
+      } else {
+        // delay of 2 seconds before calling fetchMyJobs
+        setTimeout(() => {
+          fetchAdminMaster();
+          $("#actionModal").modal("hide");
+          undoExpiredBtn.disabled = false;
+          undoExpiredBtn.innerHTML = "Undo Expiry";
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      $("#actionModal").modal("hide");
+      undoExpiredBtn.disabled = false;
+      undoExpiredBtn.innerHTML = "Undo Expiry";
+    });
+}
+
+const blockBtn = document.getElementById("block-slot-btn");
+blockBtn.addEventListener("click", blockSlot);
+
+function blockSlot() {
+  blockBtn.disabled = true;
+  blockBtn.innerHTML = loadingText;
+
+  const options = {
+    body: JSON.stringify({
+      job_id: adminOpenJobId,
+    }),
+  };
+
+  fetchAPI(
+    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/job/block",
+    "PUT",
+    token,
+    options
+  )
+    .then((data) => {
+      if (data?.message) {
+        alert(data.message);
+        blockBtn.disabled = false;
+        blockBtn.innerHTML = "Block Slot";
+      } else {
+        // delay of 2 seconds before calling fetchMyJobs
+        setTimeout(() => {
+          fetchAdminMaster();
+          $("#actionModal").modal("hide");
+          blockBtn.disabled = false;
+          blockBtn.innerHTML = "Block Slot";
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      $("#actionModal").modal("hide");
+      blockBtn.disabled = false;
+      blockBtn.innerHTML = "Block Slot";
+    });
+}
+
+const unblockBtn = document.getElementById("unblock-slot-btn");
+unblockBtn.addEventListener("click", unBlockSlot);
+
+function unBlockSlot() {
+  unblockBtn.disabled = true;
+  unblockBtn.innerHTML = loadingText;
+
+  const options = {
+    body: JSON.stringify({
+      job_id: adminOpenJobId,
+    }),
+  };
+
+  fetchAPI(
+    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/job/unblock",
+    "PUT",
+    token,
+    options
+  )
+    .then((data) => {
+      if (data?.message) {
+        alert(data.message);
+        unblockBtn.disabled = false;
+        unblockBtn.innerHTML = "Unblock Slot";
+      } else {
+        // delay of 2 seconds before calling fetchMyJobs
+        setTimeout(() => {
+          fetchAdminMaster();
+          $("#actionModal").modal("hide");
+          unblockBtn.disabled = false;
+          unblockBtn.innerHTML = "Unblock Slot";
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      $("#actionModal").modal("hide");
+      unblockBtn.disabled = false;
+      unblockBtn.innerHTML = "Unblock Slot";
     });
 }
 
@@ -1386,6 +1526,7 @@ function adminlistPostedJob(jobId, data) {
       card.querySelector("h6").textContent = `${item._channel.name}`;
       card.querySelector("h7").textContent = `Posted at: ${newActiveDate}`;
       const deleteBtn = card.querySelector("button");
+
       deleteBtn.addEventListener("click", function () {
         deleteJob(jobId, item, this, "admin");
       });
@@ -1541,6 +1682,8 @@ function populateToAdminAllJobs(data) {
       badge = `<span class="badge badge-pill badge-success">Active</span>`;
     } else if (isPaid_isFree === true && item.status_id === 3) {
       badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
+    } else if (isPaid_isFree === true && item.status_id === 4) {
+      badge = `<span class="badge badge-pill badge-dark">Blocked</span>`;
     }
 
     let row = document.createElement("tr");
