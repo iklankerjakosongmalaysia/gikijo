@@ -14,7 +14,7 @@ Fraudulent Activities: Any attempt to manipulate or deceive our system, or to en
 
 Multiple Accounts: Each user is allowed to have only one account on IKKM. Creating multiple accounts is strictly prohibited.
 
-Fake Application URL: Providing fake application URL in job postings is strictly prohibited. All application links must lead to the legitimate application process for the relevant job.
+Fake Job Application URL: Providing fake job application URL in job postings is strictly prohibited. All application links must lead to the legitimate application process for the relevant job.
 
 Consequences:
 
@@ -30,5 +30,5 @@ Updates:
 
 Please note that this policy may be updated or changed at any time at our discretion. We encourage you to review this policy periodically to stay informed of any changes. By continuing to use our services, you agree to be bound by the most current version of this policy.
 
-We also encourage our users to report any violations of our policies. If you have any questions or concerns about our policies, please submit it through the 'Feedback' section in your account settings.
+We encourage our users to report any violations of our policies. If you have any questions or concerns about our policies, please submit it through the 'Feedback' section in your account settings.
 
