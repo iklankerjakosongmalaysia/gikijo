@@ -100,6 +100,30 @@ adminRefreshBtn.addEventListener("click", function () {
   }
 });
 
+const adminRefreshUserBtn = document.getElementById("admin-refresh-user-list");
+let can_adminRefreshUserBtn = true;
+
+adminRefreshUserBtn.addEventListener("click", function () {
+  if (can_adminRefreshUserBtn) {
+    can_adminRefreshUserBtn = false;
+    fetchAdminMaster();
+    let countdown = 20;
+    adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    let countdownInterval = setInterval(function () {
+      countdown--;
+      if (countdown > 0) {
+        adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+      } else {
+        clearInterval(countdownInterval);
+        can_adminRefreshUserBtn = true;
+        adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh`;
+      }
+    }, 1000);
+  } else {
+    adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+  }
+});
+
 const adminRefreshFeedbackBtn = document.getElementById(
   "admin-refresh-feedback-list"
 );
@@ -162,6 +186,11 @@ if (myData.userData.role_id === 1) {
       content: "admin",
     },
     {
+      id: "admin-user-tab",
+      title: "Users (admin)",
+      content: "admin-user",
+    },
+    {
       id: "admin-feedback-tab",
       title: "Feedbacks (admin)",
       content: "admin-feedback",
@@ -191,7 +220,7 @@ for (let i = 0; i < tabs.length; i++) {
 
 document.getElementById("myTab").innerHTML = tabHTML;
 
-let selectedJobId;
+let selectedJob;
 
 const format = {
   year: "numeric",
@@ -285,11 +314,17 @@ function populateChannel() {
     const title = divs[0].getElementsByTagName("h7");
     const iconExternalLink = divs[0].getElementsByTagName("i");
 
-    if (item.is_new) {
-      title[0].innerHTML = `${item.source_name} ∙ ${item.name} <span class="badge badge-danger">New</span>`;
+    var badgeInfo = "";
+
+    if (item.is_new && item.paid_only === false) {
+      badgeInfo = `<span class="badge badge-danger">New</span>`;
+    } else if (item.is_new && item.paid_only === true) {
+      badgeInfo = `<span class="badge badge-warning">Plus Slot Only</span> <span class="badge badge-danger">New</span>`;
     } else {
-      title[0].innerHTML = `${item.source_name} ∙ ${item.name}`;
+      badgeInfo = "";
     }
+
+    title[0].innerHTML = `${item.source_name} ∙ ${item.name} ${badgeInfo}`;
 
     iconExternalLink[0].addEventListener("click", function () {
       window.open(item.url, "_blank");
@@ -327,6 +362,111 @@ function populateChannel() {
     }
     totalRecord.forEach((item) => {
       listContainer.appendChild(item);
+    });
+  }
+}
+
+document
+  .getElementById("refresh-coupon-list")
+  .addEventListener("click", firstCall);
+document
+  .getElementById("modal-refresh-coupon-list")
+  .addEventListener("click", firstCall);
+
+function populateCouponDashboard(data) {
+  const loadingChannelCard = document.getElementById(
+    "home-coupon-list-loading"
+  );
+  const emptyCard = document.getElementById("home-coupon-list-empty");
+  const parentTable = document.getElementById("home-coupon-list-parent");
+  const style = document.getElementById("home-coupon-list-child");
+  const emptyDiv = [];
+
+  data.forEach(function (item) {
+    const card = style.cloneNode(true);
+    const divs = card.getElementsByTagName("div");
+
+    const title = divs[0].getElementsByTagName("h5");
+    const description = divs[0].getElementsByTagName("h6");
+
+    title[0].innerHTML = `${item.discount} - ${item.name}`;
+    description[0].innerHTML = `Code: ${item.code}`;
+    divs[2].addEventListener("click", function () {
+      navigator.clipboard
+        .writeText(item.code)
+        .then(() => {
+          divs[2].innerHTML = "Code copied!";
+        })
+        .catch((error) => {
+          console.error("Failed to copy link: ", error);
+        });
+    });
+    emptyDiv.push(card);
+  });
+
+  loadingChannelCard.classList.add("hidden");
+
+  if (emptyDiv.length === 0) {
+    emptyCard.classList.remove("hidden");
+    parentTable.classList.add("hidden");
+  } else {
+    emptyCard.classList.add("hidden");
+    parentTable.classList.remove("hidden");
+
+    while (parentTable.firstChild) {
+      parentTable.removeChild(parentTable.firstChild);
+    }
+    emptyDiv.forEach((item) => {
+      parentTable.appendChild(item);
+    });
+  }
+}
+
+function populateCouponModal(data) {
+  const loadingChannelCard = document.getElementById(
+    "modal-coupon-list-loading"
+  );
+  const emptyCard = document.getElementById("modal-coupon-list-empty");
+  const parentTable = document.getElementById("modal-coupon-list-parent");
+  const style = document.getElementById("modal-coupon-list-child");
+  const emptyDiv = [];
+
+  data.forEach(function (item) {
+    const card = style.cloneNode(true);
+    const divs = card.getElementsByTagName("div");
+
+    const title = divs[0].getElementsByTagName("h5");
+    const description = divs[0].getElementsByTagName("h6");
+
+    title[0].innerHTML = `${item.discount} - ${item.name}`;
+    description[0].innerHTML = `Code: ${item.code}`;
+    divs[2].addEventListener("click", function () {
+      navigator.clipboard
+        .writeText(item.code)
+        .then(() => {
+          divs[2].innerHTML = "Code copied!";
+        })
+        .catch((error) => {
+          console.error("Failed to copy link: ", error);
+        });
+    });
+    emptyDiv.push(card);
+  });
+
+  loadingChannelCard.classList.add("hidden");
+
+  if (emptyDiv.length === 0) {
+    emptyCard.classList.remove("hidden");
+    parentTable.classList.add("hidden");
+  } else {
+    emptyCard.classList.add("hidden");
+    parentTable.classList.remove("hidden");
+
+    while (parentTable.firstChild) {
+      parentTable.removeChild(parentTable.firstChild);
+    }
+    emptyDiv.forEach((item) => {
+      parentTable.appendChild(item);
     });
   }
 }
@@ -390,6 +530,13 @@ function populateChannelDashboard(data) {
 channelForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
+  if (selectedJob.is_free && selectedChannelItem.paid_only) {
+    alert(
+      `This channel is exclusively for Plus job slots. Please create a Plus job slot to publish your job posting on this channel.`
+    );
+    return;
+  }
+
   let submitChannelBtn = document.getElementById("submit-channel-btn");
   submitChannelBtn.disabled = true;
   submitChannelBtn.innerHTML =
@@ -406,14 +553,14 @@ channelForm.addEventListener("submit", function (event) {
 
   const options = {
     body: JSON.stringify({
-      job_id: selectedJobId,
+      job_id: selectedJob.id,
       channel_id: selectedChannelItem.id,
       tz_name: userTimeZone,
     }),
   };
 
   fetchAPI(
-    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/job/telegram/send",
+    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/job/post",
     "POST",
     token,
     options
@@ -538,7 +685,7 @@ buyVisibilityForm.addEventListener("submit", function (event) {
         },
       ],
       metadata: {
-        job_id: selectedJobId,
+        job_id: selectedJob.id,
         day_visibility: productVisibility,
         max_active_post: maxActivePost,
       },
@@ -588,7 +735,8 @@ function filterJob() {
         currentJob = item;
       }
     });
-    listPostedJob(openJobId, currentJob.telegram);
+
+    listPostedJob(currentJob?.postData ? currentJob?.postData : []);
   }
 }
 
@@ -598,16 +746,18 @@ var adminOpenJobId = null;
 function adminFilterJob() {
   if (adminOpenJobId !== null) {
     var currentJob = {};
+
     adminJobListState.map((item) => {
       if (item.id === adminOpenJobId) {
         currentJob = item;
       }
     });
-    adminlistPostedJob(adminOpenJobId, currentJob.telegram);
+
+    adminlistPostedJob(currentJob?.postData ? currentJob?.postData : []);
   }
 }
 
-function listPostedJob(jobId, passData) {
+function listPostedJob(passData) {
   const emptyCard = document.getElementById("posted-job-card-empty");
 
   const parentTable = document.getElementById("posted-job-card-list-parent");
@@ -623,27 +773,27 @@ function listPostedJob(jobId, passData) {
       const activeAtContainer = divs[0].getElementsByTagName("h7");
       const deleteBtn = divs[0].getElementsByTagName("button")[0];
       deleteBtn.addEventListener("click", function () {
-        deleteJob(jobId, item, this, "employer");
+        deleteJob(item.id, this, "employer");
       });
 
       const viewBtn = divs[0].getElementsByTagName("button")[1];
 
       var newLink = "";
 
-      if (item._channel.source_code == "telegram") {
-        newLink = `${item._channel.url}/${item.message_id}`;
+      if (item.is_telegram) {
+        newLink = `${item.channel_data.url}/${item.telegram_data.message_id}`;
       } else {
-        newLink = `${item._channel.url}?postId=${item.custom_id}`;
+        newLink = `${item.channel_data.url}?postId=${item.id}`;
       }
 
       viewBtn.addEventListener("click", function () {
         window.open(newLink);
       });
 
-      let activeDate = new Date(item.timestamp_active);
+      let activeDate = new Date(item.created_at);
       const newActiveDate = activeDate.toLocaleString("en-US", format);
 
-      channelContainer[0].innerHTML = `${item._channel.name}`;
+      channelContainer[0].innerHTML = `${item.channel_data.name}`;
       activeAtContainer[0].innerHTML = `Posted at: ${newActiveDate}`;
       emptyDiv.push(card);
     });
@@ -714,7 +864,7 @@ document
 
       const options = {
         body: JSON.stringify({
-          job_id: selectedJobId,
+          job_id: selectedJob.id,
           title: title,
           company_name: company_name,
           ssm_number: ssm_number,
@@ -758,12 +908,23 @@ document
   });
 
 function fetchMyJobs() {
-  fetchAPI(
-    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/job",
-    "GET",
-    token
-  )
+  fetchAPI("https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/job", "GET", token)
     .then((data) => {
+      var job_list = data.job_list;
+      var post_list = data.post_list;
+
+      post_list.map((item1) => {
+        job_list.map((item2, index) => {
+          if (item1.job_id == item2.id) {
+            if (job_list[index].postData) {
+              job_list[index].postData.push(item1);
+            } else {
+              job_list[index].postData = [item1];
+            }
+          }
+        });
+      });
+
       const loadingStatusCard = document.getElementById(
         "home-status-list-loading"
       );
@@ -787,11 +948,16 @@ function fetchMyJobs() {
         populateChannelDashboard(data.channel_list);
       }
 
-      populateOrderHistoryVisibility(data.job_list);
+      if (data?.coupon_list) {
+        populateCouponDashboard(data.coupon_list);
+        populateCouponModal(data.coupon_list);
+      }
 
-      jobListState = data.job_list;
+      populateOrderHistoryVisibility(job_list);
 
-      data.job_list.map((item) => {
+      jobListState = job_list;
+
+      job_list.map((item) => {
         const card = style.cloneNode(true);
         const divs = card.getElementsByTagName("div");
 
@@ -847,7 +1013,7 @@ function fetchMyJobs() {
 
             $("#editJobModal").modal("show");
             $("#editJobModal").on("shown.bs.modal", function () {
-              selectedJobId = item.id;
+              selectedJob = item;
               document.getElementById("input-edit-company-name").value =
                 item.company_name;
               document.getElementById("input-edit-company-ssm").value =
@@ -942,6 +1108,14 @@ function fetchMyJobs() {
         const firstBtn = actionBtn[0];
         const secondBtn = actionBtn[1];
 
+        var currentTotalPost = 0;
+
+        if (item?.postData) {
+          currentTotalPost = item?.postData.length;
+        } else {
+          currentTotalPost = 0;
+        }
+
         if (isPaid_isFree === false) {
           dashboard.not_active = dashboard.not_active + 1;
           progressContainer.style.width = "35%";
@@ -957,7 +1131,7 @@ function fetchMyJobs() {
 
             $("#payJobModal").modal("show");
             $("#payJobModal").on("shown.bs.modal", function () {
-              selectedJobId = item.id;
+              selectedJob = item;
               const payJobTitle = document.getElementById(
                 "pay-job-title-modal"
               );
@@ -974,11 +1148,11 @@ function fetchMyJobs() {
           progressContainer.style.width = "65%";
           progressContainer.firstChild.nodeValue = "2/3 steps";
           nextStepTitle[0].innerHTML = `Next step: First Time Post`;
-          firstBtn.innerHTML = `First Time Post ${item.telegram.length}/${item.payment_info.max_active_post}`;
+          firstBtn.innerHTML = `First Time Post ${currentTotalPost}/${item.payment_info.max_active_post}`;
           firstBtn.addEventListener("click", function () {
             $("#channelJobModal").modal("show");
             $("#channelJobModal").on("shown.bs.modal", function () {
-              selectedJobId = item.id;
+              selectedJob = item;
               populateChannel();
             });
           });
@@ -988,11 +1162,11 @@ function fetchMyJobs() {
         } else if (isPaid_isFree === true && item.status_id === 2) {
           badge = `<span class="badge badge-pill badge-success">Active</span>`;
           dashboard.active = dashboard.active + 1;
-          firstBtn.innerHTML = `Post ${item.telegram.length}/${item.payment_info.max_active_post}`;
+          firstBtn.innerHTML = `Post ${currentTotalPost}/${item.payment_info.max_active_post}`;
           firstBtn.addEventListener("click", function () {
             $("#channelJobModal").modal("show");
             $("#channelJobModal").on("shown.bs.modal", function () {
-              selectedJobId = item.id;
+              selectedJob = item;
               populateChannel();
             });
           });
@@ -1003,7 +1177,7 @@ function fetchMyJobs() {
           progressContainer.firstChild.nodeValue = "3/3 steps";
           nextStepTitle[0].innerHTML = `Completed`;
           secondBtn.classList.remove("hidden");
-          secondBtn.innerHTML = `View Published Post <span class="badge badge-light">${item.telegram.length}</span>`;
+          secondBtn.innerHTML = `View Published Post <span class="badge badge-light">${currentTotalPost}</span>`;
           secondBtn.addEventListener("click", function () {
             $("#postedJobModal").modal("show");
             openJobId = item.id;
@@ -1013,7 +1187,7 @@ function fetchMyJobs() {
           dashboard.expired = dashboard.expired + 1;
           badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
 
-          firstBtn.innerHTML = `Post ${item.telegram.length}/${item.payment_info.max_active_post}`;
+          firstBtn.innerHTML = `Post ${currentTotalPost}/${item.payment_info.max_active_post}`;
           firstBtn.classList.replace("btn-primary", "btn-secondary");
           firstBtn.addEventListener("click", function () {
             alert(
@@ -1028,7 +1202,7 @@ function fetchMyJobs() {
         } else if (isPaid_isFree === true && item.status_id === 4) {
           badge = `<span class="badge badge-pill badge-dark">Blocked</span>`;
 
-          firstBtn.innerHTML = `Post ${item.telegram.length}/${item.payment_info.max_active_post}`;
+          firstBtn.innerHTML = `Post ${currentTotalPost}/${item.payment_info.max_active_post}`;
           firstBtn.classList.replace("btn-primary", "btn-secondary");
           firstBtn.addEventListener("click", function () {
             alert(
@@ -1130,12 +1304,12 @@ function populateOrderHistoryVisibility(data) {
         maxActivePost.innerText = 0;
       }
 
-      let totalAmount = document.createElement("td");
-      if (item?.payment_info?.amount_total) {
-        totalAmount.innerText = formatPrice(item.payment_info.amount_total);
-      } else {
-        totalAmount.innerText = "-";
-      }
+      // let totalAmount = document.createElement("td");
+      // if (item?.payment_info?.amount_total) {
+      //   totalAmount.innerText = formatPrice(item.payment_info.amount_total);
+      // } else {
+      //   totalAmount.innerText = "-";
+      // }
       let orderStatus = document.createElement("td");
       orderStatus.innerText = "Paid";
 
@@ -1143,7 +1317,7 @@ function populateOrderHistoryVisibility(data) {
       row.appendChild(datePurchased);
       row.appendChild(dayVisibility);
       row.appendChild(maxActivePost);
-      row.appendChild(totalAmount);
+      // row.appendChild(totalAmount);
       row.appendChild(orderStatus);
       totalRecord.push(item);
       document
@@ -1163,6 +1337,104 @@ function populateOrderHistoryVisibility(data) {
   }
 }
 
+document.getElementById("boost-post-btn").onclick = function () {
+  $("#addJobModal").modal("hide");
+  // Remove the previous event listener, if any
+  $("#addJobModal").off("hidden.bs.modal");
+  // Attach a new event listener to show the alert
+  $("#addJobModal").on("hidden.bs.modal", function handleModalHidden(e) {
+    $("#postBoostModal").modal("show");
+    // Remove the event listener after it's been triggered
+    $("#addJobModal").off("hidden.bs.modal", handleModalHidden);
+  });
+};
+
+function openBackFreeSlotModal() {
+  $("#postBoostModal").modal("hide");
+  // Remove the previous event listener, if any
+  $("#postBoostModal").off("hidden.bs.modal");
+  // Attach a new event listener to show the alert
+  $("#postBoostModal").on("hidden.bs.modal", function handleModalHidden(e) {
+    $("#addJobModal").modal("show");
+    // Remove the event listener after it's been triggered
+    $("#postBoostModal").off("hidden.bs.modal", handleModalHidden);
+  });
+}
+
+document.getElementById("close-open-free-slot-btn").onclick = function () {
+  openBackFreeSlotModal();
+};
+
+document.getElementById("go-back-to-free-slot-btn").onclick = function () {
+  openBackFreeSlotModal();
+};
+
+var company_name_free = document.getElementById("input-free-company-name");
+var ssm_number_free = document.getElementById("input-free-company-ssm");
+var title_free = document.getElementById("input-free-job-title");
+var type_free = document.getElementById("input-free-job-type");
+var min_salary_free = document.getElementById("input-free-job-min-salary");
+var max_salary_free = document.getElementById("input-free-job-max-salary");
+var salary_type_free = document.getElementById("input-free-job-salary-type");
+var location_free = document.getElementById("input-free-job-location");
+var apply_link_free = document.getElementById("input-free-job-url");
+
+var company_name_paid = document.getElementById("input-paid-company-name");
+var ssm_number_paid = document.getElementById("input-paid-company-ssm");
+var title_paid = document.getElementById("input-paid-job-title");
+var type_paid = document.getElementById("input-paid-job-type");
+var min_salary_paid = document.getElementById("input-paid-job-min-salary");
+var max_salary_paid = document.getElementById("input-paid-job-max-salary");
+var salary_type_paid = document.getElementById("input-paid-job-salary-type");
+var requirement_paid = document.getElementById("input-paid-job-requirement");
+var benefit_paid = document.getElementById("input-paid-job-benefit");
+var additional_info_paid = document.getElementById(
+  "input-paid-job-additional-info"
+);
+var location_paid = document.getElementById("input-paid-job-location");
+var apply_link_paid = document.getElementById("input-paid-job-url");
+
+document.getElementById("transfer-content-to-plus-btn").onclick = function () {
+  $("#postBoostModal").modal("hide");
+  // Remove the previous event listener, if any
+  $("#postBoostModal").off("hidden.bs.modal");
+  // Attach a new event listener to show the alert
+  $("#postBoostModal").on("hidden.bs.modal", function handleModalHidden(e) {
+    $("#addJobModal").modal("show");
+    document.querySelector("#my-paid-slot-tab").click();
+
+    company_name_paid.value = company_name_free.value;
+    company_name_free.value = "";
+
+    ssm_number_paid.value = ssm_number_free.value;
+    ssm_number_free.value = "";
+
+    title_paid.value = title_free.value;
+    title_free.value = "";
+
+    type_paid.value = type_free.value;
+    type_free.value = "";
+
+    min_salary_paid.value = min_salary_free.value;
+    min_salary_free.value = "";
+
+    max_salary_paid.value = max_salary_free.value;
+    max_salary_free.value = "";
+
+    salary_type_paid.value = salary_type_free.value;
+    salary_type_free.value = "";
+
+    location_paid.value = location_free.value;
+    location_free.value = "";
+
+    apply_link_paid.value = apply_link_free.value;
+    apply_link_free.value = "";
+
+    // Remove the event listener after it's been triggered
+    $("#postBoostModal").off("hidden.bs.modal", handleModalHidden);
+  });
+};
+
 document
   .getElementById("free-job-form")
   .addEventListener("submit", function (e) {
@@ -1175,26 +1447,8 @@ document
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
     if (token) {
-      var company_name = document.getElementById(
-        "input-free-company-name"
-      ).value;
-      var ssm_number = document.getElementById("input-free-company-ssm").value;
-      var title = document.getElementById("input-free-job-title").value;
-      var type = document.getElementById("input-free-job-type").value;
-      var min_salary = document.getElementById(
-        "input-free-job-min-salary"
-      ).value;
-      var max_salary = document.getElementById(
-        "input-free-job-max-salary"
-      ).value;
-      var salary_type = document.getElementById(
-        "input-free-job-salary-type"
-      ).value;
-      var location = document.getElementById("input-free-job-location").value;
-      var apply_link = document.getElementById("input-free-job-url").value;
-
-      if (min_salary) {
-        if (min_salary <= max_salary) {
+      if (min_salary_free.value) {
+        if (min_salary_free.value <= max_salary_free.value) {
           // proceed
         } else {
           alert("Maximum salary should be greater than minimum salary");
@@ -1206,15 +1460,15 @@ document
 
       const options = {
         body: JSON.stringify({
-          title: title,
-          company_name: company_name,
-          ssm_number: ssm_number,
-          type: type,
-          min_salary: min_salary,
-          max_salary: max_salary,
-          salary_type: salary_type,
-          location: location,
-          apply_link: apply_link,
+          title: title_free.value,
+          company_name: company_name_free.value,
+          ssm_number: ssm_number_free.value,
+          type: type_free.value,
+          min_salary: min_salary_free.value,
+          max_salary: max_salary_free.value,
+          salary_type: salary_type_free.value,
+          location: location_free.value,
+          apply_link: apply_link_free.value,
           is_free: true,
         }),
       };
@@ -1260,33 +1514,8 @@ document
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
     if (token) {
-      var company_name = document.getElementById(
-        "input-paid-company-name"
-      ).value;
-      var ssm_number = document.getElementById("input-paid-company-ssm").value;
-      var title = document.getElementById("input-paid-job-title").value;
-      var type = document.getElementById("input-paid-job-type").value;
-      var min_salary = document.getElementById(
-        "input-paid-job-min-salary"
-      ).value;
-      var max_salary = document.getElementById(
-        "input-paid-job-max-salary"
-      ).value;
-      var salary_type = document.getElementById(
-        "input-paid-job-salary-type"
-      ).value;
-      var requirement = document.getElementById(
-        "input-paid-job-requirement"
-      ).value;
-      var benefit = document.getElementById("input-paid-job-benefit").value;
-      var additional_info = document.getElementById(
-        "input-paid-job-additional-info"
-      ).value;
-      var location = document.getElementById("input-paid-job-location").value;
-      var apply_link = document.getElementById("input-paid-job-url").value;
-
-      if (min_salary) {
-        if (min_salary <= max_salary) {
+      if (min_salary_paid.value) {
+        if (min_salary_paid.value <= max_salary_paid.value) {
           // proceed
         } else {
           alert("Maximum salary should be greater than minimum salary");
@@ -1298,18 +1527,18 @@ document
 
       const options = {
         body: JSON.stringify({
-          title: title,
-          company_name: company_name,
-          ssm_number: ssm_number,
-          type: type,
-          min_salary: min_salary,
-          max_salary: max_salary,
-          salary_type: salary_type,
-          location: location,
-          requirement: requirement,
-          benefit: benefit,
-          additional_info: additional_info,
-          apply_link: apply_link,
+          title: title_paid.value,
+          company_name: company_name_paid.value,
+          ssm_number: ssm_number_paid.value,
+          type: type_paid.value,
+          min_salary: min_salary_paid.value,
+          max_salary: max_salary_paid.value,
+          salary_type: salary_type_paid.value,
+          location: location_paid.value,
+          requirement: requirement_paid.value,
+          benefit: benefit_paid.value,
+          additional_info: additional_info_paid.value,
+          apply_link: apply_link_paid.value,
           is_free: false,
         }),
       };
@@ -1507,7 +1736,7 @@ function unBlockSlot() {
     });
 }
 
-function adminlistPostedJob(jobId, data) {
+function adminlistPostedJob(passData) {
   const emptyCard = document.getElementById("admin-posted-job-card-empty");
 
   const parentTable = document.getElementById(
@@ -1517,20 +1746,36 @@ function adminlistPostedJob(jobId, data) {
 
   const emptyDiv = [];
 
-  if (data.length !== 0) {
-    data.map((item) => {
+  if (passData.length !== 0) {
+    passData.map((item) => {
       const card = style.cloneNode(true);
-      let activeDate = new Date(item.timestamp_active);
-      const newActiveDate = activeDate.toLocaleString("en-US", format);
-
-      card.querySelector("h6").textContent = `${item._channel.name}`;
-      card.querySelector("h7").textContent = `Posted at: ${newActiveDate}`;
-      const deleteBtn = card.querySelector("button");
-
+      const divs = card.getElementsByTagName("div");
+      const channelContainer = divs[0].getElementsByTagName("h6");
+      const activeAtContainer = divs[0].getElementsByTagName("h7");
+      const deleteBtn = divs[0].getElementsByTagName("button")[0];
       deleteBtn.addEventListener("click", function () {
-        deleteJob(jobId, item, this, "admin");
+        deleteJob(item.id, this, "admin");
       });
 
+      const viewBtn = divs[0].getElementsByTagName("button")[1];
+
+      var newLink = "";
+
+      if (item.is_telegram) {
+        newLink = `${item.channel_data.url}/${item.telegram_data.message_id}`;
+      } else {
+        newLink = `${item.channel_data.url}?postId=${item.id}`;
+      }
+
+      viewBtn.addEventListener("click", function () {
+        window.open(newLink);
+      });
+
+      let activeDate = new Date(item.created_at);
+      const newActiveDate = activeDate.toLocaleString("en-US", format);
+
+      channelContainer[0].innerHTML = `${item.channel_data.name}`;
+      activeAtContainer[0].innerHTML = `Posted at: ${newActiveDate}`;
       emptyDiv.push(card);
     });
   }
@@ -1552,7 +1797,7 @@ function adminlistPostedJob(jobId, data) {
 
 var deleting = false;
 
-function deleteJob(jobId, telegramData, deleteBtn, type) {
+function deleteJob(postId, deleteBtn, type) {
   if (deleting) {
     alert("Deletion is not yet complete. Please wait...");
   } else {
@@ -1563,12 +1808,7 @@ function deleteJob(jobId, telegramData, deleteBtn, type) {
     if (confirmDelete) {
       const options = {
         body: JSON.stringify({
-          job_id: jobId,
-          username_id: telegramData._channel.username_id,
-          message_id: telegramData.message_id,
-          chat_id: telegramData.chat_id,
-          source_code: telegramData._channel.source_code,
-          custom_id: telegramData.custom_id,
+          post_id: postId,
         }),
       };
 
@@ -1577,7 +1817,7 @@ function deleteJob(jobId, telegramData, deleteBtn, type) {
       deleteBtn.innerHTML = loadingIcon;
 
       fetchAPI(
-        "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/job/telegram/delete",
+        "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/job/post/delete",
         "POST",
         token,
         options
@@ -1623,6 +1863,21 @@ function deleteJob(jobId, telegramData, deleteBtn, type) {
 }
 
 function populateToAdminAllJobs(data) {
+  var job_list = data.job;
+  var post_list = data.post;
+
+  post_list.map((item1) => {
+    job_list.map((item2, index) => {
+      if (item1.job_id == item2.id) {
+        if (job_list[index].postData) {
+          job_list[index].postData.push(item1);
+        } else {
+          job_list[index].postData = [item1];
+        }
+      }
+    });
+  });
+
   const loadingAdminAllJobCard = document.getElementById(
     "admin-all-job-card-loading"
   );
@@ -1634,14 +1889,13 @@ function populateToAdminAllJobs(data) {
     tableBody.removeChild(tableBody.firstChild);
   }
 
-  adminJobListState = data;
+  adminJobListState = job_list;
   var totalRecord = [];
 
-  data.forEach((item) => {
+  job_list.forEach((item) => {
     let isPaid_isFree = false;
     let badge = `<span class="badge badge-pill badge-danger">Not Active</span>`;
 
-    let resent_used = "";
     let active_date = "-";
     let expired_date = "-";
     let day_visibility = "-";
@@ -1658,7 +1912,6 @@ function populateToAdminAllJobs(data) {
     }
 
     if (item.timestamp_active && item.timestamp_expired) {
-      resent_used = item.telegram.length - 1; // minus the first time post
       let activeDate = new Date(item.timestamp_active);
       let expiredDate = new Date(item.timestamp_expired);
 
@@ -1726,7 +1979,13 @@ function populateToAdminAllJobs(data) {
 
     button.setAttribute("type", "button");
     button.setAttribute("data-telegram", JSON.stringify(item.telegram));
-    button.innerHTML = `View All <span class="badge badge-light">${item.telegram.length}</span>`;
+
+    if (item?.postData) {
+      button.innerHTML = `View All <span class="badge badge-light">${item.postData.length}</span>`;
+    } else {
+      button.innerHTML = `View All <span class="badge badge-light">0</span>`;
+    }
+
     button.onclick = function () {
       $("#actionModal").modal("show");
       adminOpenJobId = item.id;
@@ -1750,6 +2009,88 @@ function populateToAdminAllJobs(data) {
     row.appendChild(action);
     totalRecord.push(item);
     document.getElementById("admin-all-job-table-body").appendChild(row);
+  });
+
+  loadingAdminAllJobCard.classList.add("hidden");
+
+  if (totalRecord.length === 0) {
+    emptyCard.classList.remove("hidden");
+    parentTable.classList.add("hidden");
+  } else {
+    emptyCard.classList.add("hidden");
+    parentTable.classList.remove("hidden");
+  }
+}
+
+function populateToAdminAllUsers(data) {
+  const loadingAdminAllJobCard = document.getElementById(
+    "admin-all-user-card-loading"
+  );
+  const emptyCard = document.getElementById("admin-all-user-card-empty");
+  const parentTable = document.getElementById("admin-all-user-table-parent");
+  const tableBody = document.getElementById("admin-all-user-table-body");
+  // Clear the table before appending the new data
+  while (tableBody.firstChild) {
+    tableBody.removeChild(tableBody.firstChild);
+  }
+
+  var totalRecord = [];
+
+  data.forEach((item) => {
+    let badge = ``;
+
+    if (item.verify) {
+      badge = `<span class="badge badge-pill badge-success">Verified</span>`;
+    } else {
+      badge = `<span class="badge badge-pill badge-warning">Not Verified</span>`;
+    }
+
+    let row = document.createElement("tr");
+
+    let userId = document.createElement("td");
+    userId.innerText = item.id;
+
+    let tempCreatedDate = new Date(item.created_at);
+    createdDate = tempCreatedDate.toLocaleString("en-US", format);
+    let createdDate_Td = document.createElement("td");
+    createdDate_Td.innerText = createdDate;
+
+    let username = document.createElement("td");
+    username.innerText = item.username;
+
+    let email = document.createElement("td");
+    email.innerText = item.email;
+
+    let companyName = document.createElement("td");
+    companyName.innerText = item.company_name ? item.company_name : "-";
+
+    let verify = document.createElement("td");
+    verify.innerHTML = badge;
+
+    let role = document.createElement("td");
+    role.innerText = item.role_data?.title;
+
+    let lastPosted_Td = document.createElement("td");
+
+    if (item.timestamp_last_posted) {
+      let tempLastPosted = new Date(item.timestamp_last_posted);
+      lastPosted = tempLastPosted.toLocaleString("en-US", format);
+      lastPosted_Td.innerText = lastPosted;
+    } else {
+      lastPosted_Td.innerText = "-";
+    }
+
+    row.appendChild(userId);
+    row.appendChild(createdDate_Td);
+    row.appendChild(username);
+    row.appendChild(email);
+    row.appendChild(companyName);
+    row.appendChild(verify);
+    row.appendChild(role);
+    row.appendChild(lastPosted_Td);
+
+    totalRecord.push(item);
+    document.getElementById("admin-all-user-table-body").appendChild(row);
   });
 
   loadingAdminAllJobCard.classList.add("hidden");
@@ -1834,7 +2175,8 @@ function fetchAdminMaster() {
         if (data?.message) {
           alert(data.message);
         } else {
-          populateToAdminAllJobs(data.job);
+          populateToAdminAllJobs(data);
+          populateToAdminAllUsers(data.user);
           populateToAdminAllFeedbacks(data.feedback);
         }
       })

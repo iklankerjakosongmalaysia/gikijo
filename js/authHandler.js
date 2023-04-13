@@ -124,6 +124,7 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         saveData("masterData", {
           userData: data.userData,
           authToken: data.authToken,
+          industryData: data.industryData,
         });
         submitLoginBtn.disabled = false;
         submitLoginBtn.innerHTML = "Login";
@@ -373,6 +374,7 @@ function continueOauth(code) {
           saveData("masterData", {
             userData: data.userData,
             authToken: data.authToken,
+            industryData: data.industryData,
           });
           window.location.href = successUrl;
         } else {

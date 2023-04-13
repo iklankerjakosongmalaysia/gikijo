@@ -21,34 +21,7 @@ if (token) {
   });
 }
 
-var inputKeyword = document.getElementById("input-keyword");
-var jobData = [];
-
-document
-  .getElementById("reset-filter-job-btn")
-  .addEventListener("click", function () {
-    inputKeyword.value = "";
-    populateContent(jobData, "");
-  });
-
-document
-  .getElementById("filter-job-form")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    let submitFreeJobBtn = document.getElementById("submit-filter-job-btn");
-
-    submitFreeJobBtn.disabled = true;
-    submitFreeJobBtn.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
-
-    populateContent(jobData, inputKeyword.value);
-
-    submitFreeJobBtn.disabled = false;
-    submitFreeJobBtn.innerHTML = "Search";
-  });
-
-function populateContent(data, userInput) {
+function populateContent(passData) {
   const listLoader = document.getElementById("content-list-loader");
   const listEmpty = document.getElementById("content-list-empty");
   const listContainer = document.getElementById("content-list-container");
@@ -56,14 +29,7 @@ function populateContent(data, userInput) {
 
   var totalRecord = [];
 
-  // Filter data based on user input
-  const filteredData = data.filter((item) => {
-    return item.stringifyAllData
-      .toLowerCase()
-      .includes(userInput.toLowerCase());
-  });
-
-  filteredData.forEach((item, index) => {
+  passData.forEach((item) => {
     const card = listBody.cloneNode(true);
     const divs = card.getElementsByTagName("div");
 
@@ -72,13 +38,13 @@ function populateContent(data, userInput) {
     const listItem = divs[0].getElementsByTagName("li");
     const applyButton = divs[0].getElementsByTagName("button");
 
-    var timestamp = new Date(item.timestamp);
-    var timeAgo = moment(timestamp).fromNow(true);
+    var created_at = new Date(item.created_at);
+    var timeAgo = moment(created_at).fromNow(true);
 
     postedAt[0].innerHTML = ` ${timeAgo} ago`;
     title[0].innerHTML = item.title;
 
-    listItem[0].innerHTML = `<i class="fas fa-building"></i> ${item.company_name} (${item.ssm_number})`;
+    listItem[0].innerHTML = `<i class="fas fa-building"></i> <a href="company-profile.html?company_id=${item.user_id}">${item.company_name} (${item.ssm_number})</a>`;
 
     listItem[1].innerHTML = `<i class="fas fa-tag"></i> ${item.type}`;
 
@@ -90,59 +56,36 @@ function populateContent(data, userInput) {
 
     listItem[3].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
 
-    const copyLink = `${item.channel_data.url}?postId=${item.custom_id}`;
+    listItem[4].innerHTML = `<br>Requirement<br>${item.requirement.replace(
+      /\n/g,
+      "<br>"
+    )}`;
+    listItem[5].innerHTML = `<br>Benefit<br>${item.benefit.replace(
+      /\n/g,
+      "<br>"
+    )}`;
+    listItem[6].innerHTML = `<br>Additional Information<br>${item.additional_info.replace(
+      /\n/g,
+      "<br>"
+    )}`;
 
-    if (item.is_free == true) {
-      listItem[4].innerHTML = "";
-      listItem[5].innerHTML = "";
-      listItem[6].innerHTML = "";
+    const copyLink = `${item.channel_data.url}?postId=${item.id}`;
 
-      applyButton[0].addEventListener("click", function () {
-        navigator.clipboard
-          .writeText(copyLink)
-          .then(() => {
-            applyButton[0].innerHTML = "Link copied!";
-          })
-          .catch((error) => {
-            console.error("Failed to copy link: ", error);
-          });
-      });
+    applyButton[0].addEventListener("click", function () {
+      navigator.clipboard
+        .writeText(copyLink)
+        .then(() => {
+          applyButton[0].innerHTML = "Link copied!";
+        })
+        .catch((error) => {
+          console.error("Failed to copy link: ", error);
+        });
+    });
 
-      applyButton[1].addEventListener("click", function () {
-        window.open(item.apply_link_free, "_blank");
-      });
-    } else {
-      listItem[4].innerHTML = `<br>Requirement<br>${item.requirement.replace(
-        /\n/g,
-        "<br>"
-      )}`;
-      listItem[5].innerHTML = `<br>Benefit<br>${item.benefit.replace(
-        /\n/g,
-        "<br>"
-      )}`;
-      listItem[6].innerHTML = `<br>Additional Information<br>${item.additional_info.replace(
-        /\n/g,
-        "<br>"
-      )}`;
+    applyButton[1].addEventListener("click", function () {
+      window.open(item.apply_link, "_blank");
+    });
 
-      applyButton[0].addEventListener("click", function () {
-        navigator.clipboard
-          .writeText(copyLink)
-          .then(() => {
-            applyButton[0].innerHTML = "Link copied!";
-          })
-          .catch((error) => {
-            console.error("Failed to copy link: ", error);
-          });
-      });
-
-      applyButton[1].addEventListener("click", function () {
-        window.open(item.apply_link, "_blank");
-      });
-    }
-
-    // salary[0].innerHTML = item.title;
-    // console.log("item", item.title);
     // const paragraph = divs[0].getElementsByTagName("p");
     // paragraph[0].innerHTML = item.content.replace(/\n/g, "<br>");
 
@@ -159,9 +102,9 @@ function populateContent(data, userInput) {
 
   const textTotalJOb = document.getElementById("text-total-job");
   if (totalRecord.length > 0) {
-    textTotalJOb.innerHTML = `Showing ${totalRecord.length} jobs`;
+    textTotalJOb.innerText = `Showing ${totalRecord.length} jobs`;
   } else {
-    textTotalJOb.innerHTML = `Showing ${totalRecord.length} job`;
+    textTotalJOb.innerText = `Showing ${totalRecord.length} job`;
   }
 
   if (totalRecord.length === 0) {
@@ -229,63 +172,81 @@ function populateChannel() {
   }
 }
 
-const buttonRetryJobList = document.getElementById("button-retry-job-list");
+var currentPostId = 0;
+var currentSearchQuery = "";
+
+var inputKeyword = document.getElementById("input-keyword");
+var postData = [];
+
+document
+  .getElementById("reset-filter-job-btn")
+  .addEventListener("click", function () {
+    fetchPostList(currentPostId, "");
+    currentSearchQuery = "";
+    inputKeyword.value = "";
+  });
+
+document
+  .getElementById("filter-job-form")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let submitFreeJobBtn = document.getElementById("submit-filter-job-btn");
+
+    submitFreeJobBtn.disabled = true;
+    submitFreeJobBtn.innerHTML =
+      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+
+    fetchPostList(currentPostId, inputKeyword.value);
+    currentSearchQuery = inputKeyword.value;
+
+    submitFreeJobBtn.disabled = false;
+    submitFreeJobBtn.innerHTML = "Search";
+  });
+
+const buttonRetryPostList = document.getElementById("button-retry-post-list");
 let canClickRetryButton = true;
 
-buttonRetryJobList.addEventListener("click", function () {
+buttonRetryPostList.addEventListener("click", function () {
   if (canClickRetryButton) {
     canClickRetryButton = false;
-    fetchJobList();
+    fetchPostList(currentPostId, currentSearchQuery);
     let countdown = 20;
-    buttonRetryJobList.textContent = `Retry (available again in ${countdown} seconds)`;
+    buttonRetryPostList.textContent = `Retry (available again in ${countdown} seconds)`;
     let countdownInterval = setInterval(function () {
       countdown--;
       if (countdown > 0) {
-        buttonRetryJobList.textContent = `Retry (available again in ${countdown} seconds)`;
+        buttonRetryPostList.textContent = `Retry (available again in ${countdown} seconds)`;
       } else {
         clearInterval(countdownInterval);
         canClickRetryButton = true;
-        buttonRetryJobList.textContent = "Retry";
+        buttonRetryPostList.textContent = "Retry";
       }
     }, 1000);
   } else {
-    buttonRetryJobList.textContent = "Please wait before clicking again.";
+    buttonRetryPostList.textContent = "Please wait before clicking again.";
   }
 });
 
-function fetchJobList(postId = "") {
-  fetchAPI("https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/job/list", "GET")
+function fetchPostList(postId = 0, search_query = "") {
+  fetchAPI(
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/job/post/list?post_id=${postId}&search_query=${search_query}`,
+    "GET"
+  )
     .then((data) => {
       if (data?.message) {
         alert(data.message);
       } else {
-        var jobList = [];
+        postData = data.post_list;
+        channelListData = data.channel_list;
 
-        data.job.map((item) => {
-          if (item.telegram.length !== 0) {
-            item.telegram.map((item_2) => {
-              if (item_2.channel_data.source_code == "job_list") {
-                const newItem = Object.assign({}, item_2, {
-                  stringifyAllData: JSON.stringify(item_2),
-                });
-                jobList.push(newItem);
-              }
-            });
-          }
-        });
-
-        const reversedJobList = [...jobList].reverse(); // 4 3 2
-
-        jobData = reversedJobList;
-        channelListData = data.channel;
-
-        populateContent(reversedJobList, postId);
+        populateContent(data.post_list);
         populateChannel();
       }
     })
     .catch((error) => {
       populateChannel();
-      populateContent(jobData, "");
+      populateContent(postData);
       console.error(error);
     });
 }
@@ -293,9 +254,11 @@ function fetchJobList(postId = "") {
 $(document).ready(function () {
   var urlParams = new URLSearchParams(window.location.search);
   var postId = urlParams.get("postId");
+
   if (postId) {
-    fetchJobList(postId);
+    fetchPostList(postId, currentSearchQuery);
+    currentPostId = postId;
   } else {
-    fetchJobList();
+    fetchPostList(currentPostId, currentSearchQuery);
   }
 });

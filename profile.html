@@ -204,60 +204,227 @@
             <!-- Your content -->
             <strong class="d-inline-block mb-2 text-primary">Profile</strong>
 
-            <form id="profileForm">
-              <!-- Content Profile Form -->
-              <div>
-                <p>Update your profile here.</p>
-                <div id="alert-profile-container">
-                  <!-- show alert body here -->
-                </div>
-                <div class="row mb-2">
-                  <div class="col-md-7">
-                    <div class="card flex-md-row mb-4 h-md-250">
-                      <div class="card-body d-flex flex-column">
-                        <div class="form-group">
-                          <label>Username</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="input-username"
-                            placeholder=""
-                          />
-                        </div>
-                        <div class="form-group">
-                          <label>Email</label>
-                          <input
-                            type="email"
-                            class="form-control"
-                            id="input-email"
-                            placeholder=""
-                            disabled
-                          />
-                        </div>
-                        <div class="form-group">
-                          <label>Company name</label>
-                          <input
-                            maxlength="80"
-                            type="text"
-                            class="form-control"
-                            id="input-company-name"
-                            placeholder=""
-                            required
-                          />
+            <div>
+              <p>Update profile details here.</p>
+              <div id="alert-profile-container">
+                <!-- show alert body here -->
+              </div>
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    id="my-profile-tab"
+                    data-toggle="tab"
+                    href="#my-profile"
+                    role="tab"
+                    aria-controls="my-profile"
+                    aria-selected="true"
+                    >My Profile</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="company-profile-tab"
+                    data-toggle="tab"
+                    href="#company-profile"
+                    role="tab"
+                    aria-controls="company-profile"
+                    aria-selected="false"
+                    >Company Profile</a
+                  >
+                </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="my-profile"
+                  role="tabpanel"
+                  aria-labelledby="my-profile-tab"
+                >
+                  <form id="profileForm" class="mt-3">
+                    <!-- Content Profile Form -->
+                    <div class="row">
+                      <div class="col-md-7">
+                        <div class="card flex-md-row mb-4 h-md-250">
+                          <div class="card-body d-flex flex-column">
+                            <div class="form-group">
+                              <label>Username</label>
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="input-username"
+                                placeholder=""
+                              />
+                            </div>
+                            <div class="form-group">
+                              <label>Email</label>
+                              <input
+                                type="email"
+                                class="form-control"
+                                id="input-email"
+                                placeholder=""
+                                disabled
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      id="submit-profile-btn"
+                    >
+                      Update
+                    </button>
+                  </form>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="company-profile"
+                  role="tabpanel"
+                  aria-labelledby="company-profile-tab"
+                >
+                  <form id="companyProfileForm" class="mt-3">
+                    <!-- Content Profile Form -->
+                    <div class="row">
+                      <div class="col-md-7">
+                        <div class="card flex-md-row mb-4 h-md-250">
+                          <div class="card-body d-flex flex-column">
+                            <div class="form-group">
+                              <label>Profile Visibility</label>
+                              <select
+                                class="form-control"
+                                id="input-select-profile-visibility"
+                                required
+                              >
+                                <option value="1">Public</option>
+                                <option value="2">Private</option>
+                              </select>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg">
+                                <div class="form-group">
+                                  <label>Company Name</label>
+                                  <input
+                                    maxlength="80"
+                                    type="text"
+                                    class="form-control"
+                                    id="input-company-name"
+                                    placeholder=""
+                                    required
+                                  />
+                                </div>
+                              </div>
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label>SSM Number</label>
+                                  <input
+                                    maxlength="30"
+                                    type="text"
+                                    class="form-control"
+                                    id="input-ssm-number"
+                                    placeholder=""
+                                    required
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label>About Us</label>
+                              <textarea
+                                maxlength="500"
+                                class="form-control"
+                                id="input-about-us"
+                                rows="3"
+                                placeholder=""
+                                required
+                              ></textarea>
+                            </div>
+
+                            <div class="form-group">
+                              <label for="select-industry">
+                                Industry
+                                <small
+                                  class="form-text text-muted"
+                                  style="display: inline"
+                                  >(hold Ctrl/Cmd to select multiple)</small
+                                >
+                              </label>
+                              <select
+                                class="form-control"
+                                id="input-select-industry"
+                                required
+                                multiple
+                                name="industries[]"
+                              ></select>
+                              <p class="mt-1">
+                                Selected:
+                                <span id="selected-industries"></span>
+                              </p>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                <div class="form-group">
+                                  <label>Company Size</label>
+                                  <input
+                                    type="number"
+                                    class="form-control"
+                                    id="input-company-size"
+                                    placeholder=""
+                                    required
+                                  />
+                                </div>
+                              </div>
+                              <div class="col">
+                                <div class="form-group">
+                                  <label>Company Website</label>
+                                  <input
+                                    maxlength="80"
+                                    type="text"
+                                    class="form-control"
+                                    id="input-company-website"
+                                    placeholder=""
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label>Business Address</label>
+                              <textarea
+                                maxlength="500"
+                                class="form-control"
+                                id="input-business-address"
+                                rows="3"
+                                placeholder=""
+                              ></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      id="submit-company-profile-btn"
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      id="view-company-profile-btn"
+                    >
+                      View Company Profile<i
+                        class="fa fa-external-link-alt ml-1"
+                      ></i>
+                    </button>
+                  </form>
                 </div>
               </div>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                id="submit-profile-btn"
-              >
-                Update
-              </button>
-            </form>
+            </div>
+
             <!-- End of Your Content -->
           </div>
           <!-- /.container-fluid -->

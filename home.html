@@ -46,6 +46,20 @@
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6981662240440614"
       crossorigin="anonymous"
     ></script>
+    <style>
+      .carousel .carousel-indicators li {
+        background-color: rgb(110, 110, 110);
+      }
+      .carousel .carousel-indicators li.active {
+        background-color: #4c74dc;
+      }
+      .carousel-inner {
+        margin-bottom: 50px;
+      }
+      .carousel-indicators {
+        bottom: -50px;
+      }
+    </style>
   </head>
 
   <body id="page-top">
@@ -350,6 +364,57 @@
                     </div>
                   </div>
 
+                  <!-- Content Coupon -->
+                  <strong class="d-inline-block mb-2 text-primary"
+                    >Discount Coupon</strong
+                  >
+
+                  <div class="text-center p-5" id="home-coupon-list-loading">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+
+                  <div class="hidden" id="home-coupon-list-empty">
+                    <div class="container mt-4">
+                      <div
+                        class="row justify-content-center align-items-center"
+                      >
+                        <div class="col-md-6 text-center">
+                          <div class="empty-box-icon">
+                            <i class="fas fa-exclamation-circle fa-3x"></i>
+                          </div>
+                          <h1 class="mt-4">No Coupons Found</h1>
+                          <p>
+                            Sorry, we could not find any coupons at the moment.
+                            <a
+                              href="#"
+                              id="refresh-coupon-list"
+                              class="text-primary"
+                              >Click here to refresh</a
+                            >
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-2 hidden" id="home-coupon-list-parent">
+                    <div class="col-md-6" id="home-coupon-list-child">
+                      <div class="card flex-md-row mb-4 h-md-250">
+                        <div class="card-body d-flex flex-column">
+                          <h5 class="mb-1 font-weight-bold text-gray-800">
+                            ...
+                          </h5>
+                          <h6 class="mb-0 text-muted">..</h6>
+                          <div class="d-flex justify-content-end">
+                            <i class="fas fa-copy"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <!-- Content Visit -->
                   <strong class="d-inline-block mb-2 text-primary"
                     >Our Channels</strong
@@ -608,6 +673,23 @@
                             <li class="nav-item">
                               <a
                                 class="nav-link active"
+                                id="my-paid-vs-free-slot-tab"
+                                data-toggle="tab"
+                                href="#my-paid-vs-free-slot"
+                                role="tab"
+                                aria-controls="my-paid-vs-free-slot"
+                                aria-selected="false"
+                              >
+                                <span
+                                  class="badge badge-warning"
+                                  style="color: rgb(24, 24, 24)"
+                                  >What's different?</span
+                                >
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a
+                                class="nav-link"
                                 id="my-free-slot-tab"
                                 data-toggle="tab"
                                 href="#my-free-slot"
@@ -629,27 +711,129 @@
                                 >Plus</a
                               >
                             </li>
-                            <li class="nav-item">
-                              <a
-                                class="nav-link"
-                                id="my-paid-vs-free-slot-tab"
-                                data-toggle="tab"
-                                href="#my-paid-vs-free-slot"
-                                role="tab"
-                                aria-controls="my-paid-vs-free-slot"
-                                aria-selected="false"
-                              >
-                                <span
-                                  class="badge badge-warning"
-                                  style="color: rgb(24, 24, 24)"
-                                  >What's different?</span
-                                >
-                              </a>
-                            </li>
                           </ul>
                           <div class="tab-content">
                             <div
                               class="tab-pane fade show active"
+                              id="my-paid-vs-free-slot"
+                              role="tabpanel"
+                              aria-labelledby="my-paid-vs-free-slot-tab"
+                            >
+                              <div class="table-responsive">
+                                <table
+                                  class="table table-borderless table-striped mt-2"
+                                >
+                                  <thead>
+                                    <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col"><strong>Free</strong></th>
+                                      <th scope="col"><strong>Plus</strong></th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <th scope="row">Price</th>
+                                      <td>Free</td>
+                                      <td colspan="2">
+                                        Starting from only RM 35
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">
+                                        Published post at a time
+                                      </th>
+                                      <td>1 post</td>
+                                      <td>2, 4, or 6 posts</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Day visibility</th>
+                                      <td>5 days (renewable)</td>
+                                      <td>5, 15, or 25 days</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">
+                                        Access to more form fields
+                                      </th>
+                                      <td>
+                                        <i class="fas fa-times text-danger"></i>
+                                      </td>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Edit Job slot details</th>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Post may contain ads</th>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                      <td>
+                                        <i class="fas fa-times text-danger"></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">
+                                        Job application URL may show ads first
+                                      </th>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                      <td>
+                                        <i class="fas fa-times text-danger"></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">
+                                        Post to Telegram channels
+                                      </th>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">
+                                        Post to IKKM Job list website
+                                      </th>
+                                      <td>
+                                        <i class="fas fa-times text-danger"></i>
+                                      </td>
+                                      <td>
+                                        <i
+                                          class="fas fa-check text-success"
+                                        ></i>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                            <div
+                              class="tab-pane fade"
                               id="my-free-slot"
                               role="tabpanel"
                               aria-labelledby="my-free-slot-tab"
@@ -779,7 +963,7 @@
                                       class="form-control"
                                       id="input-free-job-requirement"
                                       rows="3"
-                                      placeholder="This field only available for Plus version"
+                                      placeholder="Switch to the Plus slot to unlock this field and make your job post stand out!"
                                       required
                                       disabled
                                     ></textarea>
@@ -791,7 +975,7 @@
                                       class="form-control"
                                       id="input-free-job-benefit"
                                       rows="3"
-                                      placeholder="This field only available for Plus version"
+                                      placeholder="Switch to the Plus slot to unlock this field and make your job post stand out!"
                                       required
                                       disabled
                                     ></textarea>
@@ -803,7 +987,7 @@
                                       class="form-control"
                                       id="input-free-job-additional-info"
                                       rows="3"
-                                      placeholder="This field only available for Plus version"
+                                      placeholder="Switch to the Plus slot to unlock this field and make your job post stand out!"
                                       disabled
                                     ></textarea>
                                   </div>
@@ -820,9 +1004,15 @@
                                   </div>
                                   <div class="form-group">
                                     <label
-                                      >Job application URL (ads may appear in
-                                      the Free version).</label
-                                    >
+                                      >Job application URL
+                                      <small
+                                        class="form-text text-muted"
+                                        style="display: inline"
+                                        >(ads may appear in the Free slot,
+                                        switch to the Plus slot to remove
+                                        ads)</small
+                                      >
+                                    </label>
                                     <input
                                       type="text"
                                       class="form-control"
@@ -838,8 +1028,15 @@
                                       website).
                                     </small>
                                   </div>
+                                  <button
+                                    type="button"
+                                    class="btn btn-warning mb-4"
+                                    style="color: rgb(24, 24, 24)"
+                                    id="boost-post-btn"
+                                  >
+                                    Boost Post 🚀✨
+                                  </button>
                                 </div>
-
                                 <div class="modal-footer">
                                   <button
                                     type="button"
@@ -1064,120 +1261,259 @@
                               </form>
                               <!-- end tab content -->
                             </div>
-                            <div
-                              class="tab-pane fade"
-                              id="my-paid-vs-free-slot"
-                              role="tabpanel"
-                              aria-labelledby="my-paid-vs-free-slot-tab"
-                            >
-                              <div class="table-responsive">
-                                <table
-                                  class="table table-borderless table-striped mt-2"
-                                >
-                                  <thead>
-                                    <tr>
-                                      <th scope="col"></th>
-                                      <th scope="col"><strong>Free</strong></th>
-                                      <th scope="col"><strong>Plus</strong></th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <th scope="row">Edit Job slot details</th>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">Post may contain ads</th>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                      <td>
-                                        <i class="fas fa-times text-danger"></i>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        Job application URL may redirect via
-                                        ad-displaying external site
-                                      </th>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                      <td>
-                                        <i class="fas fa-times text-danger"></i>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        Access to more form fields
-                                      </th>
-                                      <td>
-                                        <i class="fas fa-times text-danger"></i>
-                                      </td>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        More than 1 published post at a time
-                                      </th>
-                                      <td>
-                                        <i class="fas fa-times text-danger"></i>
-                                      </td>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        More than 5 day visibility options
-                                      </th>
-                                      <td>
-                                        <i class="fas fa-times text-danger"></i>
-                                      </td>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                    </tr>
-                                    <!-- <tr>
-                                      <th scope="row">
-                                        Display of link previews for compatible
-                                        links (Telegram only)
-                                      </th>
-                                      <td>
-                                        <i class="fas fa-times text-danger"></i>
-                                      </td>
-                                      <td>
-                                        <i
-                                          class="fas fa-check text-success"
-                                        ></i>
-                                      </td>
-                                    </tr> -->
-                                  </tbody>
-                                </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Post Boost Modal -->
+                  <div
+                    class="modal fade"
+                    id="postBoostModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div
+                      class="modal-dialog modal-dialog-centered"
+                      role="document"
+                    >
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">
+                            Boost Post 🚀✨
+                          </h5>
+                          <button
+                            type="button"
+                            class="close"
+                            id="close-open-free-slot-btn"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div
+                            id="carouselExampleIndicators"
+                            class="carousel slide"
+                            data-ride="carousel"
+                          >
+                            <ol class="carousel-indicators">
+                              <li
+                                data-target="#carouselExampleIndicators"
+                                data-slide-to="0"
+                                class="active"
+                              ></li>
+                              <li
+                                data-target="#carouselExampleIndicators"
+                                data-slide-to="1"
+                              ></li>
+                              <li
+                                data-target="#carouselExampleIndicators"
+                                data-slide-to="2"
+                              ></li>
+                              <li
+                                data-target="#carouselExampleIndicators"
+                                data-slide-to="3"
+                              ></li>
+                            </ol>
+                            <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                <div class="pl-1 pr-1">
+                                  <h4 class="heading text-center text-primary">
+                                    More Details, More Space
+                                  </h4>
+                                  <h6>Free Slot:</h6>
+                                  <img
+                                    src="img/free_post.png"
+                                    class="img-fluid mb-2"
+                                    alt="Responsive image"
+                                  />
+                                  <h6>Plus Slot:</h6>
+                                  <img
+                                    src="img/paid_post.png"
+                                    class="img-fluid mb-2"
+                                    alt="Responsive image"
+                                  />
+                                  <p>
+                                    With our Plus slot posting, you can add
+                                    extra information such as requirements and
+                                    benefits, and it will also take up more
+                                    space on our Telegram channel, making it
+                                    more eye-catching for potential viewers.
+                                  </p>
+                                </div>
+                              </div>
+                              <div class="carousel-item">
+                                <div class="pl-1 pr-1">
+                                  <h4 class="heading text-center text-primary">
+                                    Say Goodbye to Ads
+                                  </h4>
+                                  <h6>Free Slot:</h6>
+                                  <img
+                                    src="img/free_application_flow.png"
+                                    class="img-fluid mb-2"
+                                    alt="Responsive image"
+                                  />
+                                  <h6>Plus Slot:</h6>
+                                  <img
+                                    src="img/paid_application_flow.png"
+                                    class="img-fluid mb-2"
+                                    alt="Responsive image"
+                                  />
+                                  <p>
+                                    Post your content without any distracting
+                                    ads. With Plus, your job application URL
+                                    will be directly linked to the destination,
+                                    streamlining the process and creating a more
+                                    professional appearance.
+                                  </p>
+                                </div>
+                              </div>
+                              <div class="carousel-item">
+                                <div class="pl-1 pr-1">
+                                  <h4 class="heading text-center text-primary">
+                                    Post to Telegram channels & Web
+                                  </h4>
+                                  <img
+                                    src="img/web_post.png"
+                                    class="img-fluid mb-2"
+                                    alt="Responsive image"
+                                  />
+                                  <p>
+                                    With the Plus slot, you can post to both
+                                    Telegram channels and our website, while
+                                    free slots are limited to Telegram channels
+                                    only.
+                                  </p>
+                                </div>
+                              </div>
+                              <div class="carousel-item">
+                                <div class="pl-1 pr-1">
+                                  <h4 class="heading text-center text-primary">
+                                    Enjoy Coupon Savings
+                                  </h4>
+                                  <div
+                                    class="text-center p-5"
+                                    id="modal-coupon-list-loading"
+                                  >
+                                    <div class="spinner-border" role="status">
+                                      <span class="sr-only">Loading...</span>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    class="hidden"
+                                    id="modal-coupon-list-empty"
+                                  >
+                                    <div class="container mt-4">
+                                      <div
+                                        class="row justify-content-center align-items-center"
+                                      >
+                                        <div class="col-md-6 text-center">
+                                          <div class="empty-box-icon">
+                                            <i
+                                              class="fas fa-exclamation-circle fa-3x"
+                                            ></i>
+                                          </div>
+                                          <h1 class="mt-4">No Coupons Found</h1>
+                                          <p>
+                                            Sorry, we could not find any coupons
+                                            at the moment.
+                                            <a
+                                              href="#"
+                                              id="modal-refresh-coupon-list"
+                                              class="text-primary"
+                                              >Click here to refresh</a
+                                            >
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    class="hidden"
+                                    id="modal-coupon-list-parent"
+                                  >
+                                    <div
+                                      class="mt-3"
+                                      id="modal-coupon-list-child"
+                                    >
+                                      <div
+                                        class="card flex-md-row mb-4 h-md-250"
+                                      >
+                                        <div
+                                          class="card-body d-flex flex-column"
+                                        >
+                                          <h5
+                                            class="mb-1 font-weight-bold text-gray-800"
+                                          >
+                                            ...
+                                          </h5>
+                                          <h6 class="mb-0 text-muted">..</h6>
+                                          <div
+                                            class="d-flex justify-content-end"
+                                          >
+                                            <i class="fas fa-copy"></i>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p>
+                                    It's easy to get a discount on your Plus
+                                    slot purchase, just copy and paste the
+                                    coupon code above at checkout and enjoy a
+                                    reduced price. Don't miss out on this
+                                    opportunity to try out Plus slot today!
+                                  </p>
+                                </div>
                               </div>
                             </div>
+                            <a
+                              class="carousel-control-prev hidden"
+                              href="#carouselExampleIndicators"
+                              role="button"
+                              data-slide="prev"
+                            >
+                              <span
+                                class="carousel-control-prev-icon"
+                                aria-hidden="true"
+                              ></span>
+                              <span class="sr-only">Previous</span>
+                            </a>
+                            <a
+                              class="carousel-control-next hidden"
+                              href="#carouselExampleIndicators"
+                              role="button"
+                              data-slide="next"
+                            >
+                              <span
+                                class="carousel-control-next-icon"
+                                aria-hidden="true"
+                              ></span>
+                              <span class="sr-only">Next</span>
+                            </a>
                           </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            id="go-back-to-free-slot-btn"
+                          >
+                            Go back
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="transfer-content-to-plus-btn"
+                          >
+                            Transfer content to Plus slot now
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -1853,7 +2189,7 @@
                           <th scope="col">Purchased Date</th>
                           <th scope="col">Day Visibility</th>
                           <th scope="col">Max Published Post (at a time)</th>
-                          <th scope="col">Total Amount</th>
+                          <!-- <th scope="col">Total Amount</th> -->
                           <th scope="col">Status</th>
                         </tr>
                       </thead>
@@ -1977,15 +2313,21 @@
                               id="admin-posted-job-card-list-child"
                             >
                               <div class="row justify-content-between">
-                                <View>
+                                <div>
                                   <h6 class="modal-title font-weight-bold">
                                     ...
                                   </h6>
                                   <h7 class="modal-title">...</h7>
-                                </View>
-                                <button class="btn btn-danger" type="button">
-                                  <i class="fa fa-trash ml-1"></i>
-                                </button>
+                                </div>
+                                <div>
+                                  <button class="btn btn-danger" type="button">
+                                    <i class="fa fa-trash ml-1"></i>
+                                  </button>
+                                  <button class="btn btn-primary" type="button">
+                                    View
+                                    <i class="fa fa-external-link-alt ml-1"></i>
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -2052,11 +2394,71 @@
                 </div>
                 <div
                   class="tab-pane fade"
+                  id="admin-user"
+                  role="tabpanel"
+                  aria-labelledby="admin-user-tab"
+                >
+                  <!-- fourth tab content -->
+                  <!-- Content Dashboard -->
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-light mt-3 mb-2"
+                      id="admin-refresh-user-list"
+                    >
+                      <i class="fas fa-sync mr-2"></i>Refresh
+                    </button>
+                  </div>
+                  <div class="text-center p-5" id="admin-all-user-card-loading">
+                    <div class="spinner-border" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                  <div id="admin-all-user-card-empty" class="hidden">
+                    <div class="container mt-5">
+                      <div
+                        class="row justify-content-center align-items-center"
+                      >
+                        <div class="col-md-6 text-center">
+                          <div class="empty-box-icon">
+                            <i class="fas fa-box-open fa-3x"></i>
+                          </div>
+                          <h1 class="mt-4">Empty List</h1>
+                          <p>There is no user record.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-responsive">
+                    <table
+                      class="table-bordered table mt-2 hidden"
+                      id="admin-all-user-table-parent"
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">Id</th>
+                          <th scope="col">Created at</th>
+                          <th scope="col">Username</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Company Name</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Role</th>
+                          <th scope="col">Last posted</th>
+                        </tr>
+                      </thead>
+                      <tbody id="admin-all-user-table-body"></tbody>
+                    </table>
+                  </div>
+
+                  <!-- end fourth tab content -->
+                </div>
+                <div
+                  class="tab-pane fade"
                   id="admin-feedback"
                   role="tabpanel"
                   aria-labelledby="admin-feedback-tab"
                 >
-                  <!-- fourth tab content -->
+                  <!-- fifth tab content -->
                   <!-- Content Dashboard -->
                   <div>
                     <button
@@ -2109,7 +2511,7 @@
                     </table>
                   </div>
 
-                  <!-- end fourth tab content -->
+                  <!-- end fifth tab content -->
                 </div>
                 <!-- Accessable from all tabs -->
                 <!-- Onboarding Modal -->
@@ -2151,8 +2553,9 @@
                         </p>
                         <h5>2. Activate your Job Slot</h5>
                         <p class="text-justify">
-                          Activate Plus job slot with a simple payment process.
-                          Free job slot do not require activation.
+                          If you wish to use the Plus job slot, there are a few
+                          easy activation steps to follow. On the other hand,
+                          the free job slot doesn't require any activation.
                         </p>
                         <h5>3. Post your Job Slot</h5>
                         <p class="text-justify">
