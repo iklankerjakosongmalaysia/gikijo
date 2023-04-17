@@ -273,6 +273,19 @@ function fetchPostList(passKeyword, passPostId) {
     });
 }
 
+const toggleFilterBtn = document.getElementById("toggle-filter-btn");
+const filterJobForm = document.getElementById("filter-job-form");
+
+toggleFilterBtn.addEventListener("click", () => {
+  if (filterJobForm.style.display === "block") {
+    filterJobForm.style.display = "none";
+    toggleFilterBtn.innerHTML = `<i class="fas fa-filter"></i> Show Filter`;
+  } else {
+    filterJobForm.style.display = "block";
+    toggleFilterBtn.innerHTML = `<i class="fas fa-filter"></i> Hide Filter`;
+  }
+});
+
 $(document).ready(function () {
   var urlParams = new URLSearchParams(window.location.search);
   var postId = urlParams.get("postId");

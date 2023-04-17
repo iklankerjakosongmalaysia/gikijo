@@ -74,6 +74,8 @@
         content: "- Show Less";
       }
 
+      /* placeholder */
+
       .form-control::placeholder {
         /* Chrome, Firefox, Opera, Safari 10.1+ */
         color: rgb(188, 186, 186);
@@ -88,6 +90,47 @@
       .form-control::-ms-input-placeholder {
         /* Microsoft Edge */
         color: rgb(188, 186, 186);
+      }
+
+      /* show filter */
+
+      /* hide the filter form initially for small screens */
+      @media (max-width: 767px) {
+        #filter-job-form {
+          display: none;
+        }
+      }
+
+      /* style the button that shows the filter form */
+      .show-filter-btn {
+        display: none;
+        margin-top: 1rem;
+      }
+
+      /* show the button for small screens */
+      @media (max-width: 767px) {
+        .show-filter-btn {
+          display: block;
+        }
+      }
+
+      /* style the filter form for small screens */
+      @media (max-width: 767px) {
+        #filter-job-form.show {
+          display: block;
+        }
+
+        #filter-job-form .form-group {
+          margin-bottom: 1rem;
+        }
+
+        #filter-job-form .input-group {
+          margin-top: 1rem;
+        }
+
+        #filter-job-form .btn {
+          margin-top: 1rem;
+        }
       }
     </style>
   </head>
@@ -184,10 +227,17 @@
       <div class="row">
         <div class="col-lg-3">
           <div>
+            <button
+              type="button"
+              class="btn btn-primary show-filter-btn"
+              id="toggle-filter-btn"
+            >
+              <i class="fas fa-filter"></i> Show Filter
+            </button>
             <form id="filter-job-form" class="mt-3">
               <div class="flex-wrap">
                 <strong class="d-inline-block mb-2 text-primary"
-                  >Job Search</strong
+                  >Filter Jobs</strong
                 >
                 <div class="form-group">
                   <label>Title</label>
