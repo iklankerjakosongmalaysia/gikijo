@@ -173,6 +173,7 @@ function populateChannel() {
 }
 
 const inputKeyword = document.getElementById("input-keyword");
+const inputLocation = document.getElementById("input-job-location");
 const inputType = document.getElementById("input-job-type");
 const inputMinSalary = document.getElementById("input-job-min-salary");
 const inputMaxSalary = document.getElementById("input-job-max-salary");
@@ -184,6 +185,7 @@ document
   .getElementById("reset-filter-job-btn")
   .addEventListener("click", function () {
     inputPostId = "";
+    inputLocation.value = "";
     inputType.value = "";
     inputMinSalary.value = "";
     inputMaxSalary.value = "";
@@ -235,6 +237,7 @@ function fetchPostList(passKeyword, passPostId) {
     body: JSON.stringify({
       post_id: passPostId,
       search_query: passKeyword,
+      location: inputLocation.value,
       type: inputType.value,
       min_salary: inputMinSalary.value,
       max_salary: inputMaxSalary.value,
