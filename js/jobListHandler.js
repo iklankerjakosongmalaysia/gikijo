@@ -172,36 +172,36 @@ function populateChannel() {
   }
 }
 
-var currentPostId = 0;
-var currentSearchQuery = "";
+const inputKeyword = document.getElementById("input-keyword");
+const inputType = document.getElementById("input-job-type");
+const inputMinSalary = document.getElementById("input-job-min-salary");
+const inputMaxSalary = document.getElementById("input-job-max-salary");
 
-var inputKeyword = document.getElementById("input-keyword");
+var inputPostId = "";
 var postData = [];
 
 document
   .getElementById("reset-filter-job-btn")
   .addEventListener("click", function () {
-    fetchPostList(currentPostId, "");
-    currentSearchQuery = "";
-    inputKeyword.value = "";
+    inputPostId = "";
+    inputType.value = "";
+    inputMinSalary.value = "";
+    inputMaxSalary.value = "";
+    fetchPostList("", "");
   });
+
+const submitFilterJobBtn = document.getElementById("submit-filter-job-btn");
 
 document
   .getElementById("filter-job-form")
   .addEventListener("submit", function (e) {
     e.preventDefault();
 
-    let submitFreeJobBtn = document.getElementById("submit-filter-job-btn");
-
-    submitFreeJobBtn.disabled = true;
-    submitFreeJobBtn.innerHTML =
+    submitFilterJobBtn.disabled = true;
+    submitFilterJobBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    fetchPostList(currentPostId, inputKeyword.value);
-    currentSearchQuery = inputKeyword.value;
-
-    submitFreeJobBtn.disabled = false;
-    submitFreeJobBtn.innerHTML = "Search";
+    fetchPostList(inputKeyword.value, inputPostId);
   });
 
 const buttonRetryPostList = document.getElementById("button-retry-post-list");
@@ -210,7 +210,7 @@ let canClickRetryButton = true;
 buttonRetryPostList.addEventListener("click", function () {
   if (canClickRetryButton) {
     canClickRetryButton = false;
-    fetchPostList(currentPostId, currentSearchQuery);
+    fetchPostList(inputKeyword.value, inputPostId);
     let countdown = 20;
     buttonRetryPostList.textContent = `Retry (available again in ${countdown} seconds)`;
     let countdownInterval = setInterval(function () {
@@ -228,10 +228,24 @@ buttonRetryPostList.addEventListener("click", function () {
   }
 });
 
-function fetchPostList(postId = 0, search_query = "") {
+function fetchPostList(passKeyword, passPostId) {
+  inputKeyword.value = passKeyword;
+
+  const options = {
+    body: JSON.stringify({
+      post_id: passPostId,
+      search_query: passKeyword,
+      type: inputType.value,
+      min_salary: inputMinSalary.value,
+      max_salary: inputMaxSalary.value,
+    }),
+  };
+
   fetchAPI(
-    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/job/post/list?post_id=${postId}&search_query=${search_query}`,
-    "GET"
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/job/post/list`,
+    "POST",
+    null,
+    options
   )
     .then((data) => {
       if (data?.message) {
@@ -243,10 +257,15 @@ function fetchPostList(postId = 0, search_query = "") {
         populateContent(data.post_list);
         populateChannel();
       }
+
+      submitFilterJobBtn.disabled = false;
+      submitFilterJobBtn.innerHTML = "Search";
     })
     .catch((error) => {
       populateChannel();
       populateContent(postData);
+      submitFilterJobBtn.disabled = false;
+      submitFilterJobBtn.innerHTML = "Search";
       console.error(error);
     });
 }
@@ -256,9 +275,9 @@ $(document).ready(function () {
   var postId = urlParams.get("postId");
 
   if (postId) {
-    fetchPostList(postId, currentSearchQuery);
-    currentPostId = postId;
+    inputPostId = postId;
+    fetchPostList(inputKeyword.value, postId);
   } else {
-    fetchPostList(currentPostId, currentSearchQuery);
+    fetchPostList(inputKeyword.value, inputPostId);
   }
 });
