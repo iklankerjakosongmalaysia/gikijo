@@ -22,6 +22,18 @@ if (token) {
 }
 
 document
+  .getElementById("topbar-job-list-btn-not-auth")
+  .addEventListener("click", function () {
+    location.href = "job-list";
+  });
+
+document
+  .getElementById("topbar-job-list-btn-with-auth")
+  .addEventListener("click", function () {
+    location.href = "job-list";
+  });
+
+document
   .getElementById("button-empty-list-post-job")
   .addEventListener("click", function () {
     location.href = "index?postJob=true";

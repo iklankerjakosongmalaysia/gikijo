@@ -12,6 +12,12 @@ $(document).ready(function () {
   }
 });
 
+document
+  .getElementById("topbar-job-list-btn")
+  .addEventListener("click", function () {
+    location.href = "job-list";
+  });
+
 function openLoginTab() {
   document.querySelector("#login-tab").click();
 }
