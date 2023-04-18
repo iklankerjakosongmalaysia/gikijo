@@ -21,6 +21,12 @@ if (token) {
   });
 }
 
+document
+  .getElementById("button-empty-list-post-job")
+  .addEventListener("click", function () {
+    location.href = "index?postJob=true";
+  });
+
 function populateContent(passData) {
   const listLoader = document.getElementById("content-list-loader");
   const listEmpty = document.getElementById("content-list-empty");
@@ -214,11 +220,11 @@ buttonRetryPostList.addEventListener("click", function () {
     canClickRetryButton = false;
     fetchPostList(inputKeyword.value, inputPostId);
     let countdown = 20;
-    buttonRetryPostList.textContent = `Retry (available again in ${countdown} seconds)`;
+    buttonRetryPostList.textContent = `Try again in ${countdown} seconds`;
     let countdownInterval = setInterval(function () {
       countdown--;
       if (countdown > 0) {
-        buttonRetryPostList.textContent = `Retry (available again in ${countdown} seconds)`;
+        buttonRetryPostList.textContent = `Try again in ${countdown} seconds`;
       } else {
         clearInterval(countdownInterval);
         canClickRetryButton = true;
@@ -226,7 +232,7 @@ buttonRetryPostList.addEventListener("click", function () {
       }
     }, 1000);
   } else {
-    buttonRetryPostList.textContent = "Please wait before clicking again.";
+    buttonRetryPostList.textContent = "Please wait ...";
   }
 });
 

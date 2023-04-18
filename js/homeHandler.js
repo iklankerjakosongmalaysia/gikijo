@@ -34,11 +34,11 @@ refreshBtn.addEventListener("click", function () {
     can_refreshBtn = false;
     fetchMyJobs();
     let countdown = 20;
-    refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
     let countdownInterval = setInterval(function () {
       countdown--;
       if (countdown > 0) {
-        refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+        refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
       } else {
         clearInterval(countdownInterval);
         can_refreshBtn = true;
@@ -46,7 +46,7 @@ refreshBtn.addEventListener("click", function () {
       }
     }, 1000);
   } else {
-    refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+    refreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait ...`;
   }
 });
 
@@ -60,11 +60,11 @@ refreshPurchaseHistoryBtn.addEventListener("click", function () {
     can_refreshPurchaseHistoryBtn = false;
     fetchMyJobs();
     let countdown = 20;
-    refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
     let countdownInterval = setInterval(function () {
       countdown--;
       if (countdown > 0) {
-        refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+        refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
       } else {
         clearInterval(countdownInterval);
         can_refreshPurchaseHistoryBtn = true;
@@ -72,7 +72,7 @@ refreshPurchaseHistoryBtn.addEventListener("click", function () {
       }
     }, 1000);
   } else {
-    refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+    refreshPurchaseHistoryBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait ...`;
   }
 });
 
@@ -84,11 +84,11 @@ adminRefreshBtn.addEventListener("click", function () {
     can_adminRefreshBtn = false;
     fetchAdminMaster();
     let countdown = 20;
-    adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
     let countdownInterval = setInterval(function () {
       countdown--;
       if (countdown > 0) {
-        adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+        adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
       } else {
         clearInterval(countdownInterval);
         can_adminRefreshBtn = true;
@@ -96,7 +96,7 @@ adminRefreshBtn.addEventListener("click", function () {
       }
     }, 1000);
   } else {
-    adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+    adminRefreshBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait ...`;
   }
 });
 
@@ -108,11 +108,11 @@ adminRefreshUserBtn.addEventListener("click", function () {
     can_adminRefreshUserBtn = false;
     fetchAdminMaster();
     let countdown = 20;
-    adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
     let countdownInterval = setInterval(function () {
       countdown--;
       if (countdown > 0) {
-        adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+        adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
       } else {
         clearInterval(countdownInterval);
         can_adminRefreshUserBtn = true;
@@ -120,7 +120,7 @@ adminRefreshUserBtn.addEventListener("click", function () {
       }
     }, 1000);
   } else {
-    adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+    adminRefreshUserBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait ...`;
   }
 });
 
@@ -134,11 +134,11 @@ adminRefreshFeedbackBtn.addEventListener("click", function () {
     can_adminRefreshFeedbackBtn = false;
     fetchAdminMaster();
     let countdown = 20;
-    adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+    adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
     let countdownInterval = setInterval(function () {
       countdown--;
       if (countdown > 0) {
-        adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Refresh (available again in ${countdown} seconds)`;
+        adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Try again in ${countdown} seconds`;
       } else {
         clearInterval(countdownInterval);
         can_adminRefreshFeedbackBtn = true;
@@ -146,7 +146,7 @@ adminRefreshFeedbackBtn.addEventListener("click", function () {
       }
     }, 1000);
   } else {
-    adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait before clicking again.`;
+    adminRefreshFeedbackBtn.innerHTML = `<i class="fas fa-sync mr-2"></i>Please wait ...`;
   }
 });
 
