@@ -316,15 +316,18 @@
                   </div>
                   <form id="register-form">
                     <div class="form-group mt-3">
-                      <label>Company Name</label>
-                      <input
-                        maxlength="30"
-                        type="text"
-                        class="form-control"
-                        id="company_name_register"
-                        placeholder=""
+                      <label>Account Type</label>
+                      <select
+                        class="custom-select"
+                        id="input-account-type"
                         required
-                      />
+                      >
+                        <option value="">Select Options</option>
+                        <option value="job_seeker" disabled>
+                          Job Seeker (coming soon)
+                        </option>
+                        <option value="employer">Employer</option>
+                      </select>
                     </div>
                     <div class="form-group mt-3">
                       <label>Username</label>
@@ -332,7 +335,7 @@
                         maxlength="30"
                         type="text"
                         class="form-control"
-                        id="username_register"
+                        id="input-username-register"
                         placeholder=""
                         required
                       />
@@ -342,7 +345,7 @@
                       <input
                         type="email"
                         class="form-control"
-                        id="email_register"
+                        id="input-email-register"
                         aria-describedby="emailHelp"
                         placeholder=""
                         required
@@ -353,7 +356,7 @@
                       <input
                         type="password"
                         class="form-control form-control-user"
-                        id="password_register"
+                        id="input-password-register"
                         placeholder=""
                         required
                       />
@@ -363,7 +366,7 @@
                       <input
                         type="password"
                         class="form-control form-control-user"
-                        id="repeat_password_register"
+                        id="input-repeat-password-register"
                         placeholder=""
                         required
                       />

@@ -95,6 +95,7 @@ profileForm.addEventListener("submit", function (event) {
   const options = {
     body: JSON.stringify({
       username: profileUsernameForm.value,
+      account_type: myData.userData.role_id,
     }),
   };
 
@@ -122,6 +123,7 @@ profileForm.addEventListener("submit", function (event) {
             ...myData.userData,
             username: data.username,
             email: data.email,
+            role_id: data.role_id,
           },
           authToken: myData.authToken,
           industryData: myData.industryData,

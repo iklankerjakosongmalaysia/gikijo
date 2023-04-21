@@ -134,7 +134,12 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         });
         submitLoginBtn.disabled = false;
         submitLoginBtn.innerHTML = "Login";
-        location.href = "home";
+
+        if (data.userData.role_id) {
+          location.href = "home";
+        } else {
+          location.href = "account-type";
+        }
       }
     })
     .catch((error) => {
@@ -154,18 +159,18 @@ document
     submitRegisterBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    const companyName = document.getElementById("company_name_register").value;
-    const username = document.getElementById("username_register").value;
-    const email = document.getElementById("email_register").value;
-    const password = document.getElementById("password_register").value;
+    const accountType = document.getElementById("input-account-type").value;
+    const username = document.getElementById("input-username-register").value;
+    const email = document.getElementById("input-email-register").value;
+    const password = document.getElementById("input-password-register").value;
     const repeatPassword = document.getElementById(
-      "repeat_password_register"
+      "input-repeat-password-register"
     ).value;
 
     if (password == repeatPassword) {
       const options = {
         body: JSON.stringify({
-          company_name: companyName,
+          account_type: accountType,
           username: username,
           email: email,
           password: password,
@@ -338,6 +343,7 @@ document
 
 var redirectUrl = "https://iklankerjakosongmalaysia.netlify.app";
 var successUrl = "https://iklankerjakosongmalaysia.netlify.app/home";
+var selectRole = "https://iklankerjakosongmalaysia.netlify.app/account-type";
 
 function initGoogleCode() {
   fetchAPI(
@@ -382,7 +388,12 @@ function continueOauth(code) {
             authToken: data.authToken,
             industryData: data.industryData,
           });
-          window.location.href = successUrl;
+
+          if (data.userData.role_id) {
+            window.location.href = successUrl;
+          } else {
+            window.location.href = selectRole;
+          }
         } else {
           alert("Token not found");
         }
