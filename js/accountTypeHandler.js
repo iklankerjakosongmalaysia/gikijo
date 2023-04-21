@@ -78,6 +78,16 @@ function handlingAccountType(accountTye, submitBtn) {
             15000
           );
         } else {
+          saveData("masterData", {
+            userData: {
+              ...myData.userData,
+              username: data.username,
+              email: data.email,
+              role_id: data.role_id,
+            },
+            authToken: myData.authToken,
+            industryData: myData.industryData,
+          });
           location.href = "home";
         }
       }
