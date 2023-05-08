@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- My function -->
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-57V08EMCKY"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-57V08EMCKY");
+    </script>
+    <!-- end my function -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Gikijo</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+
+    <!-- My function -->
+    <script src="js/apiHelper.js"></script>
+    <script src="js/globalFunction.js"></script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6981662240440614"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <style>
+      #summary p.collapse:not(.show) {
+        height: 140px !important;
+        overflow: hidden;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      #summary p.collapsing {
+        min-height: 140px !important;
+      }
+
+      #summary a.collapsed:after {
+        content: "+ Show More";
+      }
+
+      #summary a:not(.collapsed):after {
+        content: "- Show Less";
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Topbar -->
+    <nav
+      class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+      id="topbar-not-auth"
+      style="display: none"
+    >
+      <div class="justify-content-between row" style="width: 100%">
+        <a href="index" class="ml-3">
+          <img src="img/gikijo_logo.png" alt="image" width="100" />
+        </a>
+        <div class="d-sm-inline-block mr-auto ml-md-3">
+          <div class="btn ml-3" id="topbar-job-list-btn-not-auth">
+            <b>Find Job</b> <span class="badge badge-danger">New</span>
+          </div>
+        </div>
+        <div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            id="topbar-post-job-btn"
+          >
+            Post Job
+          </button>
+        </div>
+      </div>
+    </nav>
+    <nav
+      class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+      id="topbar-with-auth"
+      style="display: none"
+    >
+      <a href="index" class="ml-3">
+        <img src="img/gikijo_logo.png" alt="image" width="100" />
+      </a>
+      <div class="d-sm-inline-block mr-auto ml-md-3">
+        <div class="btn ml-3" id="topbar-job-list-btn-with-auth">
+          <b>Find Job</b> <span class="badge badge-danger">New</span>
+        </div>
+      </div>
+      <ul class="navbar-nav ml-auto">
+        <!-- Nav Item - User Information -->
+        <li class="nav-item dropdown no-arrow">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="userDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span
+              class="mr-2 d-none d-lg-inline text-gray-600 small"
+              id="topbar-username"
+              >...</span
+            >
+            <img
+              class="img-profile rounded-circle"
+              src="img/undraw_profile.svg"
+            />
+          </a>
+          <!-- Dropdown - User Information -->
+          <div
+            class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+            aria-labelledby="userDropdown"
+          >
+            <a class="dropdown-item" href="home">
+              <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
+              Home
+            </a>
+            <a class="dropdown-item" href="profile">
+              <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+              Profile
+            </a>
+            <a class="dropdown-item" href="job-list">
+              <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+              Job List
+            </a>
+            <a class="dropdown-item" href="settings">
+              <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+              Settings
+            </a>
+            <div class="dropdown-divider"></div>
+            <a
+              class="dropdown-item"
+              data-toggle="modal"
+              data-target="#logoutModal"
+            >
+              <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+              Logout
+            </a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <!-- End of Topbar -->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9">
+          <strong class="d-inline-block mb-2 mt-2 text-primary"
+            >Job Details</strong
+          >
+          <div id="alert-job-container">
+            <!-- show alert body here -->
+          </div>
+          <div class="card mt-2">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="mb-0">
+                    <strong class="card-title" id="job-title">-</strong>
+                  </h5>
+                  <h8 style="font-size: 13px" id="posted-at">...</h8>
+                </div>
+                <div id="action-job-button-container">
+                  <!-- auto display button here -->
+                </div>
+              </div>
+              <ul class="list-unstyled mt-3" id="job-list-item">
+                <li>...</li>
+                <li>...</li>
+                <li>...</li>
+                <li>...</li>
+                <li>...</li>
+                <li>...</li>
+                <li>...</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div>
+            <strong class="d-inline-block mb-2 mt-2 text-primary"
+              >More Jobs</strong
+            >
+
+            <div class="text-center p-5" id="job-list-loader">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+
+            <div id="job-list-empty" class="hidden">
+              <div class="col text-center">
+                <div class="empty-box-icon">
+                  <i class="fas fa-exclamation-circle fa-2x"></i>
+                </div>
+                <h6 class="mt-2">No Job Found</h6>
+                <a href="#" id="refresh-job-list" class="text-primary"
+                  >Refresh</a
+                >
+              </div>
+            </div>
+
+            <div class="form-group hidden" id="job-list-container">
+              <div class="card mb-1" id="job-list-body">
+                <div class="card-body d-flex justify-content-between">
+                  <h7>...</h7>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Logout Modal-->
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button
+              class="close"
+              type="button"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Select "Logout" below if you are ready to end your current session.
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-secondary"
+              type="button"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <a class="btn btn-primary" id="button-logout-yes">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+    <script src="js/jobDetailsHandler.js"></script>
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
+  </body>
+</html>
