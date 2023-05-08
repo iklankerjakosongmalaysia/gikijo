@@ -17,7 +17,7 @@ if (token) {
   topbarWithAuth.setAttribute("style", "display: none");
   topbarUsername.innerHTML = "...";
   topBarPostJobButton.addEventListener("click", function () {
-    location.href = "index?postJob=true";
+    location.href = "index?login=true";
   });
   location.href = "index";
 }

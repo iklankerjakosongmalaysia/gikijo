@@ -6,8 +6,8 @@ if (token) {
 
 $(document).ready(function () {
   var urlParams = new URLSearchParams(window.location.search);
-  var postJob = urlParams.get("postJob");
-  if (postJob === "true") {
+  var login = urlParams.get("login");
+  if (login === "true") {
     $("#startNowModal").modal("show");
   }
 });
@@ -341,7 +341,7 @@ document
     initGoogleCode();
   });
 
-var redirectUrl = "https://gikijo.com";
+var redirectUrl = "https://gikijo.com/";
 var successUrl = "https://gikijo.com/home";
 var selectRole = "https://gikijo.com/account-type";
 
