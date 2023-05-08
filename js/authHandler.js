@@ -37,12 +37,12 @@ document
     setTimeout(openLoginTab, 500);
   });
 
-document
-  .getElementById("topbar-register-btn")
-  .addEventListener("click", function () {
-    $("#startNowModal").modal("show");
-    setTimeout(openRegisterTab, 500);
-  });
+// document
+//   .getElementById("topbar-register-btn")
+//   .addEventListener("click", function () {
+//     $("#startNowModal").modal("show");
+//     setTimeout(openRegisterTab, 500);
+//   });
 
 document
   .getElementById("go-to-login-tab")
