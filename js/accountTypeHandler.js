@@ -86,7 +86,6 @@ function handlingAccountType(accountTye, submitBtn) {
               role_id: data.role_id,
             },
             authToken: myData.authToken,
-            industryData: myData.industryData,
           });
           location.href = "home";
         }

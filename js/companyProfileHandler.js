@@ -51,7 +51,7 @@ function populateCompany(data) {
 
     const title = divs[0].getElementsByTagName("h7");
 
-    title[0].innerHTML = `<i class="fas fa-building"></i> ${item.company_name}`;
+    title[0].innerHTML = `<i class="fas fa-building"></i> ${item.name}`;
 
     totalRecord.push(card);
   });
@@ -80,7 +80,7 @@ let canClickRetryButton = true;
 buttonRetryPostList.addEventListener("click", function () {
   if (canClickRetryButton) {
     canClickRetryButton = false;
-    fetchCompanyPostList();
+    fetchCompanyProfileList();
     let countdown = 20;
     buttonRetryPostList.textContent = `Try again in ${countdown} seconds`;
     let countdownInterval = setInterval(function () {
@@ -121,7 +121,7 @@ function populateContent(passData) {
     postedAt[0].innerHTML = ` ${timeAgo} ago`;
     title[0].innerHTML = item.title;
 
-    listItem[0].innerHTML = `<i class="fas fa-building"></i> <a href="company-profile?company_id=${item.user_id}">${item.company_name} (${item.ssm_number})</a>`;
+    listItem[0].innerHTML = `<i class="fas fa-building"></i> ${item.company_data.name} (${item.company_data.ssm_number})</a>`;
 
     listItem[1].innerHTML = `<i class="fas fa-tag"></i> ${item.type}`;
 
@@ -133,34 +133,21 @@ function populateContent(passData) {
 
     listItem[3].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
 
-    listItem[4].innerHTML = `<br>Requirement<br>${item.requirement.replace(
-      /\n/g,
-      "<br>"
-    )}`;
-    listItem[5].innerHTML = `<br>Benefit<br>${item.benefit.replace(
-      /\n/g,
-      "<br>"
-    )}`;
-    listItem[6].innerHTML = `<br>Additional Information<br>${item.additional_info.replace(
-      /\n/g,
-      "<br>"
-    )}`;
-
-    const copyLink = `${item.channel_data.url}?postId=${item.id}`;
+    // listItem[4].innerHTML = `<br>Requirement<br>${item.requirement.replace(
+    //   /\n/g,
+    //   "<br>"
+    // )}`;
+    // listItem[5].innerHTML = `<br>Benefit<br>${item.benefit.replace(
+    //   /\n/g,
+    //   "<br>"
+    // )}`;
+    // listItem[6].innerHTML = `<br>Additional Information<br>${item.additional_info.replace(
+    //   /\n/g,
+    //   "<br>"
+    // )}`;
 
     applyButton[0].addEventListener("click", function () {
-      navigator.clipboard
-        .writeText(copyLink)
-        .then(() => {
-          applyButton[0].innerHTML = "Link copied!";
-        })
-        .catch((error) => {
-          console.error("Failed to copy link: ", error);
-        });
-    });
-
-    applyButton[1].addEventListener("click", function () {
-      window.open(item.apply_link, "_blank");
+      window.open(item.internal_apply_link, "_blank");
     });
 
     // const paragraph = divs[0].getElementsByTagName("p");
@@ -196,13 +183,13 @@ function populateContent(passData) {
 var jobData = [];
 var is_private = false;
 
-function fetchCompanyPostList() {
+function fetchCompanyProfileList() {
   var urlParams = new URLSearchParams(window.location.search);
   var companyId = urlParams.get("company_id");
 
   if (companyId) {
     fetchAPI(
-      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/company/profile/list?company_id=${companyId}`,
+      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/company/list?company_id=${companyId}`,
       "GET"
     )
       .then((data) => {
@@ -231,14 +218,15 @@ function fetchCompanyPostList() {
             );
             const textAboutUs = document.getElementById("text-about-us");
 
-            if (data.company_profile?.company_name) {
-              textCompanyName.innerHTML = `<i class="fas fa-building"></i> ${data.company_profile?.company_name}`;
+            if (data.company_profile?.name) {
+              textCompanyName.innerHTML = `<i class="fas fa-building"></i> ${data.company_profile?.name}`;
             }
+
             if (data.company_profile?.ssm_number) {
               testSsmNumber.innerHTML = data.company_profile?.ssm_number;
             }
-            if (data.company_profile?.company_size) {
-              textCompanySize.innerHTML = data.company_profile?.company_size;
+            if (data.company_profile?.size) {
+              textCompanySize.innerHTML = data.company_profile?.size;
             }
             if (data.company_profile?.industry) {
               if (data.company_profile?.industry.length !== 0) {
@@ -249,9 +237,8 @@ function fetchCompanyPostList() {
                 textIndustry.innerHTML = combinedNames;
               }
             }
-            if (data.company_profile?.company_website) {
-              textCompanyWebsite.innerHTML =
-                data.company_profile?.company_website;
+            if (data.company_profile?.website) {
+              textCompanyWebsite.innerHTML = data.company_profile?.website;
             }
             if (data.company_profile?.business_address) {
               textBusinessAddress.innerHTML =
@@ -280,7 +267,7 @@ function fetchCompanyPostList() {
 document
   .getElementById("refresh-company-list")
   .addEventListener("click", function () {
-    fetchCompanyPostList();
+    fetchCompanyProfileList();
   });
 
-fetchCompanyPostList();
+fetchCompanyProfileList();

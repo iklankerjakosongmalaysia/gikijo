@@ -190,7 +190,6 @@ accountForm.addEventListener("submit", function (event) {
             role_id: data.role_id,
           },
           authToken: myData.authToken,
-          industryData: myData.industryData,
         });
       }
       submitAccountBtn.disabled = false;
@@ -216,61 +215,76 @@ const inputCompanySize = document.getElementById("input-company-size");
 const inputCompanyWebsite = document.getElementById("input-company-website");
 const inputBusinessAddress = document.getElementById("input-business-address");
 
-function populateSaveData() {
-  if (myData?.userData) {
-    accoutUsernameForm.value = myData.userData.username;
-    accountEmailForm.value = myData.userData.email;
-  }
+function getCompanyProfileData() {
+  fetchAPI(
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/company`,
+    "GET",
+    token
+  )
+    .then((data) => {
+      if (data?.message) {
+        alert(data.message);
+      } else {
+        const viewCompanyProfileButton = document.getElementById(
+          "view-company-profile-btn"
+        );
 
-  if (myData?.industryData) {
-    inputSelectProfileVisibility.value =
-      myData.userData.profile_visibility == true ? 1 : 2;
-    inputCompanyName.value = myData.userData.company_name;
-    inputSsmNumber.value = myData.userData.ssm_number;
-    inputAboutUs.value = myData.userData.about_us;
-
-    if (myData?.industryData?.length !== 0) {
-      myData.industryData.forEach((item) => {
-        const optionElement = document.createElement("option");
-        optionElement.value = item.id;
-        optionElement.text = item.name;
-        inputSelectIndustry.appendChild(optionElement);
-      });
-
-      if (myData?.userData?.industry.length !== 0) {
-        let newIndustry = [];
-        myData.userData.industry.map((item) => {
-          newIndustry.push(item.industry_id);
+        [
+          { name: "Public", value: 1 },
+          { name: "Private", value: 2 },
+        ].forEach((option) => {
+          const optionElement = document.createElement("option");
+          optionElement.value = option.value;
+          optionElement.text = `${option.name}`;
+          inputSelectProfileVisibility.appendChild(optionElement);
         });
-        $("#input-select-industry").val(newIndustry);
 
-        var selected = [];
-        $("#input-select-industry :selected").each(function () {
-          selected.push($(this).text());
+        data.industry_list.forEach((item) => {
+          const optionElement = document.createElement("option");
+          optionElement.value = item.id;
+          optionElement.text = item.name;
+          inputSelectIndustry.appendChild(optionElement);
         });
-        $("#selected-industries").text(selected.join(", "));
+
+        if (data.company_data !== null) {
+          if (data.company_data.industry.length !== 0) {
+            let newIndustry = [];
+            data.company_data.industry.map((item) => {
+              newIndustry.push(item.industry_id);
+            });
+            $("#input-select-industry").val(newIndustry);
+
+            var selected = [];
+            $("#input-select-industry :selected").each(function () {
+              selected.push($(this).text());
+            });
+            $("#selected-industries").text(selected.join(", "));
+          }
+
+          inputSelectProfileVisibility.value =
+            data.company_data.profile_visibility == true ? 1 : 2;
+          inputCompanyName.value = data.company_data.name;
+          inputSsmNumber.value = data.company_data.ssm_number;
+          inputAboutUs.value = data.company_data.about_us;
+          inputCompanySize.value = data.company_data.size;
+          inputCompanyWebsite.value = data.company_data.website;
+          inputBusinessAddress.value = data.company_data.business_address;
+        }
+
+        if (data.company_data !== null) {
+          viewCompanyProfileButton.disabled = false;
+          viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
+          viewCompanyProfileButton.addEventListener("click", function (e) {
+            window.open(`company-profile?company_id=${data.company_data.id}`);
+          });
+        } else {
+          viewCompanyProfileButton.disabled = true;
+          viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> Update to view company profile`;
+        }
       }
-    } else {
-      alert("Something went wrong, please login again");
-      clearSession();
-    }
-
-    inputCompanySize.value = myData.userData.company_size;
-    inputCompanyWebsite.value = myData.userData.company_website;
-    inputBusinessAddress.value = myData.userData.business_address;
-  }
+    })
+    .catch((error) => {});
 }
-
-document
-  .getElementById("view-company-profile-btn")
-  .addEventListener("click", function (e) {
-    if (myData?.userData.id) {
-      window.open(`company-profile.html?company_id=${myData.userData.id}`);
-    } else {
-      alert("Something went wrong, please login again");
-      clearSession();
-    }
-  });
 
 companyProfileForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -291,19 +305,19 @@ companyProfileForm.addEventListener("submit", function (event) {
     body: JSON.stringify({
       profile_visibility:
         inputSelectProfileVisibility.value == 1 ? true : false,
-      company_name: inputCompanyName.value,
+      name: inputCompanyName.value,
       ssm_number: inputSsmNumber.value,
       about_us: inputAboutUs.value,
       industry: selectedIndustry,
-      company_size: inputCompanySize.value,
-      company_website: inputCompanyWebsite.value,
+      size: inputCompanySize.value,
+      website: inputCompanyWebsite.value,
       business_address: inputBusinessAddress.value,
     }),
   };
 
   fetchAPI(
-    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/edit_company_profile`,
-    "PUT",
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/company`,
+    "POST",
     token,
     options
   )
@@ -311,6 +325,7 @@ companyProfileForm.addEventListener("submit", function (event) {
       if (data?.message) {
         alert(data.message);
       } else {
+        firstFetch();
         showAlert(
           "alert-profile-container",
           "Success!",
@@ -319,22 +334,6 @@ companyProfileForm.addEventListener("submit", function (event) {
           "my-profile-alert",
           15000
         );
-
-        saveData("masterData", {
-          userData: {
-            ...myData.userData,
-            profile_visibility: data.profile_visibility,
-            company_name: data.company_name,
-            ssm_number: data.ssm_number,
-            about_us: data.about_us,
-            industry: data.industry,
-            company_size: data.company_size,
-            company_website: data.company_website,
-            business_address: data.business_address,
-          },
-          authToken: myData.authToken,
-          industryData: myData.industryData,
-        });
 
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
@@ -571,7 +570,7 @@ function getResumeData() {
           viewResumeButton.disabled = false;
           viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
           viewResumeButton.addEventListener("click", function (e) {
-            window.open(`user-profile.html?profile_id=${data.resume.id}`);
+            window.open(`user-profile?profile_id=${data.resume.id}`);
           });
         } else {
           viewResumeButton.disabled = true;
@@ -585,8 +584,17 @@ function getResumeData() {
 // -- end of resume section
 
 function firstFetch() {
-  populateSaveData();
-  getResumeData();
+  // first tab
+  if (myData?.userData) {
+    accoutUsernameForm.value = myData.userData.username;
+    accountEmailForm.value = myData.userData.email;
+  }
+
+  if (myData.userData.role_id === 3) {
+    getResumeData();
+  } else {
+    getCompanyProfileData();
+  }
 
   $("#input-select-industry").change(function () {
     var selected = [];
@@ -598,5 +606,10 @@ function firstFetch() {
 }
 
 $(document).ready(function () {
+  var urlParams = new URLSearchParams(window.location.search);
+  var code = urlParams.get("code");
+  if (code === "company_profile") {
+    document.querySelector("#company-profile-tab").click();
+  }
   firstFetch();
 });

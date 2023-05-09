@@ -149,7 +149,7 @@ if (myData.userData.role_id === 3) {
     },
     {
       id: "my-job-job-seeker-tab",
-      title: "My Jobs",
+      title: "My Application",
       content: "my-job-job-seeker",
     }
   );
@@ -249,6 +249,18 @@ for (let i = 0; i < tabs.length; i++) {
 
 // const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 document.getElementById("myTab").innerHTML = tabHTML;
+
+document
+  .getElementById("create-update-company-profile")
+  .addEventListener("click", () => {
+    location.href = "profile?code=company_profile";
+  });
+
+document
+  .getElementById("edit-update-company-profile")
+  .addEventListener("click", () => {
+    location.href = "profile?code=company_profile";
+  });
 
 const successUrl = "https://gikijo.com/success";
 const cancelUrl = "https://gikijo.com/cancel";
@@ -988,8 +1000,6 @@ document
         body: JSON.stringify({
           job_id: selectedJob.id,
           title: title_edit.value,
-          company_name: company_name_edit.value,
-          ssm_number: ssm_number_edit.value,
           type: job_type_edit.value,
           min_salary: min_salary_edit.value,
           max_salary: max_salary_edit.value,
@@ -1132,6 +1142,7 @@ function populateApplication(data, applicationStatusData, userData) {
     const card = style.cloneNode(true);
     const divs = card.getElementsByTagName("div");
     const h6Text = divs[0].getElementsByTagName("h6");
+
     h6Text[0].innerHTML = `${item.profile_data.full_name} <span class="badge badge-pill badge-info">${item.application_status_data.name}</span> `;
     h6Text[1].innerHTML = item.post_data.title;
 
@@ -1297,8 +1308,10 @@ function editForm(item) {
     }
   }
 
-  document.getElementById("input-edit-company-name").value = item.company_name;
-  document.getElementById("input-edit-company-ssm").value = item.ssm_number;
+  document.getElementById("input-edit-company-name").value =
+    item.company_data.name;
+  document.getElementById("input-edit-company-ssm").value =
+    item.company_data.ssm_number;
   document.getElementById("input-edit-job-title").value = item.title;
   document.getElementById("input-edit-job-type").value = item.type;
   document.getElementById("input-edit-job-min-salary").value = item.min_salary;
@@ -1418,6 +1431,14 @@ function fetchMyJobs() {
         });
       });
 
+      if (data.company_data !== null) {
+        company_data = data.company_data;
+        company_name_create.value = data.company_data.name;
+        ssm_number_create.value = data.company_data.ssm_number;
+      } else {
+        company_data = null;
+      }
+
       const loadingStatusCard = document.getElementById(
         "home-status-list-loading"
       );
@@ -1524,7 +1545,7 @@ function fetchMyJobs() {
 
         const listItem = divs[0].getElementsByTagName("li");
         listItem[0].innerHTML = `<b>Title of the job opening:</b> ${item.title}`;
-        listItem[1].innerHTML = `<b>Company name:</b> ${item.company_name} (${item.ssm_number})`;
+        listItem[1].innerHTML = `<b>Company name:</b> <a href="company-profile?company_id=${item.company_data.id}" target="_blank" rel="noopener noreferrer">${item.company_data.name} (${item.company_data.ssm_number})</a>`;
         listItem[2].innerHTML = `<b>Type:</b> ${item.type}`;
         if (item.min_salary > 0) {
           listItem[3].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
@@ -1841,6 +1862,7 @@ function populateOrderHistoryVisibility(data) {
   }
 }
 
+var company_data = null;
 var slot_type_create = document.getElementById("input-create-slot-type");
 var company_name_create = document.getElementById("input-create-company-name");
 var ssm_number_create = document.getElementById("input-create-company-ssm");
@@ -1900,76 +1922,82 @@ function defaultHide() {
 }
 
 defaultHide();
+let company_profile_id = null;
 
 document
   .getElementById("create-job-form")
   .addEventListener("submit", function (e) {
     e.preventDefault();
 
-    let submitCreateJobBtn = document.getElementById("submit-create-job-btn");
+    if (company_data) {
+      let submitCreateJobBtn = document.getElementById("submit-create-job-btn");
 
-    submitCreateJobBtn.disabled = true;
-    submitCreateJobBtn.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+      submitCreateJobBtn.disabled = true;
+      submitCreateJobBtn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    if (token) {
-      if (min_salary_create.value) {
-        if (min_salary_create.value <= max_salary_create.value) {
-          // proceed
-        } else {
-          alert("Maximum salary should be greater or equal to minimum salary");
-          submitCreateJobBtn.disabled = false;
-          submitCreateJobBtn.innerHTML = "Create";
-          return;
-        }
-      }
-
-      const options = {
-        body: JSON.stringify({
-          title: title_create.value,
-          company_name: company_name_create.value,
-          ssm_number: ssm_number_create.value,
-          type: job_type_create.value,
-          min_salary: min_salary_create.value,
-          max_salary: max_salary_create.value,
-          salary_type: salary_type_create.value,
-          location: location_create.value,
-          requirement: requirement_create.value,
-          benefit: benefit_create.value,
-          additional_info: additional_info_create.value,
-          external_apply_link: external_apply_link_create.value,
-          is_free: slot_type_create.value == "coin-based" ? true : false,
-          is_external_apply:
-            apply_type_create.value == "external" ? true : false,
-        }),
-      };
-
-      fetchAPI(
-        "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/job",
-        "POST",
-        token,
-        options
-      )
-        .then((data) => {
-          if (data?.message) {
-            alert(data.message);
+      if (token) {
+        if (min_salary_create.value) {
+          if (min_salary_create.value <= max_salary_create.value) {
+            // proceed
+          } else {
+            alert(
+              "Maximum salary should be greater or equal to minimum salary"
+            );
             submitCreateJobBtn.disabled = false;
             submitCreateJobBtn.innerHTML = "Create";
-          } else {
-            // delay of 2 seconds before calling fetchMyJobs
-            setTimeout(() => {
-              fetchMyJobs();
-              $("#addJobModal").modal("hide");
+            return;
+          }
+        }
+
+        const options = {
+          body: JSON.stringify({
+            company_id: company_data.id,
+            title: title_create.value,
+            type: job_type_create.value,
+            min_salary: min_salary_create.value,
+            max_salary: max_salary_create.value,
+            salary_type: salary_type_create.value,
+            location: location_create.value,
+            requirement: requirement_create.value,
+            benefit: benefit_create.value,
+            additional_info: additional_info_create.value,
+            external_apply_link: external_apply_link_create.value,
+            is_free: slot_type_create.value == "coin-based" ? true : false,
+            is_external_apply:
+              apply_type_create.value == "external" ? true : false,
+          }),
+        };
+
+        fetchAPI(
+          "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/job",
+          "POST",
+          token,
+          options
+        )
+          .then((data) => {
+            if (data?.message) {
+              alert(data.message);
               submitCreateJobBtn.disabled = false;
               submitCreateJobBtn.innerHTML = "Create";
-            }, 2000);
-          }
-        })
-        .catch((error) => {
-          $("#addJobModal").modal("hide");
-          submitCreateJobBtn.disabled = false;
-          submitCreateJobBtn.innerHTML = "Create";
-        });
+            } else {
+              // delay of 2 seconds before calling fetchMyJobs
+              setTimeout(() => {
+                fetchMyJobs();
+                $("#addJobModal").modal("hide");
+                submitCreateJobBtn.disabled = false;
+                submitCreateJobBtn.innerHTML = "Create";
+              }, 2000);
+            }
+          })
+          .catch((error) => {
+            $("#addJobModal").modal("hide");
+            submitCreateJobBtn.disabled = false;
+            submitCreateJobBtn.innerHTML = "Create";
+          });
+      }
+    } else {
+      alert("Company profile not updated, please update your company profile");
     }
   });
 
