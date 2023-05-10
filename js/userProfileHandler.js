@@ -105,15 +105,7 @@ function cancelInvite(invite_id, inviteBtn, typeText) {
     )
       .then((data) => {
         if (data?.message) {
-          showAlert(
-            "alert-user-profile-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-user-profile-alert",
-            15000
-          );
-
+          showToast("alert-toast-container", data.message, "danger");
           inviteBtn.disabled = false;
           inviteBtn.innerHTML = `Invite`;
           loading = false;
@@ -121,16 +113,11 @@ function cancelInvite(invite_id, inviteBtn, typeText) {
         } else {
           setTimeout(() => {
             fetchUserProfile();
-
-            showAlert(
-              "alert-user-profile-container",
-              "Success!",
+            showToast(
+              "alert-toast-container",
               `The ${typeText} has been successfully canceled.`,
-              "success",
-              "my-user-profile-alert",
-              15000
+              "success"
             );
-
             inviteBtn.disabled = false;
             inviteBtn.innerHTML = `Invite`;
             loading = false;
@@ -171,15 +158,7 @@ function sendInvite(postId, inviteBtn, profileId) {
     )
       .then((data) => {
         if (data?.message) {
-          showAlert(
-            "alert-user-profile-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-user-profile-alert",
-            15000
-          );
-
+          showToast("alert-toast-container", data.message, "danger");
           inviteBtn.disabled = false;
           inviteBtn.innerHTML = `Invite`;
           loading = false;
@@ -187,16 +166,11 @@ function sendInvite(postId, inviteBtn, profileId) {
         } else {
           setTimeout(() => {
             fetchUserProfile();
-
-            showAlert(
-              "alert-user-profile-container",
-              "Success!",
-              "The invitation has been sent successfully!",
-              "success",
-              "my-user-profile-alert",
-              15000
+            showToast(
+              "alert-toast-container",
+              "The invitation has been sent successfully.",
+              "success"
             );
-
             inviteBtn.disabled = false;
             inviteBtn.innerHTML = `Invite`;
             loading = false;

@@ -596,29 +596,14 @@ channelForm.addEventListener("submit", function (event) {
         setTimeout(() => {
           submitChannelBtn.disabled = false;
           submitChannelBtn.innerHTML = "Share Now";
-          showAlert(
-            "alert-share-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-share-alert",
-            15000
-          );
+          showToast("alert-toast-container", data.message, "danger");
         }, 2000);
       } else {
         // delay of 2 seconds before calling fetchMyJobs
         setTimeout(() => {
           fetchMyJobs();
           $("#channelJobModal").modal("hide");
-          window.scrollTo(0, 0);
-          showAlert(
-            "alert-post-container",
-            "Success!",
-            data.status_message,
-            "success",
-            "my-share-alert",
-            15000
-          );
+          showToast("alert-toast-container", data.status_message, "success");
           submitChannelBtn.disabled = false;
           submitChannelBtn.innerHTML = "Share Now";
         }, 2000);

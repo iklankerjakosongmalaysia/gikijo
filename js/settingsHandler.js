@@ -173,15 +173,7 @@ changePasswordForm.addEventListener("submit", function (event) {
   const repeatPassword = repeatNewPasswordForm.value;
 
   if (newPassword !== repeatPassword) {
-    // Show error message that passwords do not match
-    showAlert(
-      "alert-settings-container",
-      "Error!",
-      "passwords do not match",
-      "danger",
-      "my-settings-alert",
-      15000
-    );
+    showToast("alert-toast-container", "Passwords do not match.", "danger");
     submitChangeBtn.disabled = false;
     submitChangeBtn.innerHTML = "Update";
     return;
@@ -200,22 +192,12 @@ changePasswordForm.addEventListener("submit", function (event) {
     )
       .then((data) => {
         if (data?.message) {
-          showAlert(
-            "alert-settings-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-settings-alert",
-            15000
-          );
+          showToast("alert-toast-container", data.message, "danger");
         } else {
-          showAlert(
-            "alert-settings-container",
-            "Success!",
-            "your password has been successfully updated!",
-            "success",
-            "my-settings-alert",
-            15000
+          showToast(
+            "alert-toast-container",
+            "Your password has been successfully updated.",
+            "success"
           );
         }
         submitChangeBtn.disabled = false;
@@ -260,22 +242,12 @@ feedbackForm.addEventListener("submit", function (event) {
     .then((data) => {
       if (data) {
         if (data.message) {
-          showAlert(
-            "alert-settings-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-settings-alert",
-            15000
-          );
+          showToast("alert-toast-container", data.message, "danger");
         } else {
-          showAlert(
-            "alert-settings-container",
-            "Thank you!",
-            "your feedback has been submitted successfully",
-            "success",
-            "my-settings-alert",
-            15000
+          showToast(
+            "alert-toast-container",
+            "Your feedback has been submitted successfully.",
+            "success"
           );
           feedbackTitle.value = "";
           feedbackDescription.value = "";
@@ -326,22 +298,12 @@ deleteProfileForm.addEventListener("submit", function (event) {
   )
     .then((data) => {
       if (data?.message) {
-        showAlert(
-          "alert-settings-container",
-          "Error!",
-          data.message,
-          "danger",
-          "my-settings-alert",
-          15000
-        );
+        showToast("alert-toast-container", data.message, "danger");
       } else {
-        showAlert(
-          "alert-settings-container",
-          "Success!",
-          "your account has been deleted",
-          "success",
-          "my-settings-alert",
-          15000
+        showToast(
+          "alert-toast-container",
+          "Your account has been deleted!",
+          "success"
         );
         setTimeout(() => {
           clearSession();

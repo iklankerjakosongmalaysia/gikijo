@@ -110,21 +110,9 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
         if (data.payload === 700) {
           $("#startNowModal").modal("hide");
           $("#reverifyModal").modal("show");
-          showAlert(
-            "alert-reverify-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-reverify-alert"
-          );
+          showToast("alert-toast-container", data.message, "danger");
         } else {
-          showAlert(
-            "alert-login-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-login-alert"
-          );
+          showToast("alert-toast-container", data.message, "danger");
         }
       } else {
         saveData("masterData", {
@@ -185,22 +173,9 @@ document
           submitRegisterBtn.disabled = false;
           submitRegisterBtn.innerHTML = "Register";
           if (data.code) {
-            showAlert(
-              "alert-register-container",
-              "Error!",
-              data.message,
-              "danger",
-              "my-register-alert"
-            );
+            showToast("alert-toast-container", data.message, "danger");
           } else {
-            showAlert(
-              "alert-register-container",
-              "Success!",
-              data.message,
-              "success",
-              "my-register-alert",
-              15000
-            );
+            showToast("alert-toast-container", data.message, "success");
           }
         })
         .catch((error) => {
@@ -209,12 +184,10 @@ document
           alert(error);
         });
     } else {
-      showAlert(
-        "alert-register-container",
-        "Error!",
-        "Password and confirm password does not match",
-        "danger",
-        "my-register-alert"
+      showToast(
+        "alert-toast-container",
+        "Password and confirm password does not match.",
+        "danger"
       );
       submitRegisterBtn.disabled = false;
       submitRegisterBtn.innerHTML = "Register";
@@ -251,22 +224,9 @@ document
         submitForgotPasswordBtn.disabled = false;
         submitForgotPasswordBtn.innerHTML = "Reset Password";
         if (data.code) {
-          showAlert(
-            "alert-forgot-password-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-forgot-password-alert"
-          );
+          showToast("alert-toast-container", data.message, "danger");
         } else {
-          showAlert(
-            "alert-forgot-password-container",
-            "Success!",
-            data.message.message,
-            "success",
-            "my-forgot-password-alert",
-            15000
-          );
+          showToast("alert-toast-container", data.message.message, "success");
         }
       })
       .catch((error) => {
@@ -305,21 +265,9 @@ document
         submitReverifyBtn.disabled = false;
         submitReverifyBtn.innerHTML = "Resend Verification Link";
         if (data.code) {
-          showAlert(
-            "alert-reverify-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-reverify-alert"
-          );
+          showToast("alert-toast-container", data.message, "danger");
         } else {
-          showAlert(
-            "alert-reverify-container",
-            "Success!",
-            data.message,
-            "success",
-            "my-reverify-alert"
-          );
+          showToast("alert-toast-container", data.message, "success");
         }
       })
       .catch((error) => {

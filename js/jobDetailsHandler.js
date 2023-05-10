@@ -101,14 +101,7 @@ function applyJob(passData, passBtn, passBtnDefaultText) {
   )
     .then((data) => {
       if (data?.message) {
-        showAlert(
-          "alert-job-container",
-          "Error!",
-          data.message,
-          "danger",
-          "my-job-alert",
-          15000
-        );
+        showToast("alert-toast-container", data.message, "danger");
         passBtn.disabled = false;
         passBtn.innerHTML = passBtnDefaultText;
         loading = false;
@@ -116,6 +109,11 @@ function applyJob(passData, passBtn, passBtnDefaultText) {
         passBtn.disabled = false;
         passBtn.innerHTML = `<i class="fas fa-check"></i> Applied`;
         passBtn.setAttribute("class", "btn btn-success");
+        showToast(
+          "alert-toast-container",
+          "Your application has been submitted successfully.",
+          "success"
+        );
       }
     })
     .catch((error) => {
@@ -228,7 +226,7 @@ function fetchPostDetails() {
       fetchAPI(fetchUrl, "GET", token)
         .then((data) => {
           if (data?.message) {
-            alert(data.message);
+            showToast("alert-toast-container", data.message, "danger");
           } else {
             populateToJobDetails(data.post_data, data.is_applied);
             populateOtherPost(data.post_all);
@@ -242,7 +240,7 @@ function fetchPostDetails() {
       fetchAPI(fetchUrl, "GET")
         .then((data) => {
           if (data?.message) {
-            alert(data.message);
+            showToast("alert-toast-container", data.message, "danger");
           } else {
             populateToJobDetails(data.post_data, data.is_applied);
             populateOtherPost(data.post_all);
@@ -253,7 +251,7 @@ function fetchPostDetails() {
         });
     }
   } else {
-    alert("Post Id not found");
+    showToast("alert-toast-container", "Post Id not found.", "danger");
   }
 }
 

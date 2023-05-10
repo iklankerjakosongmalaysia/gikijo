@@ -69,14 +69,7 @@ function handlingAccountType(accountTye, submitBtn) {
     .then((data) => {
       if (data) {
         if (data.message) {
-          showAlert(
-            "alert-account-type-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-account-type-alert",
-            15000
-          );
+          showToast("alert-toast-container", data.message, "danger");
         } else {
           saveData("masterData", {
             userData: {

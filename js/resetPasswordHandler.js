@@ -28,13 +28,7 @@ document
       const repeatPassword = repeatNewPasswordForm.value;
 
       if (newPassword !== repeatPassword) {
-        showAlert(
-          "alert-reset-password-container",
-          "Error!",
-          "Passwords do not match",
-          "danger",
-          "my-reset-password-alert"
-        );
+        showToast("alert-toast-container", "Passwords do not match.", "danger");
         submitResetPasswordBtn.disabled = false;
         submitResetPasswordBtn.innerHTML = "Reset Password";
         return;
@@ -57,22 +51,13 @@ document
             submitResetPasswordBtn.innerHTML = "Reset Password";
 
             if (data === undefined) {
-              showAlert(
-                "alert-reset-password-container",
-                "Error!",
-                "Something went wrong",
-                "danger",
-                "my-reset-password-alert"
+              showToast(
+                "alert-toast-container",
+                "Something went wrong.",
+                "danger"
               );
             } else {
-              showAlert(
-                "alert-reset-password-container",
-                "Success!",
-                data.message,
-                "success",
-                "my-reset-password-alert",
-                15000
-              );
+              showToast("alert-toast-container", data.message, "success");
             }
           })
           .catch((error) => {
@@ -82,13 +67,7 @@ document
           });
       }
     } else {
-      showAlert(
-        "alert-reset-password-container",
-        "Error!",
-        "Token not found!",
-        "danger",
-        "my-reset-password-alert"
-      );
+      showToast("alert-toast-container", "Token not found.", "danger");
       submitResetPasswordBtn.disabled = false;
       submitResetPasswordBtn.innerHTML = "Reset Password";
     }
@@ -116,26 +95,14 @@ function verifyMagicToken() {
           token = data.authToken;
         } else {
           submitResetPasswordBtn.disabled = true;
-          showAlert(
-            "alert-reset-password-container",
-            "Error!",
-            data.message,
-            "danger",
-            "my-reset-password-alert"
-          );
+          showToast("alert-toast-container", data.message, "danger");
         }
       })
       .catch((error) => {
         alert(error);
       });
   } else {
-    showAlert(
-      "alert-reset-password-container",
-      "Error!",
-      "Token not found!",
-      "danger",
-      "my-reset-password-alert"
-    );
+    showToast("alert-toast-container", "Token not found.", "danger");
   }
 }
 

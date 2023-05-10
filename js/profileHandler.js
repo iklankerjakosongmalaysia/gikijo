@@ -173,15 +173,11 @@ accountForm.addEventListener("submit", function (event) {
       if (data?.message) {
         alert(data.message);
       } else {
-        showAlert(
-          "alert-profile-container",
-          "Success!",
-          "Account has been successfully updated!",
-          "success",
-          "my-profile-alert",
-          15000
+        showToast(
+          "alert-toast-container",
+          "Account has been successfully updated.",
+          "success"
         );
-
         saveData("masterData", {
           userData: {
             ...myData.userData,
@@ -211,7 +207,9 @@ const inputCompanyName = document.getElementById("input-company-name");
 const inputSsmNumber = document.getElementById("input-ssm-number");
 const inputAboutUs = document.getElementById("input-about-us");
 const inputSelectIndustry = document.getElementById("input-select-industry");
-const inputCompanySize = document.getElementById("input-company-size");
+const inputSelectCompanySize = document.getElementById(
+  "input-select-company-size"
+);
 const inputCompanyWebsite = document.getElementById("input-company-website");
 const inputBusinessAddress = document.getElementById("input-business-address");
 
@@ -259,6 +257,20 @@ function getCompanyProfileData() {
           inputSelectIndustry.appendChild(optionElement);
         });
 
+        [
+          { name: "1-10 Employees", value: "1-10 Employees" },
+          { name: "11-50 Employees", value: "11-50 Employees" },
+          { name: "51-200 Employees", value: "51-200 Employees" },
+          { name: "201-500 Employees", value: "201-500 Employees" },
+          { name: "501-1000 Employees", value: "501-1000 Employees" },
+          { name: "1001+ Employees", value: "1001+ Employees" },
+        ].forEach((option) => {
+          const optionElement = document.createElement("option");
+          optionElement.value = option.value;
+          optionElement.text = `${option.name}`;
+          inputSelectCompanySize.appendChild(optionElement);
+        });
+
         if (data.company_data !== null) {
           if (data.company_data.industry.length !== 0) {
             let newIndustry = [];
@@ -279,7 +291,7 @@ function getCompanyProfileData() {
           inputCompanyName.value = data.company_data.name;
           inputSsmNumber.value = data.company_data.ssm_number;
           inputAboutUs.value = data.company_data.about_us;
-          inputCompanySize.value = data.company_data.size;
+          inputSelectCompanySize.value = data.company_data.size;
           inputCompanyWebsite.value = data.company_data.website;
           inputBusinessAddress.value = data.company_data.business_address;
         }
@@ -315,7 +327,7 @@ companyProfileForm.addEventListener("submit", function (event) {
     inputSsmNumber,
     inputAboutUs,
     selectedIndustry,
-    inputCompanySize,
+    inputSelectCompanySize,
     inputCompanyWebsite,
     inputBusinessAddress,
   ];
@@ -364,16 +376,11 @@ companyProfileForm.addEventListener("submit", function (event) {
       if (data?.message) {
         alert(data.message);
       } else {
-        showAlert(
-          "alert-profile-container",
-          "Success!",
-          "Company profile has been successfully updated!",
-          "success",
-          "my-profile-alert",
-          15000
+        showToast(
+          "alert-toast-container",
+          "Company profile has been successfully updated.",
+          "success"
         );
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
         updateCompanyProfileViewButton(true, data.company_data.id);
       }
 
@@ -542,16 +549,11 @@ resumeForm.addEventListener("submit", function (event) {
       if (data?.message) {
         alert(data.message);
       } else {
-        showAlert(
-          "alert-profile-container",
-          "Success!",
-          "Resume has been successfully updated!",
-          "success",
-          "my-profile-alert",
-          15000
+        showToast(
+          "alert-toast-container",
+          "Resume has been successfully updated.",
+          "success"
         );
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
         updateResumeViewButton(true, data.profile_data.id);
       }
 

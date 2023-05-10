@@ -154,9 +154,6 @@
 
             <div>
               <p>Update profile details here.</p>
-              <div id="alert-profile-container">
-                <!-- show alert body here -->
-              </div>
               <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <!-- auto load nav tabs menu here -->
               </ul>
@@ -288,12 +285,11 @@
                               <div class="col">
                                 <div class="form-group">
                                   <label>Company Size</label>
-                                  <input
-                                    type="number"
+                                  <select
                                     class="form-control"
-                                    id="input-company-size"
-                                    placeholder=""
-                                  />
+                                    id="input-select-company-size"
+                                    required
+                                  ></select>
                                 </div>
                               </div>
                               <div class="col">
@@ -667,6 +663,11 @@
         </div>
       </div>
     </div>
+
+    <div id="alert-toast-container">
+      <!-- alert toast -->
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
