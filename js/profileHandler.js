@@ -215,6 +215,23 @@ const inputCompanySize = document.getElementById("input-company-size");
 const inputCompanyWebsite = document.getElementById("input-company-website");
 const inputBusinessAddress = document.getElementById("input-business-address");
 
+function updateCompanyProfileViewButton(toggle, company_id) {
+  const viewCompanyProfileButton = document.getElementById(
+    "view-company-profile-btn"
+  );
+
+  if (toggle) {
+    viewCompanyProfileButton.disabled = false;
+    viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Company Profile`;
+    viewCompanyProfileButton.addEventListener("click", function (e) {
+      window.open(`company-profile?company_id=${company_id}`);
+    });
+  } else {
+    viewCompanyProfileButton.disabled = true;
+    viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> Update to view company profile`;
+  }
+}
+
 function getCompanyProfileData() {
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/company`,
@@ -225,10 +242,6 @@ function getCompanyProfileData() {
       if (data?.message) {
         alert(data.message);
       } else {
-        const viewCompanyProfileButton = document.getElementById(
-          "view-company-profile-btn"
-        );
-
         [
           { name: "Public", value: 1 },
           { name: "Private", value: 2 },
@@ -272,14 +285,9 @@ function getCompanyProfileData() {
         }
 
         if (data.company_data !== null) {
-          viewCompanyProfileButton.disabled = false;
-          viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
-          viewCompanyProfileButton.addEventListener("click", function (e) {
-            window.open(`company-profile?company_id=${data.company_data.id}`);
-          });
+          updateCompanyProfileViewButton(true, data.company_data.id);
         } else {
-          viewCompanyProfileButton.disabled = true;
-          viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> Update to view company profile`;
+          updateCompanyProfileViewButton(false);
         }
       }
     })
@@ -301,17 +309,48 @@ companyProfileForm.addEventListener("submit", function (event) {
     selectedIndustry.push({ industry_id: $(this).val() });
   });
 
+  const textElements = [
+    inputSelectProfileVisibility,
+    inputCompanyName,
+    inputSsmNumber,
+    inputAboutUs,
+    selectedIndustry,
+    inputCompanySize,
+    inputCompanyWebsite,
+    inputBusinessAddress,
+  ];
+
+  // start progress bar
+  const POINTS_PER_FIELD = 10;
+  let completedFields = 0;
+  for (let i = 0; i < textElements.length; i++) {
+    if (textElements[i]?.value) {
+      completedFields++;
+    } else {
+      if (Array.isArray(textElements[i])) {
+        if (textElements[i].length !== 0) {
+          completedFields++;
+        }
+      }
+    }
+  }
+
+  const totalPointsEarned = completedFields * POINTS_PER_FIELD;
+  const totalPossiblePoints = textElements.length * POINTS_PER_FIELD;
+  const progressPercentage =
+    ((totalPointsEarned / totalPossiblePoints) * 100).toFixed(0) + "%";
+
   const options = {
     body: JSON.stringify({
-      profile_visibility:
-        inputSelectProfileVisibility.value == 1 ? true : false,
-      name: inputCompanyName.value,
-      ssm_number: inputSsmNumber.value,
-      about_us: inputAboutUs.value,
-      industry: selectedIndustry,
-      size: inputCompanySize.value,
-      website: inputCompanyWebsite.value,
-      business_address: inputBusinessAddress.value,
+      profile_visibility: textElements[0].value == 1 ? true : false,
+      name: textElements[1].value,
+      ssm_number: textElements[2].value,
+      about_us: textElements[3].value,
+      industry: textElements[4],
+      size: textElements[5].value,
+      website: textElements[6].value,
+      business_address: textElements[7].value,
+      progress_percentage: progressPercentage,
     }),
   };
 
@@ -325,7 +364,6 @@ companyProfileForm.addEventListener("submit", function (event) {
       if (data?.message) {
         alert(data.message);
       } else {
-        firstFetch();
         showAlert(
           "alert-profile-container",
           "Success!",
@@ -336,6 +374,7 @@ companyProfileForm.addEventListener("submit", function (event) {
         );
 
         window.scrollTo({ top: 0, behavior: "smooth" });
+        updateCompanyProfileViewButton(true, data.company_data.id);
       }
 
       submitCompanyProfileBtn.disabled = false;
@@ -344,6 +383,7 @@ companyProfileForm.addEventListener("submit", function (event) {
     .catch((error) => {
       submitCompanyProfileBtn.disabled = false;
       submitCompanyProfileBtn.innerHTML = "Update";
+      updateCompanyProfileViewButton(false);
     });
 });
 
@@ -393,6 +433,21 @@ const inputResumeLanguages = document.getElementById("input-resume-languages");
 const inputResumeOtherInformation = document.getElementById(
   "input-resume-other-information"
 );
+
+function updateResumeViewButton(toggle, profile_id) {
+  const viewResumeButton = document.getElementById("view-resume-btn");
+
+  if (toggle) {
+    viewResumeButton.disabled = false;
+    viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
+    viewResumeButton.addEventListener("click", function (e) {
+      window.open(`user-profile?profile_id=${profile_id}`);
+    });
+  } else {
+    viewResumeButton.disabled = true;
+    viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> Update to view resume`;
+  }
+}
 
 resumeForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -487,7 +542,6 @@ resumeForm.addEventListener("submit", function (event) {
       if (data?.message) {
         alert(data.message);
       } else {
-        firstFetch();
         showAlert(
           "alert-profile-container",
           "Success!",
@@ -498,6 +552,7 @@ resumeForm.addEventListener("submit", function (event) {
         );
 
         window.scrollTo({ top: 0, behavior: "smooth" });
+        updateResumeViewButton(true, data.profile_data.id);
       }
 
       submitResumeBtn.disabled = false;
@@ -506,6 +561,7 @@ resumeForm.addEventListener("submit", function (event) {
     .catch((error) => {
       submitResumeBtn.disabled = false;
       submitResumeBtn.innerHTML = "Update";
+      updateResumeViewButton(false);
     });
 });
 
@@ -519,8 +575,6 @@ function getResumeData() {
       if (data?.message) {
         alert(data.message);
       } else {
-        const viewResumeButton = document.getElementById("view-resume-btn");
-
         inputSelectContactInformationVisibility.innerHTML = "";
         data.contact_visibility_list.forEach((option) => {
           const optionElement = document.createElement("option");
@@ -537,48 +591,48 @@ function getResumeData() {
           inputSelectResumeLocation.appendChild(optionElement);
         });
 
-        if (data.resume !== null) {
+        if (data.profile_data !== null) {
           inputSelectContactInformationVisibility.value =
-            data.resume.contact_visibility_data.id;
+            data.profile_data.contact_visibility_data.id;
 
-          inputAboutMe.value = data.resume.about_me;
+          inputAboutMe.value = data.profile_data.about_me;
 
-          inputResumeFullName.value = data.resume.full_name;
-          inputSelectResumeGender.value = data.resume.gender;
-          inputResumeDateOfBirth.value = data.resume.date_of_birth;
-          inputResumeEmail.value = data.resume.email;
-          inputResumePhoneNumber.value = data.resume.phone_number;
-          inputResumeAddress.value = data.resume.address;
+          inputResumeFullName.value = data.profile_data.full_name;
+          inputSelectResumeGender.value = data.profile_data.gender;
+          inputResumeDateOfBirth.value = data.profile_data.date_of_birth;
+          inputResumeEmail.value = data.profile_data.email;
+          inputResumePhoneNumber.value = data.profile_data.phone_number;
+          inputResumeAddress.value = data.profile_data.address;
           inputSelectResumeCurrentJobStatus.value =
-            data.resume.current_job_status;
+            data.profile_data.current_job_status;
 
-          inputResumePreferredJob.value = data.resume.preferred_job;
-          inputResumeExpectedMinSalary.value = data.resume.expected_min_salary;
-          inputResumeExpectedMaxSalary.value = data.resume.expected_max_salary;
+          inputResumePreferredJob.value = data.profile_data.preferred_job;
+          inputResumeExpectedMinSalary.value =
+            data.profile_data.expected_min_salary;
+          inputResumeExpectedMaxSalary.value =
+            data.profile_data.expected_max_salary;
           inputResumeExpectedSalaryType.value =
-            data.resume.expected_salary_type;
-          inputResumeWorkExperience.value = data.resume.work_experience;
-          inputResumeEducation.value = data.resume.education;
-          inputResumeSkills.value = data.resume.skills;
-          inputResumeLanguages.value = data.resume.languages;
-          inputResumeOtherInformation.value = data.resume.other_information;
+            data.profile_data.expected_salary_type;
+          inputResumeWorkExperience.value = data.profile_data.work_experience;
+          inputResumeEducation.value = data.profile_data.education;
+          inputResumeSkills.value = data.profile_data.skills;
+          inputResumeLanguages.value = data.profile_data.languages;
+          inputResumeOtherInformation.value =
+            data.profile_data.other_information;
 
-          inputSelectResumeLocation.value = data.resume.location_id;
+          inputSelectResumeLocation.value = data.profile_data.location_id;
         }
 
-        if (data.resume !== null) {
-          viewResumeButton.disabled = false;
-          viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
-          viewResumeButton.addEventListener("click", function (e) {
-            window.open(`user-profile?profile_id=${data.resume.id}`);
-          });
+        if (data.profile_data !== null) {
+          updateResumeViewButton(true, data.profile_data.id);
         } else {
-          viewResumeButton.disabled = true;
-          viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> Update to view resume`;
+          updateResumeViewButton(false);
         }
       }
     })
-    .catch((error) => {});
+    .catch((error) => {
+      updateResumeViewButton(false);
+    });
 }
 
 // -- end of resume section
@@ -610,6 +664,9 @@ $(document).ready(function () {
   var code = urlParams.get("code");
   if (code === "company_profile") {
     document.querySelector("#company-profile-tab").click();
+  }
+  if (code === "resume") {
+    document.querySelector("#my-resume-tab").click();
   }
   firstFetch();
 });

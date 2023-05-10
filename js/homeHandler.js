@@ -1416,237 +1416,220 @@ function deletePost(passData, passBtn, passBtnDefaultText) {
 function fetchMyJobs() {
   fetchAPI("https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/job", "GET", token)
     .then((data) => {
-      var job_list = data.job_list;
-      var post_list = data.post_list;
+      if (data?.message) {
+        alert(data.message);
+      } else {
+        const progressContainer = document.getElementById(
+          "employer-profile-progress-bar"
+        );
+        const progressContainerTitle = document.getElementById(
+          "employer-profile-progress-title"
+        );
 
-      post_list.map((item1) => {
-        job_list.map((item2, index) => {
-          if (item1.job_id == item2.id) {
-            if (job_list[index].postData) {
-              job_list[index].postData.push(item1);
+        let percentageProgress = "0%";
+
+        if (data.company_data.progress_percentage) {
+          percentageProgress = data.company_data.progress_percentage;
+        }
+        progressContainer.style.width = percentageProgress;
+        progressContainer.innerHTML = percentageProgress;
+        progressContainerTitle.innerHTML = `Your company profile is ${percentageProgress} done`;
+        document
+          .getElementById("update-employer-profile-btn")
+          .addEventListener("click", () => {
+            location.href = "profile?code=company_profile";
+          });
+
+        var job_list = data.job_list;
+        var post_list = data.post_list;
+
+        post_list.map((item1) => {
+          job_list.map((item2, index) => {
+            if (item1.job_id == item2.id) {
+              if (job_list[index].postData) {
+                job_list[index].postData.push(item1);
+              } else {
+                job_list[index].postData = [item1];
+              }
+            }
+          });
+        });
+
+        if (data.company_data !== null) {
+          company_data = data.company_data;
+          company_name_create.value = data.company_data.name;
+          ssm_number_create.value = data.company_data.ssm_number;
+        } else {
+          company_data = null;
+        }
+
+        const loadingStatusCard = document.getElementById(
+          "home-status-list-loading"
+        );
+        const parentTableHome = document.getElementById(
+          "home-status-list-parent"
+        );
+
+        const emptyCard = document.getElementById("my-job-card-empty");
+        const parentTable = document.getElementById("my-job-card-list-parent");
+        const style = document.getElementById("my-job-card-list-child");
+        const emptyDiv = [];
+
+        const dashboard = {
+          not_active: 0,
+          active: 0,
+          expired: 0,
+        };
+
+        if (data?.channel_list) {
+          channelListData = data.channel_list;
+          populateChannelDashboard(data.channel_list);
+        }
+
+        if (data?.coupon_list) {
+          populateCouponDashboard(data.coupon_list);
+        }
+
+        if (data?.application_list && data?.application_status_list) {
+          populateApplication(
+            data.application_list,
+            data.application_status_list,
+            data.user_data
+          );
+        }
+
+        const profileUnlockBalance = document.getElementById(
+          "profile-unlock-balance"
+        );
+        const topupModalBalance = document.getElementById(
+          "topup-modal-balance"
+        );
+
+        currentCoinBalance =
+          data.user_data.profile_unlock_limit -
+          data.user_data.unlocked_profile.length;
+
+        profileUnlockBalance.innerHTML = currentCoinBalance;
+        topupModalBalance.innerHTML = `Balance: <i class="fas fa-coins"></i>  ${currentCoinBalance}`;
+
+        populateOrderHistoryVisibility(job_list);
+
+        jobListState = job_list;
+
+        job_list.map((item) => {
+          var slot_post_list = [];
+
+          post_list.map((postItem) => {
+            if (item.id == postItem.job_id) {
+              slot_post_list.push(postItem);
+            }
+          });
+
+          const card = style.cloneNode(true);
+          const divs = card.getElementsByTagName("div");
+
+          let is_coin_based = false;
+          let is_time_based = false;
+          let is_time_based_paid = false;
+          const jobTimeline = divs[0].getElementsByTagName("h7");
+
+          if (item.is_free == true) {
+            is_coin_based = true;
+          } else {
+            is_time_based = true;
+          }
+
+          if (item?.payment_info?.payment_status == "paid") {
+            is_time_based_paid = true;
+          } else {
+            is_time_based_paid = false;
+          }
+
+          const activeDateString =
+            item.timestamp_active &&
+            new Date(item.timestamp_active).toLocaleString("en-US", format);
+          const expiredDateString =
+            item.timestamp_expired &&
+            new Date(item.timestamp_expired).toLocaleString("en-US", format);
+
+          let paymentTypeString = "";
+          if (item.is_free) {
+            paymentTypeString = `<i class="fas fa-coins mr-1"></i>Coin-based`;
+          } else {
+            paymentTypeString = `<i class="fas fa-clock mr-1"></i>Time-Based`;
+          }
+
+          if (item.status_id === 3) {
+            jobTimeline[0].innerHTML = `This job slot has expired at ${expiredDateString}`;
+          } else {
+            if (activeDateString && expiredDateString) {
+              jobTimeline[0].innerHTML = `${paymentTypeString} ∙ Active for ${item.payment_info.day_visibility} day ∙ Expires on ${expiredDateString}`;
             } else {
-              job_list[index].postData = [item1];
+              jobTimeline[0].innerHTML = paymentTypeString;
             }
           }
-        });
-      });
 
-      if (data.company_data !== null) {
-        company_data = data.company_data;
-        company_name_create.value = data.company_data.name;
-        ssm_number_create.value = data.company_data.ssm_number;
-      } else {
-        company_data = null;
-      }
-
-      const loadingStatusCard = document.getElementById(
-        "home-status-list-loading"
-      );
-      const parentTableHome = document.getElementById(
-        "home-status-list-parent"
-      );
-
-      const emptyCard = document.getElementById("my-job-card-empty");
-      const parentTable = document.getElementById("my-job-card-list-parent");
-      const style = document.getElementById("my-job-card-list-child");
-      const emptyDiv = [];
-
-      const dashboard = {
-        not_active: 0,
-        active: 0,
-        expired: 0,
-      };
-
-      if (data?.channel_list) {
-        channelListData = data.channel_list;
-        populateChannelDashboard(data.channel_list);
-      }
-
-      if (data?.coupon_list) {
-        populateCouponDashboard(data.coupon_list);
-      }
-
-      if (data?.application_list && data?.application_status_list) {
-        populateApplication(
-          data.application_list,
-          data.application_status_list,
-          data.user_data
-        );
-      }
-
-      const profileUnlockBalance = document.getElementById(
-        "profile-unlock-balance"
-      );
-      const topupModalBalance = document.getElementById("topup-modal-balance");
-
-      currentCoinBalance =
-        data.user_data.profile_unlock_limit -
-        data.user_data.unlocked_profile.length;
-
-      profileUnlockBalance.innerHTML = currentCoinBalance;
-      topupModalBalance.innerHTML = `Balance: <i class="fas fa-coins"></i>  ${currentCoinBalance}`;
-
-      populateOrderHistoryVisibility(job_list);
-
-      jobListState = job_list;
-
-      job_list.map((item) => {
-        var slot_post_list = [];
-
-        post_list.map((postItem) => {
-          if (item.id == postItem.job_id) {
-            slot_post_list.push(postItem);
-          }
-        });
-
-        const card = style.cloneNode(true);
-        const divs = card.getElementsByTagName("div");
-
-        let is_coin_based = false;
-        let is_time_based = false;
-        let is_time_based_paid = false;
-        const jobTimeline = divs[0].getElementsByTagName("h7");
-
-        if (item.is_free == true) {
-          is_coin_based = true;
-        } else {
-          is_time_based = true;
-        }
-
-        if (item?.payment_info?.payment_status == "paid") {
-          is_time_based_paid = true;
-        } else {
-          is_time_based_paid = false;
-        }
-
-        const activeDateString =
-          item.timestamp_active &&
-          new Date(item.timestamp_active).toLocaleString("en-US", format);
-        const expiredDateString =
-          item.timestamp_expired &&
-          new Date(item.timestamp_expired).toLocaleString("en-US", format);
-
-        let paymentTypeString = "";
-        if (item.is_free) {
-          paymentTypeString = `<i class="fas fa-coins mr-1"></i>Coin-based`;
-        } else {
-          paymentTypeString = `<i class="fas fa-clock mr-1"></i>Time-Based`;
-        }
-
-        if (item.status_id === 3) {
-          jobTimeline[0].innerHTML = `This job slot has expired at ${expiredDateString}`;
-        } else {
-          if (activeDateString && expiredDateString) {
-            jobTimeline[0].innerHTML = `${paymentTypeString} ∙ Active for ${item.payment_info.day_visibility} day ∙ Expires on ${expiredDateString}`;
+          const listItem = divs[0].getElementsByTagName("li");
+          listItem[0].innerHTML = `<b>Title of the job opening:</b> ${item.title}`;
+          listItem[1].innerHTML = `<b>Company name:</b> <a href="company-profile?company_id=${item.company_data.id}" target="_blank" rel="noopener noreferrer">${item.company_data.name} (${item.company_data.ssm_number})</a>`;
+          listItem[2].innerHTML = `<b>Type:</b> ${item.type}`;
+          if (item.min_salary > 0) {
+            listItem[3].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
           } else {
-            jobTimeline[0].innerHTML = paymentTypeString;
+            listItem[3].innerHTML = `<b>Salary:</b> Not Stated`;
           }
-        }
+          listItem[4].innerHTML = `<b>Location:</b> ${item.location}`;
 
-        const listItem = divs[0].getElementsByTagName("li");
-        listItem[0].innerHTML = `<b>Title of the job opening:</b> ${item.title}`;
-        listItem[1].innerHTML = `<b>Company name:</b> <a href="company-profile?company_id=${item.company_data.id}" target="_blank" rel="noopener noreferrer">${item.company_data.name} (${item.company_data.ssm_number})</a>`;
-        listItem[2].innerHTML = `<b>Type:</b> ${item.type}`;
-        if (item.min_salary > 0) {
-          listItem[3].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
-        } else {
-          listItem[3].innerHTML = `<b>Salary:</b> Not Stated`;
-        }
-        listItem[4].innerHTML = `<b>Location:</b> ${item.location}`;
+          if (item.is_free == true) {
+            listItem[5].innerHTML = "";
+            listItem[6].innerHTML = "";
+            listItem[7].innerHTML = "";
+          } else {
+            listItem[5].innerHTML = `<b>Requirements:</b><br>${item.requirement.replace(
+              /\n/g,
+              "<br>"
+            )}`;
+            listItem[6].innerHTML = `<b>Benefits:</b><br>${item.benefit.replace(
+              /\n/g,
+              "<br>"
+            )}`;
+            listItem[7].innerHTML = `<b>Additional Information:</b><br>${item.additional_info.replace(
+              /\n/g,
+              "<br>"
+            )}`;
+          }
 
-        if (item.is_free == true) {
-          listItem[5].innerHTML = "";
-          listItem[6].innerHTML = "";
-          listItem[7].innerHTML = "";
-        } else {
-          listItem[5].innerHTML = `<b>Requirements:</b><br>${item.requirement.replace(
-            /\n/g,
-            "<br>"
-          )}`;
-          listItem[6].innerHTML = `<b>Benefits:</b><br>${item.benefit.replace(
-            /\n/g,
-            "<br>"
-          )}`;
-          listItem[7].innerHTML = `<b>Additional Information:</b><br>${item.additional_info.replace(
-            /\n/g,
-            "<br>"
-          )}`;
-        }
-
-        if (item.is_free == false) {
-          if (item.is_external_apply) {
-            listItem[8].innerHTML = `<b>External Job application URL:</b> <a href="${item.external_apply_link}" target="_blank"> ${item.external_apply_link}</a>`;
+          if (item.is_free == false) {
+            if (item.is_external_apply) {
+              listItem[8].innerHTML = `<b>External Job application URL:</b> <a href="${item.external_apply_link}" target="_blank"> ${item.external_apply_link}</a>`;
+            } else {
+              listItem[8].innerHTML = ``;
+            }
           } else {
             listItem[8].innerHTML = ``;
           }
-        } else {
-          listItem[8].innerHTML = ``;
-        }
 
-        const postBtn = divs[0].getElementsByTagName("button")[0];
-        const editBtn = divs[0].getElementsByTagName("button")[1];
+          const postBtn = divs[0].getElementsByTagName("button")[0];
+          const editBtn = divs[0].getElementsByTagName("button")[1];
 
-        if (is_time_based == true && is_time_based_paid == false) {
-          dashboard.not_active++;
-          badge = `<span class="badge badge-pill badge-danger">Not Active</span>`;
-          postBtn.innerHTML = "Activate";
-          postBtn.addEventListener("click", function () {
-            if (visibilityListData.length == 0) {
-              fetchProductList();
-            } else {
-              populateVisibility(visibilityListData);
-            }
-            $("#payJobModal").modal("show");
-            $("#payJobModal").on("shown.bs.modal", function () {
-              selectedJob = item;
-              const payJobTitle = document.getElementById(
-                "pay-job-title-modal"
-              );
-              payJobTitle.innerHTML = `Job Slot ID: ${item.custom_id}`;
-            });
-          });
-          postBtn.disabled = false;
-          postBtn.classList.replace("btn-secondary", "btn-primary");
-          editBtn.addEventListener("click", function () {
-            $("#editJobModal").modal("show");
-            $("#editJobModal").on("shown.bs.modal", function () {
-              editForm(item);
-            });
-          });
-        } else {
-          if (item.status_id === 3) {
-            dashboard.expired++;
-            badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
-            postBtn.innerHTML = `Post Now`;
-            postBtn.classList.replace("btn-primary", "btn-secondary");
-            postBtn.addEventListener("click", () => {
-              alert(
-                "We're sorry, but the job slot you're trying to post has expired, and all job postings associated with this slot will no longer be available on our channels. To post a new job opportunity, please create a new job slot."
-              );
-            });
-            editBtn.addEventListener("click", function () {
-              alert("The job slot has expired and is no longer editable");
-            });
-          } else if (item.status_id === 4) {
-            badge = `<span class="badge badge-pill badge-dark">Blocked</span>`;
-            postBtn.innerHTML = `Post Now`;
-            postBtn.classList.replace("btn-primary", "btn-secondary");
-            postBtn.addEventListener("click", () => {
-              alert(
-                "Your job slot has been blocked and all related posts have been removed due to policy violation. To appeal this decision, please submit a request through the 'Feedback' section in your account settings and include the Job Slot ID for reference."
-              );
-            });
-            editBtn.addEventListener("click", function () {
-              $("#editJobModal").modal("show");
-              $("#editJobModal").on("shown.bs.modal", function () {
-                editForm(item);
+          if (is_time_based == true && is_time_based_paid == false) {
+            dashboard.not_active++;
+            badge = `<span class="badge badge-pill badge-danger">Not Active</span>`;
+            postBtn.innerHTML = "Activate";
+            postBtn.addEventListener("click", function () {
+              if (visibilityListData.length == 0) {
+                fetchProductList();
+              } else {
+                populateVisibility(visibilityListData);
+              }
+              $("#payJobModal").modal("show");
+              $("#payJobModal").on("shown.bs.modal", function () {
+                selectedJob = item;
+                const payJobTitle = document.getElementById(
+                  "pay-job-title-modal"
+                );
+                payJobTitle.innerHTML = `Job Slot ID: ${item.custom_id}`;
               });
-            });
-          } else {
-            badge = `<span class="badge badge-pill badge-success">Active</span>`;
-            postBtn.innerHTML = `Post Now`;
-            postBtn.addEventListener("click", () => {
-              addPost(item, postBtn, postBtn.innerHTML);
             });
             postBtn.disabled = false;
             postBtn.classList.replace("btn-secondary", "btn-primary");
@@ -1656,131 +1639,175 @@ function fetchMyJobs() {
                 editForm(item);
               });
             });
-          }
-        }
-
-        const customId = divs[0].getElementsByTagName("h6");
-        customId[0].innerHTML = `Job Slot ID: ${item.custom_id} ${badge}`;
-
-        const postContainer = divs[0].getElementsByTagName("div")[3];
-        postContainer.innerHTML = ""; // Clear existing posts
-
-        slot_post_list.forEach((post) => {
-          const postTitle = document.createElement("h6");
-          postTitle.className = "modal-title font-weight-bold";
-          postTitle.innerHTML = post.title;
-          postTitle.addEventListener("click", () => {
-            window.open(post.internal_apply_link);
-          });
-
-          const postTimestamp = document.createElement("h8");
-          postTimestamp.className = "modal-title";
-          postTimestamp.style.fontSize = "13px";
-          var postTime = new Date(post.created_at);
-          var postTimeAgo = moment(postTime).fromNow(true);
-          postTimestamp.innerHTML = `${postTimeAgo} ago`;
-
-          const postView = document.createElement("View");
-          postView.appendChild(postTitle);
-          postView.appendChild(postTimestamp);
-
-          const postShareButton = document.createElement("button");
-          postShareButton.className = "btn btn-outline-primary mr-2";
-          postShareButton.type = "button";
-          postShareButton.style.border = "none";
-          const telegramImage = document.createElement("img");
-          telegramImage.src = "https://telegram.org/img/t_logo.png";
-          telegramImage.className = "ml-1";
-          telegramImage.width = 25;
-          telegramImage.height = 25;
-          const badgeSpan = document.createElement("span");
-          badgeSpan.className = "badge badge-light";
-          if (post.is_shared) {
-            badgeSpan.textContent = "1";
           } else {
-            badgeSpan.textContent = "0";
-          }
-          postShareButton.appendChild(badgeSpan);
-          postShareButton.addEventListener("click", () => {
-            $("#channelJobModal").modal("show");
-            $("#channelJobModal").on("shown.bs.modal", () => {
-              selectedJob = post;
-              populateChannel();
-            });
-          });
-
-          postShareButton.appendChild(telegramImage);
-
-          const postLinkButton = document.createElement("button");
-          postLinkButton.className = "btn btn-outline-primary mr-2";
-          postLinkButton.type = "button";
-          postLinkButton.style.border = "none";
-          const postLinkIcon = document.createElement("i");
-          postLinkIcon.className = "fa fa-external-link-alt ml-1";
-          postLinkButton.appendChild(postLinkIcon);
-
-          postLinkButton.addEventListener("click", () => {
-            window.open(post.internal_apply_link);
-          });
-
-          const postDeleteButton = document.createElement("button");
-          postDeleteButton.className = "btn btn-outline-danger";
-          postDeleteButton.type = "button";
-          postDeleteButton.style.border = "none";
-          const postDeleteIcon = document.createElement("i");
-          postDeleteIcon.className = "fa fa-trash ml-1";
-          postDeleteButton.appendChild(postDeleteIcon);
-          postDeleteButton.addEventListener("click", () => {
-            var confirmDelete = confirm(
-              "Are you sure you want to delete this post? This action cannot be undone."
-            );
-            if (confirmDelete) {
-              deletePost(post, postDeleteButton, postDeleteButton.innerHTML);
+            if (item.status_id === 3) {
+              dashboard.expired++;
+              badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
+              postBtn.innerHTML = `Post Now`;
+              postBtn.classList.replace("btn-primary", "btn-secondary");
+              postBtn.addEventListener("click", () => {
+                alert(
+                  "We're sorry, but the job slot you're trying to post has expired, and all job postings associated with this slot will no longer be available on our channels. To post a new job opportunity, please create a new job slot."
+                );
+              });
+              editBtn.addEventListener("click", function () {
+                alert("The job slot has expired and is no longer editable");
+              });
+            } else if (item.status_id === 4) {
+              badge = `<span class="badge badge-pill badge-dark">Blocked</span>`;
+              postBtn.innerHTML = `Post Now`;
+              postBtn.classList.replace("btn-primary", "btn-secondary");
+              postBtn.addEventListener("click", () => {
+                alert(
+                  "Your job slot has been blocked and all related posts have been removed due to policy violation. To appeal this decision, please submit a request through the 'Feedback' section in your account settings and include the Job Slot ID for reference."
+                );
+              });
+              editBtn.addEventListener("click", function () {
+                $("#editJobModal").modal("show");
+                $("#editJobModal").on("shown.bs.modal", function () {
+                  editForm(item);
+                });
+              });
+            } else {
+              badge = `<span class="badge badge-pill badge-success">Active</span>`;
+              postBtn.innerHTML = `Post Now`;
+              postBtn.addEventListener("click", () => {
+                addPost(item, postBtn, postBtn.innerHTML);
+              });
+              postBtn.disabled = false;
+              postBtn.classList.replace("btn-secondary", "btn-primary");
+              editBtn.addEventListener("click", function () {
+                $("#editJobModal").modal("show");
+                $("#editJobModal").on("shown.bs.modal", function () {
+                  editForm(item);
+                });
+              });
             }
+          }
+
+          const customId = divs[0].getElementsByTagName("h6");
+          customId[0].innerHTML = `Job Slot ID: ${item.custom_id} ${badge}`;
+
+          const postContainer = divs[0].getElementsByTagName("div")[3];
+          postContainer.innerHTML = ""; // Clear existing posts
+
+          slot_post_list.forEach((post) => {
+            const postTitle = document.createElement("h6");
+            postTitle.className = "modal-title font-weight-bold";
+            postTitle.innerHTML = post.title;
+            postTitle.addEventListener("click", () => {
+              window.open(post.internal_apply_link);
+            });
+
+            const postTimestamp = document.createElement("h8");
+            postTimestamp.className = "modal-title";
+            postTimestamp.style.fontSize = "13px";
+            var postTime = new Date(post.created_at);
+            var postTimeAgo = moment(postTime).fromNow(true);
+            postTimestamp.innerHTML = `${postTimeAgo} ago`;
+
+            const postView = document.createElement("View");
+            postView.appendChild(postTitle);
+            postView.appendChild(postTimestamp);
+
+            const postShareButton = document.createElement("button");
+            postShareButton.className = "btn btn-outline-primary mr-2";
+            postShareButton.type = "button";
+            postShareButton.style.border = "none";
+            const telegramImage = document.createElement("img");
+            telegramImage.src = "https://telegram.org/img/t_logo.png";
+            telegramImage.className = "ml-1";
+            telegramImage.width = 25;
+            telegramImage.height = 25;
+            const badgeSpan = document.createElement("span");
+            badgeSpan.className = "badge badge-light";
+            if (post.is_shared) {
+              badgeSpan.textContent = "1";
+            } else {
+              badgeSpan.textContent = "0";
+            }
+            postShareButton.appendChild(badgeSpan);
+            postShareButton.addEventListener("click", () => {
+              $("#channelJobModal").modal("show");
+              $("#channelJobModal").on("shown.bs.modal", () => {
+                selectedJob = post;
+                populateChannel();
+              });
+            });
+
+            postShareButton.appendChild(telegramImage);
+
+            const postLinkButton = document.createElement("button");
+            postLinkButton.className = "btn btn-outline-primary mr-2";
+            postLinkButton.type = "button";
+            postLinkButton.style.border = "none";
+            const postLinkIcon = document.createElement("i");
+            postLinkIcon.className = "fa fa-external-link-alt ml-1";
+            postLinkButton.appendChild(postLinkIcon);
+
+            postLinkButton.addEventListener("click", () => {
+              window.open(post.internal_apply_link);
+            });
+
+            const postDeleteButton = document.createElement("button");
+            postDeleteButton.className = "btn btn-outline-danger";
+            postDeleteButton.type = "button";
+            postDeleteButton.style.border = "none";
+            const postDeleteIcon = document.createElement("i");
+            postDeleteIcon.className = "fa fa-trash ml-1";
+            postDeleteButton.appendChild(postDeleteIcon);
+            postDeleteButton.addEventListener("click", () => {
+              var confirmDelete = confirm(
+                "Are you sure you want to delete this post? This action cannot be undone."
+              );
+              if (confirmDelete) {
+                deletePost(post, postDeleteButton, postDeleteButton.innerHTML);
+              }
+            });
+
+            const postButtons = document.createElement("View");
+            postButtons.appendChild(postLinkButton);
+            postButtons.appendChild(postShareButton);
+            postButtons.appendChild(postDeleteButton);
+
+            const postRow = document.createElement("div");
+            postRow.className = "row justify-content-between pl-3 pr-3";
+            postRow.appendChild(postView);
+            postRow.appendChild(postButtons);
+
+            postContainer.appendChild(document.createElement("hr"));
+            postContainer.appendChild(postRow);
           });
 
-          const postButtons = document.createElement("View");
-          postButtons.appendChild(postLinkButton);
-          postButtons.appendChild(postShareButton);
-          postButtons.appendChild(postDeleteButton);
-
-          const postRow = document.createElement("div");
-          postRow.className = "row justify-content-between pl-3 pr-3";
-          postRow.appendChild(postView);
-          postRow.appendChild(postButtons);
-
-          postContainer.appendChild(document.createElement("hr"));
-          postContainer.appendChild(postRow);
+          emptyDiv.push(card);
         });
 
-        emptyDiv.push(card);
-      });
+        const summary1 = document.getElementById("total-not-active");
+        summary1.innerHTML = dashboard.not_active;
 
-      const summary1 = document.getElementById("total-not-active");
-      summary1.innerHTML = dashboard.not_active;
+        const summary2 = document.getElementById("total-active");
+        summary2.innerHTML = dashboard.active;
 
-      const summary2 = document.getElementById("total-active");
-      summary2.innerHTML = dashboard.active;
+        const summary3 = document.getElementById("total-expired");
+        summary3.innerHTML = dashboard.expired;
 
-      const summary3 = document.getElementById("total-expired");
-      summary3.innerHTML = dashboard.expired;
+        loadingStatusCard.classList.add("hidden");
+        parentTableHome.classList.remove("hidden");
 
-      loadingStatusCard.classList.add("hidden");
-      parentTableHome.classList.remove("hidden");
-
-      if (emptyDiv.length === 0) {
-        emptyCard.classList.remove("hidden");
-        parentTable.classList.add("hidden");
-        $("#onboardingModal").modal("show");
-      } else {
-        emptyCard.classList.add("hidden");
-        parentTable.classList.remove("hidden");
-        while (parentTable.firstChild) {
-          parentTable.removeChild(parentTable.firstChild);
+        if (emptyDiv.length === 0) {
+          emptyCard.classList.remove("hidden");
+          parentTable.classList.add("hidden");
+          $("#onboardingModal").modal("show");
+        } else {
+          emptyCard.classList.add("hidden");
+          parentTable.classList.remove("hidden");
+          while (parentTable.firstChild) {
+            parentTable.removeChild(parentTable.firstChild);
+          }
+          emptyDiv.forEach((item) => {
+            parentTable.appendChild(item);
+          });
         }
-        emptyDiv.forEach((item) => {
-          parentTable.appendChild(item);
-        });
       }
     })
     .catch((error) => {
@@ -2551,7 +2578,7 @@ function populateJobSeekerApplication(data, applicationStatusData) {
     const divs = card.getElementsByTagName("div");
     const h6Text = divs[0].getElementsByTagName("h6");
     h6Text[0].innerHTML = `${item.post_data.title} <span class="badge badge-pill badge-info">${item.application_status_data.name}</span> `;
-    h6Text[1].innerHTML = `Company: ${item.post_data.company_name}`;
+    h6Text[1].innerHTML = `Company: ${item.post_data.company_data.name}`;
 
     const time = divs[0].getElementsByTagName("h7");
     var created_at = new Date(item.created_at);
@@ -2647,6 +2674,21 @@ function fetchMyApplication() {
       if (data?.message) {
         alert(data.message);
       } else {
+        const progressContainer = document.getElementById(
+          "job-seeker-profile-progress-bar"
+        );
+        const progressContainerTitle = document.getElementById(
+          "job-seeker-profile-progress-title"
+        );
+        progressContainer.style.width = data.progress_percentage;
+        progressContainer.innerHTML = data.progress_percentage;
+        progressContainerTitle.innerHTML = `Your resume is ${data.progress_percentage} done`;
+        document
+          .getElementById("update-job-seeker-profile-btn")
+          .addEventListener("click", () => {
+            location.href = "profile?code=resume";
+          });
+
         if (data.application_list && data.application_status_list) {
           populateJobSeekerApplication(
             data.application_list,
