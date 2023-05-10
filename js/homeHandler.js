@@ -1428,9 +1428,10 @@ function fetchMyJobs() {
 
         let percentageProgress = "0%";
 
-        if (data.company_data.progress_percentage) {
+        if (data.company_data) {
           percentageProgress = data.company_data.progress_percentage;
         }
+
         progressContainer.style.width = percentageProgress;
         progressContainer.innerHTML = percentageProgress;
         progressContainerTitle.innerHTML = `Your company profile is ${percentageProgress} done`;
@@ -2680,6 +2681,7 @@ function fetchMyApplication() {
         const progressContainerTitle = document.getElementById(
           "job-seeker-profile-progress-title"
         );
+
         progressContainer.style.width = data.progress_percentage;
         progressContainer.innerHTML = data.progress_percentage;
         progressContainerTitle.innerHTML = `Your resume is ${data.progress_percentage} done`;
