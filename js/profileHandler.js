@@ -1,73 +1,73 @@
-const myData = getSavedData("masterData");
+const myData = getSavedData('masterData');
 const token = myData?.authToken;
 
-const topbarNotAuth = document.getElementById("topbar-not-auth");
-const topbarWithAuth = document.getElementById("topbar-with-auth");
-const topbarUsername = document.getElementById("topbar-username");
-const topBarPostJobButton = document.getElementById("topbar-post-job-btn");
-const logoutBtn = document.getElementById("button-logout-yes");
-logoutBtn.addEventListener("click", clearSession);
+const topbarNotAuth = document.getElementById('topbar-not-auth');
+const topbarWithAuth = document.getElementById('topbar-with-auth');
+const topbarUsername = document.getElementById('topbar-username');
+const topBarPostJobButton = document.getElementById('topbar-post-job-btn');
+const logoutBtn = document.getElementById('button-logout-yes');
+logoutBtn.addEventListener('click', clearSession);
 
 if (token) {
-  topbarWithAuth.removeAttribute("style");
-  topbarNotAuth.setAttribute("style", "display: none");
+  topbarWithAuth.removeAttribute('style');
+  topbarNotAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = myData.userData.username;
 } else {
-  topbarNotAuth.removeAttribute("style");
-  topbarWithAuth.setAttribute("style", "display: none");
-  topbarUsername.innerHTML = "...";
-  topBarPostJobButton.addEventListener("click", function () {
-    location.href = "index?login=true";
+  topbarNotAuth.removeAttribute('style');
+  topbarWithAuth.setAttribute('style', 'display: none');
+  topbarUsername.innerHTML = '...';
+  topBarPostJobButton.addEventListener('click', function () {
+    location.href = 'index?login=true';
   });
-  location.href = "index";
+  location.href = 'index';
 }
 
 let userMenu = [];
 
 userMenu.push(
   {
-    href: "home",
-    iconSideBar: "fas fa-fw fa-home",
-    iconTopBar: "fas fa-home fa-sm fa-fw mr-2 text-gray-400",
-    title: "Home",
+    href: 'home',
+    iconSideBar: 'fas fa-fw fa-home',
+    iconTopBar: 'fas fa-home fa-sm fa-fw mr-2 text-gray-400',
+    title: 'Home',
   },
   {
     isActive: true,
-    href: "profile",
-    iconSideBar: "fas fa-fw fa-user",
-    iconTopBar: "fas fa-user fa-sm fa-fw mr-2 text-gray-400",
-    title: "Profile",
+    href: 'profile',
+    iconSideBar: 'fas fa-fw fa-user',
+    iconTopBar: 'fas fa-user fa-sm fa-fw mr-2 text-gray-400',
+    title: 'Profile',
   },
   {
-    href: "job-list",
-    iconSideBar: "fas fa-fw fa-list",
-    iconTopBar: "fas fa-list fa-sm fa-fw mr-2 text-gray-400",
-    title: "Job List",
+    href: 'job-list',
+    iconSideBar: 'fas fa-fw fa-list',
+    iconTopBar: 'fas fa-list fa-sm fa-fw mr-2 text-gray-400',
+    title: 'Job List',
   },
   {
-    href: "settings",
-    iconSideBar: "fas fa-fw fa-cogs",
-    iconTopBar: "fas fa-cogs fa-sm fa-fw mr-2 text-gray-400",
-    title: "Settings",
+    href: 'settings',
+    iconSideBar: 'fas fa-fw fa-cogs',
+    iconTopBar: 'fas fa-cogs fa-sm fa-fw mr-2 text-gray-400',
+    title: 'Settings',
   },
   {
-    href: "#logoutModal",
-    iconSideBar: "fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400",
-    iconTopBar: "fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400",
-    title: "Logout",
-    dataToggle: "modal",
+    href: '#logoutModal',
+    iconSideBar: 'fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400',
+    iconTopBar: 'fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400',
+    title: 'Logout',
+    dataToggle: 'modal',
   }
 );
 
-let userMenuSideBarHTML = "";
-let userMenuTopBarHTML = "";
+let userMenuSideBarHTML = '';
+let userMenuTopBarHTML = '';
 
 for (let i = 0; i < userMenu.length; i++) {
   let dataToggle = userMenu[i].dataToggle
     ? `data-toggle="${userMenu[i].dataToggle}"`
-    : "";
+    : '';
   userMenuSideBarHTML += `
-  <li class="nav-item ${userMenu[i].isActive ? "active" : ""}">
+  <li class="nav-item ${userMenu[i].isActive ? 'active' : ''}">
   <a class="nav-link" href="${userMenu[i].href}" ${dataToggle}>
     <i class="${userMenu[i].iconSideBar}"></i>
     <span>${userMenu[i].title}</span></a
@@ -81,50 +81,50 @@ for (let i = 0; i < userMenu.length; i++) {
 </a>`;
 }
 
-document.getElementById("top-bar-menu-list").innerHTML = userMenuTopBarHTML;
-document.getElementById("sidebar-menu-list").innerHTML = userMenuSideBarHTML;
+document.getElementById('top-bar-menu-list').innerHTML = userMenuTopBarHTML;
+document.getElementById('sidebar-menu-list').innerHTML = userMenuSideBarHTML;
 
 let tabs = [];
 
 if (myData.userData.role_id === 3) {
-  var defaultActiveTab = document.getElementById("account");
-  defaultActiveTab.classList.add("show", "active");
+  var defaultActiveTab = document.getElementById('account');
+  defaultActiveTab.classList.add('show', 'active');
 
   tabs.push(
     {
-      id: "account-tab",
-      title: "Account",
-      content: "account",
+      id: 'account-tab',
+      title: 'Account',
+      content: 'account',
     },
     {
-      id: "my-resume-tab",
-      title: "My Resume",
-      content: "my-resume",
+      id: 'my-resume-tab',
+      title: 'My Resume',
+      content: 'my-resume',
     }
   );
 } else {
-  var defaultActiveTab = document.getElementById("account");
-  defaultActiveTab.classList.add("show", "active");
+  var defaultActiveTab = document.getElementById('account');
+  defaultActiveTab.classList.add('show', 'active');
 
   tabs.push(
     {
-      id: "account-tab",
-      title: "Account",
-      content: "account",
+      id: 'account-tab',
+      title: 'Account',
+      content: 'account',
     },
     {
-      id: "company-profile-tab",
-      title: "Company Profile",
-      content: "company-profile",
+      id: 'company-profile-tab',
+      title: 'Company Profile',
+      content: 'company-profile',
     }
   );
 }
 
-let tabHTML = "";
+let tabHTML = '';
 
 for (let i = 0; i < tabs.length; i++) {
-  let isActive = i === 0 ? "active" : "";
-  let isShow = i === 0 ? "show" : "";
+  let isActive = i === 0 ? 'active' : '';
+  let isShow = i === 0 ? 'show' : '';
   tabHTML += `
     <li class="nav-item">
       <a
@@ -141,17 +141,17 @@ for (let i = 0; i < tabs.length; i++) {
   `;
 }
 
-document.getElementById("myTab").innerHTML = tabHTML;
+document.getElementById('myTab').innerHTML = tabHTML;
 
 // -- account section
 
-const accoutUsernameForm = document.getElementById("input-username");
-const accountEmailForm = document.getElementById("input-email");
+const accoutUsernameForm = document.getElementById('input-username');
+const accountEmailForm = document.getElementById('input-email');
 
-accountForm.addEventListener("submit", function (event) {
+accountForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  let submitAccountBtn = document.getElementById("submit-account-btn");
+  let submitAccountBtn = document.getElementById('submit-account-btn');
   submitAccountBtn.disabled = true;
   submitAccountBtn.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
@@ -165,7 +165,7 @@ accountForm.addEventListener("submit", function (event) {
 
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/edit_user`,
-    "PUT",
+    'PUT',
     token,
     options
   )
@@ -174,11 +174,11 @@ accountForm.addEventListener("submit", function (event) {
         alert(data.message);
       } else {
         showToast(
-          "alert-toast-container",
-          "Account has been successfully updated.",
-          "success"
+          'alert-toast-container',
+          'Account has been successfully updated.',
+          'success'
         );
-        saveData("masterData", {
+        saveData('masterData', {
           userData: {
             ...myData.userData,
             username: data.username,
@@ -189,11 +189,11 @@ accountForm.addEventListener("submit", function (event) {
         });
       }
       submitAccountBtn.disabled = false;
-      submitAccountBtn.innerHTML = "Update";
+      submitAccountBtn.innerHTML = 'Update';
     })
     .catch((error) => {
       submitAccountBtn.disabled = false;
-      submitAccountBtn.innerHTML = "Update";
+      submitAccountBtn.innerHTML = 'Update';
     });
 });
 
@@ -201,27 +201,27 @@ accountForm.addEventListener("submit", function (event) {
 // -- company profile section
 
 const inputSelectProfileVisibility = document.getElementById(
-  "input-select-profile-visibility"
+  'input-select-profile-visibility'
 );
-const inputCompanyName = document.getElementById("input-company-name");
-const inputSsmNumber = document.getElementById("input-ssm-number");
-const inputAboutUs = document.getElementById("input-about-us");
-const inputSelectIndustry = document.getElementById("input-select-industry");
+const inputCompanyName = document.getElementById('input-company-name');
+const inputSsmNumber = document.getElementById('input-ssm-number');
+const inputAboutUs = document.getElementById('input-about-us');
+const inputSelectIndustry = document.getElementById('input-select-industry');
 const inputSelectCompanySize = document.getElementById(
-  "input-select-company-size"
+  'input-select-company-size'
 );
-const inputCompanyWebsite = document.getElementById("input-company-website");
-const inputBusinessAddress = document.getElementById("input-business-address");
+const inputCompanyWebsite = document.getElementById('input-company-website');
+const inputBusinessAddress = document.getElementById('input-business-address');
 
 function updateCompanyProfileViewButton(toggle, company_id) {
   const viewCompanyProfileButton = document.getElementById(
-    "view-company-profile-btn"
+    'view-company-profile-btn'
   );
 
   if (toggle) {
     viewCompanyProfileButton.disabled = false;
     viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Company Profile`;
-    viewCompanyProfileButton.addEventListener("click", function (e) {
+    viewCompanyProfileButton.addEventListener('click', function (e) {
       window.open(`company-profile?company_id=${company_id}`);
     });
   } else {
@@ -233,7 +233,7 @@ function updateCompanyProfileViewButton(toggle, company_id) {
 function getCompanyProfileData() {
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/company`,
-    "GET",
+    'GET',
     token
   )
     .then((data) => {
@@ -241,31 +241,31 @@ function getCompanyProfileData() {
         alert(data.message);
       } else {
         [
-          { name: "Public", value: 1 },
-          { name: "Private", value: 2 },
+          { name: 'Public', value: 1 },
+          { name: 'Private', value: 2 },
         ].forEach((option) => {
-          const optionElement = document.createElement("option");
+          const optionElement = document.createElement('option');
           optionElement.value = option.value;
           optionElement.text = `${option.name}`;
           inputSelectProfileVisibility.appendChild(optionElement);
         });
 
         data.industry_list.forEach((item) => {
-          const optionElement = document.createElement("option");
+          const optionElement = document.createElement('option');
           optionElement.value = item.id;
           optionElement.text = item.name;
           inputSelectIndustry.appendChild(optionElement);
         });
 
         [
-          { name: "1-10 Employees", value: "1-10 Employees" },
-          { name: "11-50 Employees", value: "11-50 Employees" },
-          { name: "51-200 Employees", value: "51-200 Employees" },
-          { name: "201-500 Employees", value: "201-500 Employees" },
-          { name: "501-1000 Employees", value: "501-1000 Employees" },
-          { name: "1001+ Employees", value: "1001+ Employees" },
+          { name: '1-10 Employees', value: '1-10 Employees' },
+          { name: '11-50 Employees', value: '11-50 Employees' },
+          { name: '51-200 Employees', value: '51-200 Employees' },
+          { name: '201-500 Employees', value: '201-500 Employees' },
+          { name: '501-1000 Employees', value: '501-1000 Employees' },
+          { name: '1001+ Employees', value: '1001+ Employees' },
         ].forEach((option) => {
-          const optionElement = document.createElement("option");
+          const optionElement = document.createElement('option');
           optionElement.value = option.value;
           optionElement.text = `${option.name}`;
           inputSelectCompanySize.appendChild(optionElement);
@@ -277,13 +277,13 @@ function getCompanyProfileData() {
             data.company_data.industry.map((item) => {
               newIndustry.push(item.industry_id);
             });
-            $("#input-select-industry").val(newIndustry);
+            $('#input-select-industry').val(newIndustry);
 
             var selected = [];
-            $("#input-select-industry :selected").each(function () {
+            $('#input-select-industry :selected').each(function () {
               selected.push($(this).text());
             });
-            $("#selected-industries").text(selected.join(", "));
+            $('#selected-industries').text(selected.join(', '));
           }
 
           inputSelectProfileVisibility.value =
@@ -294,9 +294,7 @@ function getCompanyProfileData() {
           inputSelectCompanySize.value = data.company_data.size;
           inputCompanyWebsite.value = data.company_data.website;
           inputBusinessAddress.value = data.company_data.business_address;
-        }
 
-        if (data.company_data !== null) {
           updateCompanyProfileViewButton(true, data.company_data.id);
         } else {
           updateCompanyProfileViewButton(false);
@@ -306,18 +304,18 @@ function getCompanyProfileData() {
     .catch((error) => {});
 }
 
-companyProfileForm.addEventListener("submit", function (event) {
+companyProfileForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
   let submitCompanyProfileBtn = document.getElementById(
-    "submit-company-profile-btn"
+    'submit-company-profile-btn'
   );
   submitCompanyProfileBtn.disabled = true;
   submitCompanyProfileBtn.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
   var selectedIndustry = [];
-  $("#input-select-industry :selected").each(function () {
+  $('#input-select-industry :selected').each(function () {
     selectedIndustry.push({ industry_id: $(this).val() });
   });
 
@@ -350,7 +348,7 @@ companyProfileForm.addEventListener("submit", function (event) {
   const totalPointsEarned = completedFields * POINTS_PER_FIELD;
   const totalPossiblePoints = textElements.length * POINTS_PER_FIELD;
   const progressPercentage =
-    ((totalPointsEarned / totalPossiblePoints) * 100).toFixed(0) + "%";
+    ((totalPointsEarned / totalPossiblePoints) * 100).toFixed(0) + '%';
 
   const options = {
     body: JSON.stringify({
@@ -368,7 +366,7 @@ companyProfileForm.addEventListener("submit", function (event) {
 
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/company`,
-    "POST",
+    'POST',
     token,
     options
   )
@@ -377,19 +375,19 @@ companyProfileForm.addEventListener("submit", function (event) {
         alert(data.message);
       } else {
         showToast(
-          "alert-toast-container",
-          "Company profile has been successfully updated.",
-          "success"
+          'alert-toast-container',
+          'Company profile has been successfully updated.',
+          'success'
         );
         updateCompanyProfileViewButton(true, data.company_data.id);
       }
 
       submitCompanyProfileBtn.disabled = false;
-      submitCompanyProfileBtn.innerHTML = "Update";
+      submitCompanyProfileBtn.innerHTML = 'Update';
     })
     .catch((error) => {
       submitCompanyProfileBtn.disabled = false;
-      submitCompanyProfileBtn.innerHTML = "Update";
+      submitCompanyProfileBtn.innerHTML = 'Update';
       updateCompanyProfileViewButton(false);
     });
 });
@@ -398,56 +396,58 @@ companyProfileForm.addEventListener("submit", function (event) {
 // -- resume section
 
 const inputSelectContactInformationVisibility = document.getElementById(
-  "input-select-contact-information-visibility"
+  'input-select-contact-information-visibility'
 );
-const inputAboutMe = document.getElementById("input-about-me");
-const inputResumeFullName = document.getElementById("input-resume-full-name");
+const inputSummary = document.getElementById('input-summary');
+const inputResumeFullName = document.getElementById('input-resume-full-name');
 const inputSelectResumeGender = document.getElementById(
-  "input-select-resume-gender"
+  'input-select-resume-gender'
 );
 const inputResumeDateOfBirth = document.getElementById(
-  "input-resume-date-of-birth"
+  'input-resume-date-of-birth'
 );
-const inputResumeEmail = document.getElementById("input-resume-email");
+const inputResumeEmail = document.getElementById('input-resume-email');
 const inputResumePhoneNumber = document.getElementById(
-  "input-resume-phone-number"
+  'input-resume-phone-number'
 );
 const inputSelectResumeLocation = document.getElementById(
-  "input-select-resume-location"
+  'input-select-resume-location'
 );
-const inputResumeAddress = document.getElementById("input-resume-address");
+const inputResumeAddress = document.getElementById('input-resume-address');
 const inputSelectResumeCurrentJobStatus = document.getElementById(
-  "input-select-resume-current-job-status"
+  'input-select-resume-current-job-status'
 );
 const inputResumePreferredJob = document.getElementById(
-  "input-resume-preferred-job"
+  'input-resume-preferred-job'
 );
 const inputResumeExpectedMinSalary = document.getElementById(
-  "input-resume-expected-min-salary"
+  'input-resume-expected-min-salary'
 );
 const inputResumeExpectedMaxSalary = document.getElementById(
-  "input-resume-expected-max-salary"
+  'input-resume-expected-max-salary'
 );
 const inputResumeExpectedSalaryType = document.getElementById(
-  "input-resume-expected-salary-type"
-);
-const inputResumeWorkExperience = document.getElementById(
-  "input-resume-work-experience"
-);
-const inputResumeEducation = document.getElementById("input-resume-education");
-const inputResumeSkills = document.getElementById("input-resume-skills");
-const inputResumeLanguages = document.getElementById("input-resume-languages");
-const inputResumeOtherInformation = document.getElementById(
-  "input-resume-other-information"
+  'input-resume-expected-salary-type'
 );
 
+const inputResumeOtherInformation = document.getElementById(
+  'input-resume-other-information'
+);
+
+var workExperienceContainer = document.getElementById(
+  'container_work_experience'
+);
+var educationContainer = document.getElementById('container_education');
+var skillsContainer = document.getElementById('container_skills');
+var languagesContainer = document.getElementById('container_languages');
+
 function updateResumeViewButton(toggle, profile_id) {
-  const viewResumeButton = document.getElementById("view-resume-btn");
+  const viewResumeButton = document.getElementById('view-resume-btn');
 
   if (toggle) {
     viewResumeButton.disabled = false;
     viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
-    viewResumeButton.addEventListener("click", function (e) {
+    viewResumeButton.addEventListener('click', function (e) {
       window.open(`user-profile?profile_id=${profile_id}`);
     });
   } else {
@@ -456,10 +456,10 @@ function updateResumeViewButton(toggle, profile_id) {
   }
 }
 
-resumeForm.addEventListener("submit", function (event) {
+resumeForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  let submitResumeBtn = document.getElementById("submit-resume-btn");
+  let submitResumeBtn = document.getElementById('submit-resume-btn');
   submitResumeBtn.disabled = true;
   submitResumeBtn.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
@@ -471,17 +471,94 @@ resumeForm.addEventListener("submit", function (event) {
       // proceed
     } else {
       alert(
-        "Expected maximum salary should be greater or equal to minimum salary"
+        'Expected maximum salary should be greater or equal to minimum salary'
       );
       submitResumeBtn.disabled = false;
-      submitResumeBtn.innerHTML = "Update";
+      submitResumeBtn.innerHTML = 'Update';
       return;
+    }
+  }
+
+  var workExperienceInputs =
+    workExperienceContainer.querySelectorAll('input, textarea');
+  var workExperienceData = [];
+  var currentExperience = {};
+
+  for (var i = 0; i < workExperienceInputs.length; i++) {
+    var input = workExperienceInputs[i];
+
+    if (input.name.includes('job_title')) {
+      currentExperience.job_title = input.value;
+    } else if (input.name.includes('company_name')) {
+      currentExperience.company_name = input.value;
+      currentExperience.mask_company_name = maskText(input.value);
+    } else if (input.name.includes('responsibility')) {
+      currentExperience.responsibility = input.value;
+      currentExperience.mask_responsibility = maskText(input.value);
+    } else if (input.name.includes('start_date')) {
+      currentExperience.start_date = input.value;
+    } else if (input.name.includes('end_date')) {
+      currentExperience.end_date = input.value;
+      workExperienceData.push(currentExperience);
+      currentExperience = {};
+    }
+  }
+
+  var educationInputs = educationContainer.getElementsByTagName('input');
+  let educationData = [];
+  let currentEducation = {};
+
+  for (var i = 0; i < educationInputs.length; i++) {
+    if (educationInputs[i].name.includes('field_of_study')) {
+      currentEducation.field_of_study = educationInputs[i].value;
+    } else if (educationInputs[i].name.includes('institution_name')) {
+      currentEducation.institution_name = educationInputs[i].value;
+      currentEducation.mask_institution_name = maskText(
+        educationInputs[i].value
+      );
+    } else if (educationInputs[i].name.includes('start_date')) {
+      currentEducation.start_date = educationInputs[i].value;
+    } else if (educationInputs[i].name.includes('end_date')) {
+      currentEducation.end_date = educationInputs[i].value;
+      educationData.push(currentEducation);
+      currentEducation = {};
+    }
+  }
+
+  var skillElements = skillsContainer.getElementsByClassName('form-group');
+  var skillsData = [];
+
+  for (var i = 0; i < skillElements.length; i++) {
+    var skillElement = skillElements[i];
+    var titleInput = skillElement.querySelector("input[name^='skills']");
+    var levelSelect = skillElement.querySelector("select[name^='skills']");
+    // filter to exclude add button
+    if (titleInput?.value && levelSelect?.value) {
+      var skill = { title: titleInput.value, level: levelSelect.value };
+      skillsData.push(skill);
+    }
+  }
+
+  var langguageElements =
+    languagesContainer.getElementsByClassName('form-group');
+  var languagesData = [];
+
+  for (var i = 0; i < langguageElements.length; i++) {
+    var langguageElement = langguageElements[i];
+    var titleInput = langguageElement.querySelector("input[name^='languages']");
+    var levelSelect = langguageElement.querySelector(
+      "select[name^='languages']"
+    );
+    // filter to exclude add button
+    if (titleInput?.value && levelSelect?.value) {
+      var skill = { title: titleInput.value, level: levelSelect.value };
+      languagesData.push(skill);
     }
   }
 
   const textElements = [
     inputSelectContactInformationVisibility,
-    inputAboutMe,
+    inputSummary,
     inputResumeFullName,
     inputSelectResumeGender,
     inputResumeDateOfBirth,
@@ -494,10 +571,10 @@ resumeForm.addEventListener("submit", function (event) {
     inputResumeExpectedMinSalary,
     inputResumeExpectedMaxSalary,
     inputResumeExpectedSalaryType,
-    inputResumeWorkExperience,
-    inputResumeEducation,
-    inputResumeSkills,
-    inputResumeLanguages,
+    workExperienceData,
+    educationData,
+    skillsData,
+    languagesData,
     inputResumeOtherInformation,
   ];
 
@@ -505,43 +582,56 @@ resumeForm.addEventListener("submit", function (event) {
   const POINTS_PER_FIELD = 10;
   let completedFields = 0;
   for (let i = 0; i < textElements.length; i++) {
-    if (textElements[i].value !== "") {
+    if (textElements[i]?.value) {
       completedFields++;
+    } else {
+      if (Array.isArray(textElements[i])) {
+        if (textElements[i].length !== 0) {
+          completedFields++;
+        }
+      }
     }
   }
+
   const totalPointsEarned = completedFields * POINTS_PER_FIELD;
   const totalPossiblePoints = textElements.length * POINTS_PER_FIELD;
   const progressPercentage =
-    ((totalPointsEarned / totalPossiblePoints) * 100).toFixed(0) + "%";
+    ((totalPointsEarned / totalPossiblePoints) * 100).toFixed(0) + '%';
 
   const options = {
     body: JSON.stringify({
       contact_visibility_id: textElements[0].value,
-      about_me: textElements[1].value,
+      summary: textElements[1].value,
+      mask_summary: maskText(textElements[1].value),
       full_name: textElements[2].value,
+      mask_full_name: maskText(textElements[2].value),
       gender: textElements[3].value,
       date_of_birth: textElements[4].value,
       email: textElements[5].value,
+      mask_email: maskText(textElements[5].value),
       phone_number: textElements[6].value,
+      mask_phone_number: maskText(textElements[6].value),
       location_id: textElements[7].value,
       address: textElements[8].value,
+      mask_address: maskText(textElements[8].value),
       preferred_job: textElements[9].value,
       current_job_status: textElements[10].value,
       expected_min_salary: textElements[11].value,
       expected_max_salary: textElements[12].value,
       expected_salary_type: textElements[13].value,
-      work_experience: textElements[14].value,
-      education: textElements[15].value,
-      skills: textElements[16].value,
-      languages: textElements[17].value,
+      work_experience: textElements[14],
+      education: textElements[15],
+      skills: textElements[16],
+      languages: textElements[17],
       other_information: textElements[18].value,
+      mask_other_information: maskText(textElements[18].value),
       progress_percentage: progressPercentage,
     }),
   };
 
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/resume`,
-    "POST",
+    'POST',
     token,
     options
   )
@@ -550,19 +640,19 @@ resumeForm.addEventListener("submit", function (event) {
         alert(data.message);
       } else {
         showToast(
-          "alert-toast-container",
-          "Resume has been successfully updated.",
-          "success"
+          'alert-toast-container',
+          'Resume has been successfully updated.',
+          'success'
         );
         updateResumeViewButton(true, data.profile_data.id);
       }
 
       submitResumeBtn.disabled = false;
-      submitResumeBtn.innerHTML = "Update";
+      submitResumeBtn.innerHTML = 'Update';
     })
     .catch((error) => {
       submitResumeBtn.disabled = false;
-      submitResumeBtn.innerHTML = "Update";
+      submitResumeBtn.innerHTML = 'Update';
       updateResumeViewButton(false);
     });
 });
@@ -570,24 +660,24 @@ resumeForm.addEventListener("submit", function (event) {
 function getResumeData() {
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/resume`,
-    "GET",
+    'GET',
     token
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
-        inputSelectContactInformationVisibility.innerHTML = "";
+        inputSelectContactInformationVisibility.innerHTML = '';
         data.contact_visibility_list.forEach((option) => {
-          const optionElement = document.createElement("option");
+          const optionElement = document.createElement('option');
           optionElement.value = option.id;
           optionElement.text = `${option.name} - ${option.description}`;
           inputSelectContactInformationVisibility.appendChild(optionElement);
         });
 
-        inputSelectResumeLocation.innerHTML = "";
+        inputSelectResumeLocation.innerHTML = '';
         data.location_list.forEach((option) => {
-          const optionElement = document.createElement("option");
+          const optionElement = document.createElement('option');
           optionElement.value = option.id;
           optionElement.textContent = option.name;
           inputSelectResumeLocation.appendChild(optionElement);
@@ -597,11 +687,12 @@ function getResumeData() {
           inputSelectContactInformationVisibility.value =
             data.profile_data.contact_visibility_data.id;
 
-          inputAboutMe.value = data.profile_data.about_me;
+          inputSummary.value = data.profile_data.summary;
 
           inputResumeFullName.value = data.profile_data.full_name;
           inputSelectResumeGender.value = data.profile_data.gender;
           inputResumeDateOfBirth.value = data.profile_data.date_of_birth;
+
           inputResumeEmail.value = data.profile_data.email;
           inputResumePhoneNumber.value = data.profile_data.phone_number;
           inputResumeAddress.value = data.profile_data.address;
@@ -615,19 +706,80 @@ function getResumeData() {
             data.profile_data.expected_max_salary;
           inputResumeExpectedSalaryType.value =
             data.profile_data.expected_salary_type;
-          inputResumeWorkExperience.value = data.profile_data.work_experience;
-          inputResumeEducation.value = data.profile_data.education;
-          inputResumeSkills.value = data.profile_data.skills;
-          inputResumeLanguages.value = data.profile_data.languages;
+
+          generateDynamicForms(
+            'WORK_EXPERIENCE',
+            data.profile_data.work_experience,
+            workExperienceContainer,
+            'add_work_experience_field_button',
+            10
+          );
+
+          generateDynamicForms(
+            'EDUCATION',
+            data.profile_data.education,
+            educationContainer,
+            'add_education_field_button',
+            10
+          );
+
+          generateDynamicForms(
+            'SKILLS',
+            data.profile_data.skills,
+            skillsContainer,
+            'add_skills_field_button',
+            10
+          );
+
+          generateDynamicForms(
+            'LANGUAGES',
+            data.profile_data.languages,
+            languagesContainer,
+            'add_languages_field_button',
+            10
+          );
+
           inputResumeOtherInformation.value =
             data.profile_data.other_information;
 
           inputSelectResumeLocation.value = data.profile_data.location_id;
-        }
 
-        if (data.profile_data !== null) {
           updateResumeViewButton(true, data.profile_data.id);
         } else {
+          inputResumeEmail.value = myData.userData.email;
+
+          generateDynamicForms(
+            'WORK_EXPERIENCE',
+            [],
+            workExperienceContainer,
+            'add_work_experience_field_button',
+            10
+          );
+
+          generateDynamicForms(
+            'EDUCATION',
+            [],
+            educationContainer,
+            'add_education_field_button',
+            10
+          );
+
+          generateDynamicForms(
+            'SKILLS',
+            [],
+            skillsContainer,
+            'add_skills_field_button',
+            10
+          );
+
+          generateDynamicForms(
+            'LANGUAGES',
+            [],
+            languagesContainer,
+            'add_languages_field_button',
+            10
+          );
+
           updateResumeViewButton(false);
         }
       }
@@ -646,29 +798,228 @@ function firstFetch() {
     accountEmailForm.value = myData.userData.email;
   }
 
+  if (myData?.userData.verify) {
+    const emailFormLabel = document.getElementById('email-form-title');
+    emailFormLabel.innerHTML = `Email  <span class="badge badge-success">Verified</span>`;
+  }
+
   if (myData.userData.role_id === 3) {
     getResumeData();
   } else {
     getCompanyProfileData();
   }
 
-  $("#input-select-industry").change(function () {
+  $('#input-select-industry').change(function () {
     var selected = [];
-    $("#input-select-industry :selected").each(function () {
+    $('#input-select-industry :selected').each(function () {
       selected.push($(this).text());
     });
-    $("#selected-industries").text(selected.join(", "));
+    $('#selected-industries').text(selected.join(', '));
+  });
+}
+
+function dynamicFormUI(value, index, type) {
+  if (type == 'WORK_EXPERIENCE') {
+    const fieldLabels = 'Work Experience';
+    const fieldIdName = 'work_experience';
+
+    const newInput = document.createElement('div');
+    newInput.classList.add('form-group');
+    newInput.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center">
+        <label>${fieldLabels}</label>
+        <a href="#" class="remove_field">Remove</a>
+      </div>
+      <input type="text" name="${fieldIdName}[${index}][job_title]" class="form-control" placeholder="Job Title" required value="${
+      value == null ? '' : value.job_title
+    }">
+      <input type="text" name="${fieldIdName}[${index}][company_name]" class="form-control mt-1" placeholder="Company Name" required value="${
+      value == null ? '' : value.company_name
+    }">
+    <textarea  maxlength="500" rows="3" name="${fieldIdName}[${index}][responsibility]" class="form-control mt-1" placeholder="Responsibility" required>${
+      value == null ? '' : value.responsibility
+    }</textarea>
+      <div class="form-row mt-1">
+        <div class="col">
+          <div class="input-group">
+            <input type="date" name="${fieldIdName}[${index}][start_date]" class="form-control" placeholder="Start Date" required value="${
+      value == null ? '' : value.start_date
+    }">
+          </div>
+        </div>
+        <div class="d-flex align-items-center">-</div>
+        <div class="col">
+          <div class="input-group">
+            <input type="date" name="${fieldIdName}[${index}][end_date]" class="form-control" placeholder="End Date" required value="${
+      value == null ? '' : value.end_date
+    }">
+          </div>
+        </div>
+      </div>`;
+
+    return newInput;
+  }
+
+  if (type == 'EDUCATION') {
+    const fieldLabels = 'Education';
+    const fieldIdName = 'education';
+
+    const newInput = document.createElement('div');
+    newInput.classList.add('form-group');
+    newInput.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center">
+        <label>${fieldLabels}</label>
+        <a href="#" class="remove_field">Remove</a>
+      </div>
+      <input type="text" name="${fieldIdName}[${index}][field_of_study]" class="form-control" placeholder="Field of Study" required value="${
+      value == null ? '' : value.field_of_study
+    }">
+      <input type="text" name="${fieldIdName}[${index}][institution_name]" class="form-control mt-1" placeholder="Institution Name" required value="${
+      value == null ? '' : value.institution_name
+    }">
+      <div class="form-row mt-1">
+        <div class="col">
+          <div class="input-group">
+            <input type="date" name="${fieldIdName}[${index}][start_date]" class="form-control" placeholder="Start Date" required value="${
+      value == null ? '' : value.start_date
+    }">
+          </div>
+        </div>
+        <div class="d-flex align-items-center">-</div>
+        <div class="col">
+          <div class="input-group">
+            <input type="date" name="${fieldIdName}[${index}][end_date]" class="form-control" placeholder="End Date" required value="${
+      value == null ? '' : value.end_date
+    }">
+          </div>
+        </div>
+      </div>`;
+
+    return newInput;
+  }
+
+  if (type == 'SKILLS') {
+    const fieldLabels = 'Skill';
+    const fieldIdName = 'skills';
+
+    const newInput = document.createElement('div');
+    newInput.classList.add('form-group');
+    newInput.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center">
+        <label>${fieldLabels}</label>
+        <a href="#" class="remove_field">Remove</a>
+      </div>
+      <input type="text" name="${fieldIdName}[${index}][title]" class="form-control" placeholder="Title" required value="${
+      value == null ? '' : value.title
+    }">
+    <select name="${fieldIdName}[${index}][level]" class="form-control mt-1" required> 
+      <option value="">Select Level</option>
+      <option value="beginner" ${
+        value && value.level === 'beginner' ? 'selected' : ''
+      }>Beginner</option>
+      <option value="intermediate" ${
+        value && value.level === 'intermediate' ? 'selected' : ''
+      }>Intermediate</option>
+      <option value="advanced" ${
+        value && value.level === 'advanced' ? 'selected' : ''
+      }>Advanced</option>
+    </select>  
+      </div>`;
+
+    return newInput;
+  }
+
+  if (type == 'LANGUAGES') {
+    const fieldLabels = 'Language';
+    const fieldIdName = 'languages';
+
+    const newInput = document.createElement('div');
+    newInput.classList.add('form-group');
+    newInput.innerHTML = `
+      <div class="d-flex justify-content-between align-items-center">
+        <label>${fieldLabels}</label>
+        <a href="#" class="remove_field">Remove</a>
+      </div>
+      <input type="text" name="${fieldIdName}[${index}][title]" class="form-control" placeholder="Langguage Name" required value="${
+      value == null ? '' : value.title
+    }">
+    <select name="${fieldIdName}[${index}][level]" class="form-control mt-1" required> 
+      <option value="">Select Proficiency Level</option>
+      <option value="beginner" ${
+        value && value.level === 'beginner' ? 'selected' : ''
+      }>Beginner</option>
+      <option value="intermediate" ${
+        value && value.level === 'intermediate' ? 'selected' : ''
+      }>Intermediate</option>
+      <option value="advanced" ${
+        value && value.level === 'advanced' ? 'selected' : ''
+      }>Advanced</option>
+    </select>  
+      </div>`;
+
+    return newInput;
+  }
+}
+
+function generateDynamicForms(
+  type,
+  currentData,
+  containerElement,
+  add_field_btn_id,
+  maxFields = 10
+) {
+  const MAX_FIELDS = maxFields;
+  const addButton = document.querySelector(`#${add_field_btn_id}`);
+  let x = 0;
+
+  for (const data of currentData) {
+    x++;
+    const newInput = dynamicFormUI(data, x - 1, type);
+    containerElement.appendChild(newInput);
+
+    const removeButton = newInput.querySelector('.remove_field');
+    removeButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      newInput.remove();
+      x--;
+    });
+
+    containerElement.insertBefore(newInput, addButton.parentNode);
+  }
+
+  addButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    if (x < MAX_FIELDS) {
+      x++;
+
+      const newInput = dynamicFormUI(null, x - 1, type);
+      containerElement.insertBefore(newInput, addButton.parentNode);
+    } else {
+      showToast(
+        'alert-toast-container',
+        "You've reached the maximum number of forms allowed",
+        'danger'
+      );
+    }
+
+    containerElement.addEventListener('click', function (event) {
+      if (event.target.classList.contains('remove_field')) {
+        event.preventDefault();
+        event.target.parentNode.parentNode.remove();
+        x--;
+      }
+    });
   });
 }
 
 $(document).ready(function () {
   var urlParams = new URLSearchParams(window.location.search);
-  var code = urlParams.get("code");
-  if (code === "company_profile") {
-    document.querySelector("#company-profile-tab").click();
+  var code = urlParams.get('code');
+  if (code === 'company_profile') {
+    document.querySelector('#company-profile-tab').click();
   }
-  if (code === "resume") {
-    document.querySelector("#my-resume-tab").click();
+  if (code === 'resume') {
+    document.querySelector('#my-resume-tab').click();
   }
   firstFetch();
 });

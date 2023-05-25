@@ -1,78 +1,78 @@
-const myData = getSavedData("masterData");
+const myData = getSavedData('masterData');
 const token = myData?.authToken;
 
-const topbarNotAuth = document.getElementById("topbar-not-auth");
-const topbarWithAuth = document.getElementById("topbar-with-auth");
-const topbarUsername = document.getElementById("topbar-username");
-const topBarPostJobButton = document.getElementById("topbar-post-job-btn");
-const logoutBtn = document.getElementById("button-logout-yes");
-logoutBtn.addEventListener("click", clearSession);
+const topbarNotAuth = document.getElementById('topbar-not-auth');
+const topbarWithAuth = document.getElementById('topbar-with-auth');
+const topbarUsername = document.getElementById('topbar-username');
+const topBarPostJobButton = document.getElementById('topbar-post-job-btn');
+const logoutBtn = document.getElementById('button-logout-yes');
+logoutBtn.addEventListener('click', clearSession);
 
 if (token) {
-  topbarWithAuth.removeAttribute("style");
-  topbarNotAuth.setAttribute("style", "display: none");
+  topbarWithAuth.removeAttribute('style');
+  topbarNotAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = myData.userData.username;
 } else {
-  topbarNotAuth.removeAttribute("style");
-  topbarWithAuth.setAttribute("style", "display: none");
-  topbarUsername.innerHTML = "...";
-  topBarPostJobButton.addEventListener("click", function () {
-    location.href = "index?login=true";
+  topbarNotAuth.removeAttribute('style');
+  topbarWithAuth.setAttribute('style', 'display: none');
+  topbarUsername.innerHTML = '...';
+  topBarPostJobButton.addEventListener('click', function () {
+    location.href = 'index?login=true';
   });
 }
 
 document
-  .getElementById("topbar-job-list-btn-not-auth")
-  .addEventListener("click", function () {
-    location.href = "job-list";
+  .getElementById('topbar-job-list-btn-not-auth')
+  .addEventListener('click', function () {
+    location.href = 'job-list';
   });
 
 document
-  .getElementById("topbar-job-list-btn-with-auth")
-  .addEventListener("click", function () {
-    location.href = "job-list";
+  .getElementById('topbar-job-list-btn-with-auth')
+  .addEventListener('click', function () {
+    location.href = 'job-list';
   });
 
 const format = {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-  hour: "numeric",
-  minute: "numeric",
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
   hour12: true,
 };
 
 function populateMoreProfiles(data) {
-  const listLoader = document.getElementById("profile-list-loader");
-  const listEmpty = document.getElementById("profile-list-empty");
-  const listContainer = document.getElementById("profile-list-container");
-  const listBody = document.getElementById("profile-list-body");
+  const listLoader = document.getElementById('profile-list-loader');
+  const listEmpty = document.getElementById('profile-list-empty');
+  const listContainer = document.getElementById('profile-list-container');
+  const listBody = document.getElementById('profile-list-body');
 
   var totalRecord = [];
 
   data.forEach((item) => {
     const card = listBody.cloneNode(true);
-    const divs = card.getElementsByTagName("div");
+    const divs = card.getElementsByTagName('div');
 
-    divs[0].addEventListener("click", function () {
+    divs[0].addEventListener('click', function () {
       location.href = `user-profile.html?profile_id=${item.id}`;
     });
 
-    const title = divs[0].getElementsByTagName("h7");
+    const title = divs[0].getElementsByTagName('h7');
 
     title[0].innerHTML = `<i class="fas fa-user"></i> ${item.full_name}`;
 
     totalRecord.push(card);
   });
 
-  listLoader.classList.add("hidden");
+  listLoader.classList.add('hidden');
 
   if (totalRecord.length === 0) {
-    listEmpty.classList.remove("hidden");
-    listContainer.classList.add("hidden");
+    listEmpty.classList.remove('hidden');
+    listContainer.classList.add('hidden');
   } else {
-    listEmpty.classList.add("hidden");
-    listContainer.classList.remove("hidden");
+    listEmpty.classList.add('hidden');
+    listContainer.classList.remove('hidden');
 
     while (listContainer.firstChild) {
       listContainer.removeChild(listContainer.firstChild);
@@ -88,9 +88,9 @@ const loadingText =
 
 var loading = false;
 
-function cancelInvite(invite_id, inviteBtn, typeText) {
+function cancelInvite(invite_id, inviteBtn) {
   var confirmDelete = confirm(
-    `Are you sure you want to cancel this ${typeText}? This action cannot be undone.`
+    `Are you sure you want to cancel this invitation? This action cannot be undone.`
   );
 
   if (confirmDelete) {
@@ -99,29 +99,29 @@ function cancelInvite(invite_id, inviteBtn, typeText) {
     inviteBtn.innerHTML = loadingText;
 
     fetchAPI(
-      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/application/${invite_id}`,
-      "DELETE",
+      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/invitation/${invite_id}`,
+      'DELETE',
       token
     )
       .then((data) => {
         if (data?.message) {
-          showToast("alert-toast-container", data.message, "danger");
+          showToast('alert-toast-container', data.message, 'danger');
           inviteBtn.disabled = false;
           inviteBtn.innerHTML = `Invite`;
           loading = false;
-          $("#inviteModal").modal("hide");
+          $('#inviteModal').modal('hide');
         } else {
           setTimeout(() => {
             fetchUserProfile();
             showToast(
-              "alert-toast-container",
-              `The ${typeText} has been successfully canceled.`,
-              "success"
+              'alert-toast-container',
+              `The invitation has been successfully canceled.`,
+              'success'
             );
             inviteBtn.disabled = false;
             inviteBtn.innerHTML = `Invite`;
             loading = false;
-            $("#inviteModal").modal("hide");
+            $('#inviteModal').modal('hide');
           }, 2000);
         }
       })
@@ -129,20 +129,23 @@ function cancelInvite(invite_id, inviteBtn, typeText) {
         inviteBtn.disabled = false;
         inviteBtn.innerHTML = `Invite`;
         loading = false;
-        $("#inviteModal").modal("hide");
+        $('#inviteModal').modal('hide');
       });
   }
 }
 
 function sendInvite(postId, inviteBtn, profileId) {
   if (loading) {
-    alert("The invitation process is still in progress. Please wait...");
+    showToast(
+      'alert-toast-container',
+      'The invitation process is still in progress. Please wait...',
+      'danger'
+    );
   } else {
     const options = {
       body: JSON.stringify({
         post_id: postId,
         profile_id: profileId,
-        type: "invitation",
       }),
     };
 
@@ -151,30 +154,30 @@ function sendInvite(postId, inviteBtn, profileId) {
     inviteBtn.innerHTML = loadingText;
 
     fetchAPI(
-      "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/application",
-      "POST",
+      'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/invitation',
+      'POST',
       token,
       options
     )
       .then((data) => {
         if (data?.message) {
-          showToast("alert-toast-container", data.message, "danger");
+          showToast('alert-toast-container', data.message, 'danger');
           inviteBtn.disabled = false;
           inviteBtn.innerHTML = `Invite`;
           loading = false;
-          $("#inviteModal").modal("hide");
+          $('#inviteModal').modal('hide');
         } else {
           setTimeout(() => {
             fetchUserProfile();
             showToast(
-              "alert-toast-container",
-              "The invitation has been sent successfully.",
-              "success"
+              'alert-toast-container',
+              'The invitation has been sent successfully.',
+              'success'
             );
             inviteBtn.disabled = false;
             inviteBtn.innerHTML = `Invite`;
             loading = false;
-            $("#inviteModal").modal("hide");
+            $('#inviteModal').modal('hide');
           }, 2000);
         }
       })
@@ -182,73 +185,68 @@ function sendInvite(postId, inviteBtn, profileId) {
         inviteBtn.disabled = false;
         inviteBtn.innerHTML = loadingText;
         loading = false;
-        $("#inviteModal").modal("hide");
+        $('#inviteModal').modal('hide');
       });
   }
 }
 
-function listPostedJob(passData, profileId, applicationList) {
-  const emptyCard = document.getElementById("posted-job-card-empty");
+function listInvitation(passData, profileId, applicationList) {
+  const emptyCard = document.getElementById('posted-job-card-empty');
 
-  const parentTable = document.getElementById("posted-job-card-list-parent");
-  const style = document.getElementById("posted-job-card-list-child");
+  const parentTable = document.getElementById('posted-job-card-list-parent');
+  const style = document.getElementById('posted-job-card-list-child');
 
   const emptyDiv = [];
 
   if (passData.length !== 0) {
     passData.map((item) => {
       const card = style.cloneNode(true);
-      const divs = card.getElementsByTagName("div");
-      const titleContainer = divs[0].getElementsByTagName("h6");
-      const activeAtContainer = divs[0].getElementsByTagName("h7");
+      const divs = card.getElementsByTagName('div');
+      const titleContainer = divs[0].getElementsByTagName('h6');
+      const activeAtContainer = divs[0].getElementsByTagName('h7');
 
       let invited = false;
       let invite_id = null;
-      let invite_type = null;
 
       applicationList.map((item2) => {
         if (item.id == item2.post_id && profileId == item2.profile_id) {
           invited = true;
           invite_id = item2.id;
-          invite_type = item2.type;
         }
       });
 
-      const inviteBtn = divs[0].getElementsByTagName("button")[0];
+      const inviteBtn = divs[0].getElementsByTagName('button')[0];
 
-      let badgeText = "";
-      let buttonText = "";
+      let badgeText = '';
+      let buttonText = '';
 
-      if (invite_type == "application") {
-        badgeText = `<span class="badge badge-pill badge-success">Applied</span>`;
-        buttonText = "Cancel Application";
-      } else if (invite_type == "invitation") {
+      if (invited === true) {
         badgeText = `<span class="badge badge-pill badge-success">Invited</span>`;
-        buttonText = "Cancel Invite";
+        buttonText = 'Cancel Invite';
       } else {
-        badgeText = "";
-        buttonText = "Invite to Apply";
+        badgeText = '';
+        buttonText = 'Invite to Apply';
       }
 
       inviteBtn.innerHTML = buttonText;
       titleContainer[0].innerHTML = `${item.title} ${badgeText}`;
 
       if (invited === true) {
-        inviteBtn.classList.remove("btn-primary");
-        inviteBtn.classList.add("btn-secondary");
-        inviteBtn.addEventListener("click", function () {
-          cancelInvite(invite_id, this, invite_type);
+        inviteBtn.classList.remove('btn-primary');
+        inviteBtn.classList.add('btn-secondary');
+        inviteBtn.addEventListener('click', function () {
+          cancelInvite(invite_id, this);
         });
       } else {
         inviteBtn.disabled = false;
-        inviteBtn.classList.remove("btn-secondary");
-        inviteBtn.classList.add("btn-primary");
-        inviteBtn.addEventListener("click", function () {
+        inviteBtn.classList.remove('btn-secondary');
+        inviteBtn.classList.add('btn-primary');
+        inviteBtn.addEventListener('click', function () {
           sendInvite(item.id, this, profileId);
         });
       }
 
-      titleContainer[0].addEventListener("click", function () {
+      titleContainer[0].addEventListener('click', function () {
         window.open(item.internal_apply_link);
       });
 
@@ -262,11 +260,11 @@ function listPostedJob(passData, profileId, applicationList) {
   }
 
   if (emptyDiv.length === 0) {
-    emptyCard.classList.remove("hidden");
-    parentTable.classList.add("hidden");
+    emptyCard.classList.remove('hidden');
+    parentTable.classList.add('hidden');
   } else {
-    emptyCard.classList.add("hidden");
-    parentTable.classList.remove("hidden");
+    emptyCard.classList.add('hidden');
+    parentTable.classList.remove('hidden');
     while (parentTable.firstChild) {
       parentTable.removeChild(parentTable.firstChild);
     }
@@ -280,7 +278,11 @@ var unlockProfileLoading = false;
 
 function unlockProfile(profileId, passBtn, passBtnDefaultText) {
   if (unlockProfileLoading) {
-    alert("Unlock profile is still in progress. Please wait...");
+    showToast(
+      'alert-toast-container',
+      'Unlock profile is still in progress. Please wait...',
+      'danger'
+    );
   } else {
     const options = {
       body: JSON.stringify({
@@ -291,22 +293,22 @@ function unlockProfile(profileId, passBtn, passBtnDefaultText) {
     passBtn.innerHTML = loadingText;
     fetchAPI(
       `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/unlock/profile`,
-      "POST",
+      'POST',
       token,
       options
     )
       .then((data) => {
         if (data?.message) {
-          alert(data?.message);
+          showToast('alert-toast-container', data.message, 'danger');
           unlockProfileLoading = false;
           passBtn.innerHTML = passBtnDefaultText;
-          $("#coinBalanceModal").modal("hide");
+          $('#coinBalanceModal').modal('hide');
         } else {
           setTimeout(() => {
             fetchUserProfile();
             unlockProfileLoading = false;
             passBtn.innerHTML = passBtnDefaultText;
-            $("#coinBalanceModal").modal("hide");
+            $('#coinBalanceModal').modal('hide');
           }, 2000);
         }
       })
@@ -317,44 +319,265 @@ function unlockProfile(profileId, passBtn, passBtnDefaultText) {
   }
 }
 
-const unlockNowButton = document.getElementById("unlock-now");
-const textCurrentBalance = document.getElementById("text-current-balance");
+const unlockNowButton = document.getElementById('unlock-now');
+const textCoinAmountToUnlockProfile = document.getElementById(
+  'text-coin-amount-to-unlock-profile'
+);
+const textCurrentBalance = document.getElementById('text-current-balance');
 
 function fetchUserProfile() {
   var urlParams = new URLSearchParams(window.location.search);
-  var profileId = urlParams.get("profile_id");
+  var profileId = urlParams.get('profile_id');
 
   if (profileId) {
     fetchAPI(
       `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/resume/list?profile_id=${profileId}`,
-      "GET",
+      'GET',
       token
     )
       .then((data) => {
         if (data?.message) {
-          alert(data.message);
+          showToast('alert-toast-container', data.message, 'danger');
         } else {
           populateMoreProfiles(data.other_profiles);
 
-          listPostedJob(
+          listInvitation(
             data.employer_posts,
             profileId,
-            data.employer_applications
+            data.employer_invitations
           );
 
-          textCurrentBalance.innerHTML = `Your Current Balance: <b>${data.employer_coin_balance}</b> <i class="fas fa-coins mr-1"></i>`;
+          textCoinAmountToUnlockProfile.innerHTML = `Spend <b>${data.coin_amount_to_unlock_profile}</b> <i class="fas fa-coins mr-1"></i> coins to unlock this profile and gain access to complete details, including contact information.`;
+          textCurrentBalance.innerHTML = `Your Current Coin Balance: <b>${data.employer_coin_balance}</b> <i class="fas fa-coins mr-1"></i>`;
 
           if (data.profile_details !== null) {
+            const emailFormTitle = document.getElementById('email-from-title');
+            emailFormTitle.innerHTML =
+              'Email <span class="badge badge-pill badge-success">Verified</span>';
+
             const progressContainer =
-              document.getElementById("profile-progress");
+              document.getElementById('profile-progress');
             progressContainer.style.width =
               data.profile_details.progress_percentage;
             progressContainer.innerHTML =
               data.profile_details.progress_percentage;
 
             const actionProfileBtnContainer = document.getElementById(
-              "action-profile-button-container"
+              'action-profile-button-container'
             );
+
+            const textElements = [
+              document.getElementById('text-full-name'),
+              document.getElementById('text-gender'),
+              document.getElementById('text-email'),
+              document.getElementById('text-phone-number'),
+              document.getElementById('text-date-of-birth'),
+              document.getElementById('text-current-job-status'),
+              document.getElementById('text-preferred-job'),
+              document.getElementById('text-expected-salary'),
+              document.getElementById('text-location'),
+              document.getElementById('text-address'),
+              document.getElementById('text-summary'),
+              document.getElementById('work-experience-container'),
+              document.getElementById('education-container'),
+              document.getElementById('skills-container'),
+              document.getElementById('languages-container'),
+              document.getElementById('text-other-information'),
+              document.getElementById('text-last-updated'),
+              document.getElementById('text-resume-visibility'),
+            ];
+
+            var my_full_name = '-';
+            var my_gender = '-';
+            var my_current_job_status = '-';
+            var my_preferred_job = '-';
+            var my_expected_salary = '-';
+            var my_email = '-';
+            var my_phone_number = '-';
+            var my_date_of_birth = '-';
+            var my_location = '-';
+            var my_address = '-';
+            var my_summary = '-';
+            var my_other_information = '-';
+            var my_work_experience = [];
+            var my_education = [];
+            var my_skills = [];
+            var my_languages = [];
+            var my_last_updated = '';
+            var my_resume_visibility = '';
+
+            my_full_name = data.profile_unlocked
+              ? data.profile_details.full_name
+              : data.profile_details.mask_full_name;
+
+            if (data.profile_details?.gender == 'male') {
+              my_gender = 'Male';
+            } else if (data.profile_details?.gender == 'female') {
+              my_gender = 'Female';
+            } else {
+              my_gender = '';
+            }
+
+            my_email = data.profile_unlocked
+              ? data.profile_details.email
+              : data.profile_details.mask_email;
+
+            my_phone_number = data.profile_unlocked
+              ? data.profile_details.phone_number
+              : data.profile_details.mask_phone_number;
+
+            my_date_of_birth = data.profile_details?.date_of_birth;
+            my_current_job_status = data.profile_details?.current_job_status;
+            my_preferred_job = data.profile_details?.preferred_job;
+
+            let minSalary = data.profile_details?.expected_min_salary;
+            let maxSalary = data.profile_details?.expected_max_salary;
+            let salaryType = data.profile_details?.expected_salary_type;
+            if (minSalary && maxSalary && salaryType) {
+              my_expected_salary = `${minSalary} - ${maxSalary} ${salaryType}`;
+            }
+
+            my_location = data.profile_details?.location_data?.name;
+
+            my_address = data.profile_unlocked
+              ? data.profile_details.address
+              : data.profile_details.mask_address;
+            my_summary = data.profile_unlocked
+              ? data.profile_details.summary
+              : data.profile_details.mask_summary;
+
+            textElements[0].innerHTML = `<i class="fas fa-user"></i> ${my_full_name}`;
+            textElements[1].innerHTML = my_gender;
+            textElements[2].innerHTML = my_email;
+            textElements[3].innerHTML = my_phone_number;
+            textElements[4].innerHTML = my_date_of_birth;
+            textElements[5].innerHTML = my_current_job_status;
+            textElements[6].innerHTML = my_preferred_job;
+            textElements[7].innerHTML = my_expected_salary;
+            textElements[8].innerHTML = my_location;
+            textElements[9].innerHTML = my_address;
+            textElements[10].innerHTML = my_summary;
+
+            if (data.profile_details?.work_experience) {
+              // Clear existing content
+              while (textElements[11].firstChild) {
+                textElements[11].removeChild(textElements[11].firstChild);
+              }
+
+              my_work_experience = data.profile_details.work_experience;
+              my_work_experience.forEach((item) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                      <h7 class="font-weight-bold mb-0">${item.job_title}</h7>
+                      <h6 class="text-muted mb-0">${
+                        data.profile_unlocked
+                          ? item.company_name
+                          : item.mask_company_name
+                      } ◦ ${item.start_date} - ${item.end_date}</h6>
+                      <h6>${
+                        data.profile_unlocked
+                          ? item.responsibility
+                          : item.mask_responsibility
+                      }</h6>
+              `;
+
+                textElements[11].appendChild(div);
+              });
+            }
+
+            if (data.profile_details?.education) {
+              // Clear existing content
+              while (textElements[12].firstChild) {
+                textElements[12].removeChild(textElements[12].firstChild);
+              }
+
+              my_education = data.profile_details.education;
+              my_education.forEach((item) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                      <h7 class="font-weight-bold mb-0">${
+                        item.field_of_study
+                      }</h7>
+                      <h6 class="text-muted">${
+                        data.profile_unlocked
+                          ? item.institution_name
+                          : item.mask_institution_name
+                      } ◦ ${item.start_date} - ${item.end_date}</h6>
+              `;
+
+                textElements[12].appendChild(div);
+              });
+            }
+
+            const levelTitle = {
+              beginner: 'Beginner',
+              intermediate: 'Intermediate',
+              advanced: 'Advanced',
+            };
+
+            if (data.profile_details?.skills) {
+              // Clear existing content
+              while (textElements[13].firstChild) {
+                textElements[13].removeChild(textElements[13].firstChild);
+              }
+
+              my_skills = data.profile_details.skills;
+              my_skills.forEach((item) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                      <h7 class="font-weight-bold mb-0">${item.title}</h7>
+                      <h6 class="text-muted">${levelTitle[item.level]}</h6>
+              `;
+
+                textElements[13].appendChild(div);
+              });
+            }
+
+            if (data.profile_details?.languages) {
+              // Clear existing content
+              while (textElements[14].firstChild) {
+                textElements[14].removeChild(textElements[14].firstChild);
+              }
+
+              my_languages = data.profile_details.languages;
+              my_languages.forEach((item) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                      <h7 class="font-weight-bold mb-0">${item.title}</h7>
+                      <h6 class="text-muted">${levelTitle[item.level]}</h6>
+              `;
+
+                textElements[14].appendChild(div);
+              });
+            }
+
+            my_other_information = data.profile_unlocked
+              ? data.profile_details.other_information
+              : data.profile_details.mask_other_information;
+
+            textElements[15].innerHTML = my_other_information;
+
+            var last_update_at = new Date(data.profile_details.last_updated);
+            var last_update_timeAgo = moment(last_update_at).fromNow(true);
+
+            my_last_updated = `${last_update_timeAgo} ago`;
+
+            textElements[16].innerHTML = my_last_updated;
+
+            my_resume_visibility =
+              data.profile_details.resume_visibility_data.name;
+
+            textElements[17].innerHTML = my_resume_visibility;
+
+            for (let i = 0; i < textElements.length; i++) {
+              if (
+                textElements[i].innerText == '' ||
+                textElements[i].innerText == 'undefined' ||
+                textElements[i].innerText == '-'
+              ) {
+                textElements[i].innerHTML = '-';
+              }
+            }
 
             // remove existing dropdown button (if any)
             while (actionProfileBtnContainer.firstChild) {
@@ -364,36 +587,188 @@ function fetchUserProfile() {
             }
 
             if (myData.userData.role_id == 1 || myData.userData.role_id == 2) {
-              const buttonInvite = document.createElement("button");
-              buttonInvite.setAttribute("type", "button");
-              buttonInvite.setAttribute(
-                "class",
-                "btn btn-outline-primary mr-1"
+              const buttonDownload = document.createElement('button');
+              buttonDownload.setAttribute('type', 'button');
+              buttonDownload.setAttribute(
+                'class',
+                'btn btn-outline-primary mr-1'
               );
-              buttonInvite.setAttribute("data-toggle", "modal");
-              buttonInvite.setAttribute("data-target", "#inviteModal");
-              buttonInvite.setAttribute("id", "button-send-invite");
+              buttonDownload.setAttribute('id', 'button-download');
+              buttonDownload.innerHTML = `<i class="fas fa-download mr-1"></i>Download`;
+              buttonDownload.addEventListener('click', () => {
+                if (data.profile_unlocked == true) {
+                  var profileResumeData = {
+                    full_name: {
+                      title: 'Full Name',
+                      type: 'string',
+                      value: my_full_name,
+                    },
+                    gender: {
+                      title: 'Gender',
+                      type: 'string',
+                      value: my_gender,
+                    },
+                    current_job_status: {
+                      title: 'Current Job Status',
+                      type: 'string',
+                      value: my_current_job_status,
+                    },
+                    date_of_birth: {
+                      title: 'Date of Birth',
+                      type: 'string',
+                      value: my_date_of_birth,
+                    },
+                    email: { title: 'Email', type: 'string', value: my_email },
+                    phone: {
+                      title: 'Phone Number',
+                      type: 'string',
+                      value: my_phone_number,
+                    },
+                    location: {
+                      title: 'My Location',
+                      type: 'string',
+                      value: my_location,
+                    },
+                    address: {
+                      title: 'Address',
+                      type: 'string',
+                      value: my_address,
+                    },
+                    preferred_job: {
+                      title: 'Preferred Job',
+                      type: 'string',
+                      value: my_preferred_job,
+                    },
+                    expected_salary: {
+                      title: 'Expected Salary',
+                      type: 'string',
+                      value: my_expected_salary,
+                    },
+                    summary: {
+                      title: 'Summary',
+                      type: 'string',
+                      value: my_summary,
+                    },
+                    experience: {
+                      title: 'Work Experience',
+                      type: 'array',
+                      value: my_work_experience,
+                    },
+                    education: {
+                      title: 'Education',
+                      type: 'array',
+                      value: my_education,
+                    },
+                    skills: {
+                      title: 'Skills',
+                      type: 'array',
+                      value: my_skills,
+                    },
+                    languages: {
+                      title: 'Languages',
+                      type: 'array',
+                      value: my_languages,
+                    },
+                    other_information: {
+                      title: 'Other Information',
+                      type: 'string',
+                      value: my_other_information,
+                    },
+                  };
+
+                  // Create a new jsPDF instance
+                  var doc = new jsPDF();
+
+                  // Generate the HTML content
+                  var htmlContent = '<div style="font-size: 13px;">';
+
+                  htmlContent += '<h2>My Resume</h2>';
+
+                  Object.keys(profileResumeData).forEach(function (key) {
+                    var data = profileResumeData[key];
+                    htmlContent += '<div>';
+                    htmlContent +=
+                      '<span style="font-weight: bold;">' +
+                      data.title +
+                      ': </span>';
+
+                    if (data.type === 'string') {
+                      htmlContent += '<span>' + (data.value || '') + '</span>';
+                    } else if (data.type === 'array') {
+                      if (Array.isArray(data.value) && data.value.length > 0) {
+                        htmlContent += '<ul>';
+                        data.value.forEach(function (item) {
+                          if (data.title == 'Work Experience') {
+                            htmlContent += `<li>${item.job_title} at ${item.company_name} (${item.start_date} - ${item.end_date}) - ${item.responsibility}</li>`;
+                          } else if (data.title == 'Education') {
+                            htmlContent += `<li>${item.field_of_study} at ${item.institution_name} (${item.start_date} - ${item.end_date})</li>`;
+                          } else {
+                            htmlContent +=
+                              '<li>' +
+                              `${item.title} - ${item.level}` +
+                              '</li>';
+                          }
+                        });
+                        htmlContent += '</ul>';
+                      } else {
+                        htmlContent +=
+                          '<span>No ' +
+                          data.title.toLowerCase() +
+                          ' available</span>';
+                      }
+                    }
+
+                    htmlContent += '</div>';
+                  });
+
+                  htmlContent += '</div>';
+
+                  // Generate the PDF from HTML content
+                  doc.fromHTML(htmlContent, 15, 15, {
+                    width: 170,
+                  });
+
+                  var fileName =
+                    profileResumeData.full_name.title.replace(/\s+/g, '_') +
+                    '_resume.pdf';
+                  doc.save(fileName);
+                } else {
+                  showToast(
+                    'alert-toast-container',
+                    'Profile is currently locked. Unlock it to enable the download feature.',
+                    'danger'
+                  );
+                }
+              });
+
+              const buttonInvite = document.createElement('button');
+              buttonInvite.setAttribute('type', 'button');
+              buttonInvite.setAttribute(
+                'class',
+                'btn btn-outline-primary mr-1'
+              );
+              buttonInvite.setAttribute('data-toggle', 'modal');
+              buttonInvite.setAttribute('data-target', '#inviteModal');
+              buttonInvite.setAttribute('id', 'button-send-invite');
               buttonInvite.innerHTML = `<i class="fas fa-envelope mr-1"></i>Invite`;
 
-              const buttonUnlock = document.createElement("button");
-              buttonUnlock.setAttribute("type", "button");
-              buttonUnlock.setAttribute("id", "unlock-button");
+              const buttonUnlock = document.createElement('button');
+              buttonUnlock.setAttribute('type', 'button');
+              buttonUnlock.setAttribute('id', 'unlock-button');
 
               if (data.profile_unlocked == true) {
-                buttonInvite.disabled = false;
                 buttonUnlock.disabled = true;
-                buttonUnlock.setAttribute("class", "btn btn-secondary");
+                buttonUnlock.setAttribute('class', 'btn btn-secondary');
                 buttonUnlock.innerHTML = `<i class="fas fa-lock-open mr-1"></i>Profile Unlocked`;
               } else {
-                buttonInvite.disabled = true;
                 buttonUnlock.disabled = false;
-                buttonUnlock.setAttribute("class", "btn btn-primary");
+                buttonUnlock.setAttribute('class', 'btn btn-primary');
                 buttonUnlock.innerHTML = `<i class="fas fa-lock mr-1"></i>Unlock Profile`;
-                buttonUnlock.setAttribute("data-toggle", "modal");
-                buttonUnlock.setAttribute("data-target", "#coinBalanceModal");
+                buttonUnlock.setAttribute('data-toggle', 'modal');
+                buttonUnlock.setAttribute('data-target', '#coinBalanceModal');
 
                 // unclock now button on modal open
-                unlockNowButton.addEventListener("click", () => {
+                unlockNowButton.addEventListener('click', () => {
                   unlockProfile(
                     data.profile_details.id,
                     unlockNowButton,
@@ -401,85 +776,26 @@ function fetchUserProfile() {
                   );
                 });
 
-                if (data.employer_coin_balance > 0) {
-                  unlockNowButton.setAttribute("class", "btn btn-success");
+                if (
+                  data.employer_coin_balance >=
+                  data.coin_amount_to_unlock_profile
+                ) {
+                  unlockNowButton.setAttribute('class', 'btn btn-success');
                   unlockNowButton.innerHTML =
-                    '<i class="fas fa-unlock mr-1"></i> Unlock Now';
+                    '<i class="fas fa-lock mr-1"></i> Unlock Now';
                 } else {
-                  unlockNowButton.setAttribute("class", "btn btn-secondary");
+                  unlockNowButton.setAttribute('class', 'btn btn-secondary');
                   unlockNowButton.innerHTML =
-                    '<i class="fas fa-unlock mr-1"></i> Not enough coins';
+                    '<i class="fas fa-lock mr-1"></i> Not enough coins';
                 }
               }
+
               actionProfileBtnContainer.appendChild(buttonInvite);
+              actionProfileBtnContainer.appendChild(buttonDownload);
               actionProfileBtnContainer.appendChild(buttonUnlock);
             }
-
-            const textFullName = document.getElementById("text-full-name");
-            textFullName.innerHTML = `<i class="fas fa-user"></i> ${
-              data.profile_details?.full_name ?? "-"
-            }`;
-
-            const textElements = [
-              document.getElementById("text-gender"),
-              document.getElementById("text-email"),
-              document.getElementById("text-phone-number"),
-              document.getElementById("text-date-of-birth"),
-              document.getElementById("text-current-job-status"),
-              document.getElementById("text-preferred-job"),
-              document.getElementById("text-expected-salary"),
-              document.getElementById("text-location"),
-              document.getElementById("text-address"),
-              document.getElementById("text-about-me"),
-              document.getElementById("text-work-experience"),
-              document.getElementById("text-education"),
-              document.getElementById("text-skills"),
-              document.getElementById("text-languages"),
-              document.getElementById("text-other-information"),
-            ];
-
-            if (data.profile_details?.gender == "male") {
-              textElements[0].innerHTML = "Male";
-            } else if (data.profile_details?.gender == "female") {
-              textElements[0].innerHTML = "Female";
-            } else {
-              textElements[0].innerHTML = "";
-            }
-
-            textElements[4].innerHTML =
-              data.profile_details?.current_job_status;
-            textElements[5].innerHTML = data.profile_details?.preferred_job;
-            let minSalary = data.profile_details?.expected_min_salary;
-            let maxSalary = data.profile_details?.expected_max_salary;
-            let salaryType = data.profile_details?.expected_salary_type;
-            if (minSalary && maxSalary && salaryType) {
-              textElements[6].innerHTML = `${minSalary} - ${maxSalary} ${salaryType}`;
-            }
-
-            textElements[1].innerHTML = data.profile_details?.email;
-            textElements[2].innerHTML = data.profile_details?.phone_number;
-            textElements[3].innerHTML = data.profile_details?.date_of_birth;
-
-            textElements[7].innerHTML =
-              data.profile_details?.location_data?.name;
-            textElements[8].innerHTML = data.profile_details?.address;
-            textElements[9].innerHTML = data.profile_details?.about_me;
-            textElements[10].innerHTML = data.profile_details?.work_experience;
-            textElements[11].innerHTML = data.profile_details?.education;
-            textElements[12].innerHTML = data.profile_details?.skills;
-            textElements[13].innerHTML = data.profile_details?.languages;
-            textElements[14].innerHTML =
-              data.profile_details?.other_information;
-
-            // var hiddenText = `<i class="fas fa-eye-slash"></i>`;
-
-            for (let i = 0; i < textElements.length; i++) {
-              if (textElements[i].innerText == "") {
-                textElements[i].innerHTML = "-";
-              }
-            }
           } else {
-            const textCompanyName = document.getElementById("text-full-name");
+            const textCompanyName = document.getElementById('text-full-name');
             textCompanyName.innerHTML = `This profile is set to private <i class="fas fa-lock"></i>`;
           }
         }
@@ -490,13 +806,13 @@ function fetchUserProfile() {
       });
   } else {
     populateMoreProfiles([]);
-    alert("Resume Id not found");
+    showToast('alert-toast-container', 'Resume Id not found', 'danger');
   }
 }
 
 document
-  .getElementById("refresh-profile-list")
-  .addEventListener("click", function () {
+  .getElementById('refresh-profile-list')
+  .addEventListener('click', function () {
     fetchUserProfile();
   });
 

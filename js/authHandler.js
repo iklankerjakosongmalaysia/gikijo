@@ -1,93 +1,110 @@
-const myData = getSavedData("masterData");
+const myData = getSavedData('masterData');
 const token = myData?.authToken;
+
+const topbarNotAuth = document.getElementById('topbar-not-auth');
+const topbarWithAuth = document.getElementById('topbar-with-auth');
+const topbarUsername = document.getElementById('topbar-username');
+const topBarPostJobButton = document.getElementById('topbar-post-job-btn');
+const logoutBtn = document.getElementById('button-logout-yes');
+logoutBtn.addEventListener('click', clearSession);
+
 if (token) {
-  location.href = "home";
+  topbarWithAuth.removeAttribute('style');
+  topbarNotAuth.setAttribute('style', 'display: none');
+  topbarUsername.innerHTML = myData.userData.username;
+} else {
+  topbarNotAuth.removeAttribute('style');
+  topbarWithAuth.setAttribute('style', 'display: none');
+  topbarUsername.innerHTML = '...';
+  topBarPostJobButton.addEventListener('click', function () {
+    $('#startNowModal').modal('show'); // only for index.html
+  });
 }
+
+document
+  .getElementById('topbar-job-list-btn-not-auth')
+  .addEventListener('click', function () {
+    location.href = 'job-list';
+  });
+
+document
+  .getElementById('topbar-job-list-btn-with-auth')
+  .addEventListener('click', function () {
+    location.href = 'job-list';
+  });
 
 $(document).ready(function () {
   var urlParams = new URLSearchParams(window.location.search);
-  var login = urlParams.get("login");
-  if (login === "true") {
-    $("#startNowModal").modal("show");
+  var login = urlParams.get('login');
+  if (login === 'true') {
+    $('#startNowModal').modal('show');
+  }
+});
+
+function openLoginTab() {
+  document.querySelector('#login-tab').click();
+}
+
+function openRegisterTab() {
+  document.querySelector('#register-tab').click();
+}
+
+document.getElementById('find-job-btn').addEventListener('click', function () {
+  location.href = 'job-list';
+});
+
+document.getElementById('post-job-btn').addEventListener('click', function () {
+  if (token) {
+    location.href = 'home';
+  } else {
+    $('#startNowModal').modal('show');
   }
 });
 
 document
-  .getElementById("topbar-job-list-btn")
-  .addEventListener("click", function () {
-    location.href = "job-list";
-  });
-
-function openLoginTab() {
-  document.querySelector("#login-tab").click();
-}
-
-function openRegisterTab() {
-  document.querySelector("#register-tab").click();
-}
-
-document.getElementById("find-job-btn").addEventListener("click", function () {
-  location.href = "job-list";
-});
-
-document
-  .getElementById("topbar-login-btn")
-  .addEventListener("click", function () {
-    $("#startNowModal").modal("show");
-    setTimeout(openLoginTab, 500);
-  });
-
-// document
-//   .getElementById("topbar-register-btn")
-//   .addEventListener("click", function () {
-//     $("#startNowModal").modal("show");
-//     setTimeout(openRegisterTab, 500);
-//   });
-
-document
-  .getElementById("go-to-login-tab")
-  .addEventListener("click", function () {
-    document.querySelector("#login-tab").click();
+  .getElementById('go-to-login-tab')
+  .addEventListener('click', function () {
+    document.querySelector('#login-tab').click();
   });
 
 document
-  .getElementById("go-to-register-tab")
-  .addEventListener("click", function () {
-    document.querySelector("#register-tab").click();
+  .getElementById('go-to-register-tab')
+  .addEventListener('click', function () {
+    document.querySelector('#register-tab').click();
   });
 
 document
-  .getElementById("go-to-forgot-password-modal")
-  .addEventListener("click", function () {
-    $("#startNowModal").modal("hide");
-    $("#forgotPasswordModal").modal("show");
+  .getElementById('go-to-forgot-password-modal')
+  .addEventListener('click', function () {
+    $('#startNowModal').modal('hide');
+    $('#forgotPasswordModal').modal('show');
   });
 
 document
-  .getElementById("go-to-login-modal")
-  .addEventListener("click", function () {
-    $("#forgotPasswordModal").modal("hide");
-    $("#startNowModal").modal("show");
+  .getElementById('go-to-login-modal')
+  .addEventListener('click', function () {
+    $('#forgotPasswordModal').modal('hide');
+    $('#startNowModal').modal('show');
   });
 
 document
-  .getElementById("reverify-go-to-login-modal")
-  .addEventListener("click", function () {
-    $("#reverifyModal").modal("hide");
-    $("#startNowModal").modal("show");
+  .getElementById('reverify-go-to-login-modal')
+  .addEventListener('click', function () {
+    $('#reverifyModal').modal('hide');
+    $('#startNowModal').modal('show');
   });
 
-document.getElementById("login-form").addEventListener("submit", function (e) {
+document.getElementById('login-form').addEventListener('submit', function (e) {
   e.preventDefault();
 
-  let submitLoginBtn = document.querySelector("#submit-btn-login");
+  let submitLoginBtn = document.querySelector('#submit-btn-login');
 
   submitLoginBtn.disabled = true;
   submitLoginBtn.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
   const options = {
     body: JSON.stringify({
@@ -97,61 +114,61 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
   };
 
   fetchAPI(
-    "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/auth/login",
-    "POST",
+    'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/auth/login',
+    'POST',
     null,
     options
   )
     .then((data) => {
-      const hasKey = Object.keys(data).includes("authToken");
+      const hasKey = Object.keys(data).includes('authToken');
       if (hasKey === false) {
         submitLoginBtn.disabled = false;
-        submitLoginBtn.innerHTML = "Login";
+        submitLoginBtn.innerHTML = 'Login';
         if (data.payload === 700) {
-          $("#startNowModal").modal("hide");
-          $("#reverifyModal").modal("show");
-          showToast("alert-toast-container", data.message, "danger");
+          $('#startNowModal').modal('hide');
+          $('#reverifyModal').modal('show');
+          showToast('alert-toast-container', data.message, 'danger');
         } else {
-          showToast("alert-toast-container", data.message, "danger");
+          showToast('alert-toast-container', data.message, 'danger');
         }
       } else {
-        saveData("masterData", {
+        saveData('masterData', {
           userData: data.userData,
           authToken: data.authToken,
         });
         submitLoginBtn.disabled = false;
-        submitLoginBtn.innerHTML = "Login";
+        submitLoginBtn.innerHTML = 'Login';
 
         if (data.userData.role_id) {
-          location.href = "home";
+          location.href = 'home';
         } else {
-          location.href = "account-type";
+          location.href = 'account-type';
         }
       }
     })
     .catch((error) => {
       submitLoginBtn.disabled = false;
-      submitLoginBtn.innerHTML = "Login";
+      submitLoginBtn.innerHTML = 'Login';
     });
 });
 
 document
-  .getElementById("register-form")
-  .addEventListener("submit", function (e) {
+  .getElementById('register-form')
+  .addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let submitRegisterBtn = document.querySelector("#submit-btn-register");
+    let submitRegisterBtn = document.querySelector('#submit-btn-register');
 
     submitRegisterBtn.disabled = true;
     submitRegisterBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    const accountType = document.getElementById("input-account-type").value;
-    const username = document.getElementById("input-username-register").value;
-    const email = document.getElementById("input-email-register").value;
-    const password = document.getElementById("input-password-register").value;
+    const accountType = document.getElementById('input-account-type').value;
+    const username = document.getElementById('input-username-register').value;
+    const email = document.getElementById('input-email-register').value;
+    const password = document.getElementById('input-password-register').value;
     const repeatPassword = document.getElementById(
-      "input-repeat-password-register"
+      'input-repeat-password-register'
     ).value;
 
     if (password == repeatPassword) {
@@ -164,50 +181,50 @@ document
         }),
       };
       fetchAPI(
-        "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/auth/verify_email/signup",
-        "POST",
+        'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/auth/verify_email/signup',
+        'POST',
         null,
         options
       )
         .then((data) => {
           submitRegisterBtn.disabled = false;
-          submitRegisterBtn.innerHTML = "Register";
+          submitRegisterBtn.innerHTML = 'Register';
           if (data.code) {
-            showToast("alert-toast-container", data.message, "danger");
+            showToast('alert-toast-container', data.message, 'danger');
           } else {
-            showToast("alert-toast-container", data.message, "success");
+            showToast('alert-toast-container', data.message, 'success');
           }
         })
         .catch((error) => {
           submitRegisterBtn.disabled = false;
-          submitRegisterBtn.innerHTML = "Register";
+          submitRegisterBtn.innerHTML = 'Register';
           alert(error);
         });
     } else {
       showToast(
-        "alert-toast-container",
-        "Password and confirm password does not match.",
-        "danger"
+        'alert-toast-container',
+        'Password and confirm password does not match.',
+        'danger'
       );
       submitRegisterBtn.disabled = false;
-      submitRegisterBtn.innerHTML = "Register";
+      submitRegisterBtn.innerHTML = 'Register';
     }
   });
 
 document
-  .getElementById("forgot-password-form")
-  .addEventListener("submit", function (e) {
+  .getElementById('forgot-password-form')
+  .addEventListener('submit', function (e) {
     e.preventDefault();
 
     let submitForgotPasswordBtn = document.querySelector(
-      "#submit-btn-forgot-password"
+      '#submit-btn-forgot-password'
     );
 
     submitForgotPasswordBtn.disabled = true;
     submitForgotPasswordBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    const email = document.getElementById("email-forgot-password").value;
+    const email = document.getElementById('email-forgot-password').value;
 
     const options = {
       body: JSON.stringify({
@@ -215,39 +232,39 @@ document
       }),
     };
     fetchAPI(
-      "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/auth/password/request-magic-link",
-      "POST",
+      'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/auth/password/request-magic-link',
+      'POST',
       null,
       options
     )
       .then((data) => {
         submitForgotPasswordBtn.disabled = false;
-        submitForgotPasswordBtn.innerHTML = "Reset Password";
+        submitForgotPasswordBtn.innerHTML = 'Reset Password';
         if (data.code) {
-          showToast("alert-toast-container", data.message, "danger");
+          showToast('alert-toast-container', data.message, 'danger');
         } else {
-          showToast("alert-toast-container", data.message.message, "success");
+          showToast('alert-toast-container', data.message.message, 'success');
         }
       })
       .catch((error) => {
         submitForgotPasswordBtn.disabled = false;
-        submitForgotPasswordBtn.innerHTML = "Reset Password";
+        submitForgotPasswordBtn.innerHTML = 'Reset Password';
         alert(error);
       });
   });
 
 document
-  .getElementById("reverify-form")
-  .addEventListener("submit", function (e) {
+  .getElementById('reverify-form')
+  .addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let submitReverifyBtn = document.querySelector("#submit-btn-reverify");
+    let submitReverifyBtn = document.querySelector('#submit-btn-reverify');
 
     submitReverifyBtn.disabled = true;
     submitReverifyBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    const email = document.getElementById("email-reverify").value;
+    const email = document.getElementById('email-reverify').value;
 
     const options = {
       body: JSON.stringify({
@@ -256,46 +273,46 @@ document
     };
 
     fetchAPI(
-      "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/auth/verify_email/resend",
-      "POST",
+      'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/auth/verify_email/resend',
+      'POST',
       null,
       options
     )
       .then((data) => {
         submitReverifyBtn.disabled = false;
-        submitReverifyBtn.innerHTML = "Resend Verification Link";
+        submitReverifyBtn.innerHTML = 'Resend Verification Link';
         if (data.code) {
-          showToast("alert-toast-container", data.message, "danger");
+          showToast('alert-toast-container', data.message, 'danger');
         } else {
-          showToast("alert-toast-container", data.message, "success");
+          showToast('alert-toast-container', data.message, 'success');
         }
       })
       .catch((error) => {
         submitReverifyBtn.disabled = false;
-        submitReverifyBtn.innerHTML = "Resend Verification Link";
+        submitReverifyBtn.innerHTML = 'Resend Verification Link';
       });
   });
 
 document
-  .getElementById("button-continue-login-with-google")
-  .addEventListener("click", function () {
+  .getElementById('button-continue-login-with-google')
+  .addEventListener('click', function () {
     initGoogleCode();
   });
 
 document
-  .getElementById("button-continue-signup-with-google")
-  .addEventListener("click", function () {
+  .getElementById('button-continue-signup-with-google')
+  .addEventListener('click', function () {
     initGoogleCode();
   });
 
-var redirectUrl = "https://gikijo.com/";
-var successUrl = "https://gikijo.com/home";
-var selectRole = "https://gikijo.com/account-type";
+var redirectUrl = 'https://gikijo.com/';
+var successUrl = 'https://gikijo.com/home';
+var selectRole = 'https://gikijo.com/account-type';
 
 function initGoogleCode() {
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/init?redirect_uri=${redirectUrl}`,
-    "GET",
+    'GET',
     null
   )
     .then((data) => {
@@ -306,13 +323,13 @@ function initGoogleCode() {
       }
     })
     .catch((error) => {
-      console.log("error", error);
+      console.log('error', error);
     });
 }
 
 window.onload = function () {
   var curUrl = new URL(document.location.href);
-  var code = curUrl.searchParams.get("code");
+  var code = curUrl.searchParams.get('code');
 
   if (code) {
     continueOauth(code);
@@ -322,7 +339,7 @@ window.onload = function () {
 function continueOauth(code) {
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:OF8QSJWr/oauth/google/continue?redirect_uri=${redirectUrl}&code=${code}`,
-    "GET",
+    'GET',
     null
   )
     .then((data) => {
@@ -330,7 +347,7 @@ function continueOauth(code) {
         alert(data.message);
       } else {
         if (data?.authToken) {
-          saveData("masterData", {
+          saveData('masterData', {
             userData: data.userData,
             authToken: data.authToken,
           });
@@ -341,11 +358,11 @@ function continueOauth(code) {
             window.location.href = selectRole;
           }
         } else {
-          alert("Token not found");
+          alert('Token not found');
         }
       }
     })
     .catch((error) => {
-      console.log("error", error);
+      console.log('error', error);
     });
 }

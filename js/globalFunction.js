@@ -4,23 +4,31 @@
 </div> */
 // showAlert("alert-login-container", "Error!", data.message, "danger", "my-login-alert");
 
+function maskText(text) {
+  if (text) {
+    return text.substring(0, 4) + '*'.repeat(text.length - 4);
+  } else {
+    return '-';
+  }
+}
+
 function formatPrice(price) {
   // example 1600 to RM 16,00;
-  const formattedPrice = (price / 100).toLocaleString("en-MY", {
-    style: "currency",
-    currency: "MYR",
-    currencyDisplay: "symbol",
+  const formattedPrice = (price / 100).toLocaleString('en-MY', {
+    style: 'currency',
+    currency: 'MYR',
+    currencyDisplay: 'symbol',
     minimumFractionDigits: 2,
   });
   return formattedPrice;
 }
 
 function showAlert(
-  parentContainerId = "",
-  strong = "",
+  parentContainerId = '',
+  strong = '',
   message,
-  type = "",
-  id = "",
+  type = '',
+  id = '',
   timeOut = 7000
 ) {
   const alertContainer = document.getElementById(parentContainerId);
@@ -42,7 +50,7 @@ function showAlert(
     });
 }
 
-function showToast(parentContainerId = "", message, type = "") {
+function showToast(parentContainerId = '', message, type = '') {
   const toastContainer = document.getElementById(parentContainerId);
   const alertHTML = `
       <div class="toast toast-container align-items-center text-white bg-${type} border-0"
@@ -66,11 +74,11 @@ function showToast(parentContainerId = "", message, type = "") {
       `;
   toastContainer.innerHTML = alertHTML;
 
-  $(".toast").toast({
+  $('.toast').toast({
     autohide: true,
     delay: 10000, // Set the toast to disappear after 10 seconds
   });
-  $(".toast").toast("show");
+  $('.toast').toast('show');
 }
 
 function rateLimitButton(buttonId) {
@@ -110,9 +118,9 @@ function generateUniqueID() {
 
 function clearSession() {
   // clear session data, such as removing the token from local storage
-  localStorage.removeItem("masterData");
+  localStorage.removeItem('masterData');
   // redirect user to login page
-  window.location.href = "/index";
+  window.location.href = '/index';
 }
 
 function disableButton(button, text, toggle) {
@@ -164,17 +172,17 @@ function getSavedData(key) {
   */
 
 const currentUrl = window.location.pathname.substring(
-  window.location.pathname.lastIndexOf("/")
+  window.location.pathname.lastIndexOf('/')
 );
-const excludedPages = ["/index", "/reset-password", "/job-list"];
+const excludedPages = ['/index', '/reset-password', '/job-list'];
 
 if (!excludedPages.includes(currentUrl)) {
   window.onload = function () {
-    const myData = getSavedData("masterData");
+    const myData = getSavedData('masterData');
     const token = myData.authToken;
     if (token == null) {
-      alert("You are not logged in. Please log in and try again");
-      location.href = "/index";
+      alert('You are not logged in. Please log in and try again');
+      location.href = '/index';
     }
   };
 }

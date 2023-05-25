@@ -13,14 +13,12 @@ function fetchAPI(
   token,
   options = {},
   headers = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   }
 ) {
-  // Use the fetch() function to make a request to the API
-  // Pass in the options object as the fifth argument
   return (
     fetch(url, {
-      method: method, // Set the HTTP method using the parameter
+      method: method,
       headers: {
         ...headers, // Spread the headers object to include any additional headers
         Authorization: `Bearer ${token}`, // Set the authorization header using the token parameter
@@ -32,21 +30,28 @@ function fetchAPI(
         if (response.status === 429) {
           // too many requests
           if (stopAlert === false) {
-            stopAlertAPI(); // to stop display multiple alert at one time
-            alert("Too Many Requests, Please try again in a moment.");
+            stopAlertAPI(); // stop multiple alert at one time
+            showToast(
+              'alert-toast-container',
+              'Too Many Requests, Please try again in a moment.',
+              'danger'
+            );
           }
         } else {
           return response.json();
         }
       })
-      // If the request was successful, return the JSON data
       .then((data) => {
         if (data?.code) {
-          if (data.code === "ERROR_CODE_UNAUTHORIZED") {
-            alert("Your session has expired. Please log in again to continue.");
+          if (data.code === 'ERROR_CODE_UNAUTHORIZED') {
+            showToast(
+              'alert-toast-container',
+              'Your session has expired. Please log in again to continue.',
+              'danger'
+            );
             localStorage.clear();
             sessionStorage.clear();
-            location.href = "/index";
+            location.href = '/index';
           } else {
             return data;
           }
@@ -54,41 +59,8 @@ function fetchAPI(
           return data;
         }
       })
-      // If the request failed, throw an error
       .catch((error) => {
         throw error;
       })
   );
 }
-/*
-  // Use the default headers, no token, and default options
-  fetchAPI('https://example.com/api/endpoint', 'POST')
-    .then(data => {
-      // Do something with the data here
-    })
-    .catch(error => {
-      // Handle any errors here
-    });
-  
-  // Provide custom a token, headers, and custom options
-  
-  const token = 'abc123';
-  
-  const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded', // Set the request headers
-  };
-  
-  const options = {
-    body: JSON.stringify({
-      key: 'value',
-    }),
-  };
-  
-  fetchAPI('https://example.com/api/endpoint', 'POST', token, options, headers)
-    .then(data => {
-      // Do something with the data here
-    })
-    .catch(error => {
-      // Handle any errors here
-    });
-  */
