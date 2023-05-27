@@ -746,7 +746,7 @@ function populateApplicantModalList(applicantListData) {
 
     const secondRow = document.createElement('div');
 
-    //  create button elements
+    //  create button element
     const buttonParent = document.createElement('button');
     buttonParent.classList.add('btn', 'btn-primary', 'dropdown-toggle');
     buttonParent.setAttribute('type', 'button');
