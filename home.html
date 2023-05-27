@@ -1353,8 +1353,35 @@
                             <li></li>
                             <li></li>
                           </ul>
-                          <div>
-                            <!-- auto populate posted list here -->
+                          <div class="d-flex justify-content-end">
+                            <button
+                              class="btn btn-outline-primary mr-1"
+                              type="button"
+                              style="border: none"
+                            >
+                              <img
+                                src="https://telegram.org/img/t_logo.png"
+                                width="25"
+                                height="25"
+                              />
+                              <!-- <i class="fa fa-share"></i> -->
+                              <span class="badge badge-light">0</span>
+                            </button>
+                            <button
+                              class="btn btn-outline-primary mr-1"
+                              type="button"
+                              style="border: none"
+                            >
+                              <i class="fa fa-user"></i>
+                              <span class="badge badge-light">0</span>
+                            </button>
+                            <button
+                              class="btn btn-outline-primary mr-1"
+                              type="button"
+                              style="border: none"
+                            >
+                              <i class="fa fa-external-link-alt"></i>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -1553,6 +1580,85 @@
                             </button>
                           </div>
                         </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Applicant Job Modal -->
+                  <div
+                    class="modal fade"
+                    id="applicantModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="exampleModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div
+                      class="modal-dialog modal-dialog-centered"
+                      role="document"
+                    >
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">
+                            Applicants
+                          </h5>
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div class="modal-body">
+                          <!-- Content Create Job -->
+                          <div>
+                            <label>See who have applied for this post</label>
+                            <div
+                              class="text-center p-5"
+                              id="applicant-list-loader"
+                            >
+                              <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                              </div>
+                            </div>
+                            <div id="applicant-list-empty" class="hidden">
+                              <div class="container mt-5">
+                                <div
+                                  class="row justify-content-center align-items-center"
+                                >
+                                  <div class="col-md-6 text-center">
+                                    <div class="empty-box-icon">
+                                      <i class="fas fa-box-open fa-3x"></i>
+                                    </div>
+                                    <h1 class="mt-4">Empty List</h1>
+                                    <p>No applicants at the moment</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="form-group"
+                              id="applicant-list-container"
+                            >
+                              <div class="card mb-1" id="applicant-list-body">
+                                <div>
+                                  <!-- auto populate applicant list here -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Close
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
