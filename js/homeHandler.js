@@ -1815,113 +1815,258 @@ function fetchMyEmployer() {
             }
           }
 
-          applicantBtn.addEventListener('click', function () {
-            $('#applicantModal').modal('show');
-            $('#applicantModal').on('shown.bs.modal', () => {
-              selectedJob = item;
-              populateApplicantModalList(applicant_list);
-            });
-          });
-
-          if (item.is_active == false) {
-            badge = `<span class="badge badge-pill badge-warning">Not Active</span>`;
-            shareBtn.disabled = true;
-            viewBtn.disabled = true;
-            postBtn.innerHTML = 'Activate';
-            postBtn.addEventListener('click', function () {
-              $('#visibilityModal').modal('show');
-              $('#visibilityModal').on('shown.bs.modal', function () {
-                selectedJob = item;
-              });
-            });
-            postBtn.disabled = false;
-            postBtn.classList.value = 'btn btn-warning';
-            editBtn.addEventListener('click', function () {
-              $('#editJobModal').modal('show');
-              $('#editJobModal').on('shown.bs.modal', function () {
-                editForm(item);
-              });
-            });
-          } else {
-            if (item.status_id === 3) {
-              badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
-              shareBtn.disabled = true;
-              viewBtn.disabled = true;
-              postBtn.innerHTML = `Expired`;
-              postBtn.classList.value = 'btn btn-secondary';
-              postBtn.addEventListener('click', () => {
-                showToast(
-                  'alert-toast-container',
-                  "We're sorry, but the post you're trying to publish has expired, and all job postings associated with this post will no longer be available on our channels. To post a new job opportunity, please create a new post.",
-                  'danger'
-                );
-              });
-              editBtn.addEventListener('click', function () {
-                showToast(
-                  'alert-toast-container',
-                  'The post has expired and is no longer editable',
-                  'danger'
-                );
-              });
-            } else if (item.status_id === 4) {
-              badge = `<span class="badge badge-pill badge-dark">Blocked</span>`;
-              shareBtn.disabled = true;
-              viewBtn.disabled = true;
-              postBtn.innerHTML = `Blocked`;
-              postBtn.classList.value = 'btn btn-secondary';
-              postBtn.addEventListener('click', () => {
-                showToast(
-                  'alert-toast-container',
-                  "Your post has been blocked due to policy violation. To appeal this decision, please submit a request through the 'Feedback' section in your account settings and include the Post ID for reference.",
-                  'danger'
-                );
-              });
-              editBtn.addEventListener('click', function () {
-                $('#editJobModal').modal('show');
-                $('#editJobModal').on('shown.bs.modal', function () {
-                  editForm(item);
-                });
-              });
-            } else {
-              badge = `<span class="badge badge-pill badge-success">Active</span>`;
-              shareBtn.disabled = false;
-              shareBtn.addEventListener('click', () => {
-                $('#channelJobModal').modal('show');
-                $('#channelJobModal').on('shown.bs.modal', () => {
-                  selectedJob = item;
-                  populateChannel();
-                });
-              });
-              viewBtn.disabled = false;
-              viewBtn.addEventListener('click', () => {
-                if (item.is_published) {
-                  window.open(item.internal_apply_link);
-                } else {
+          const handler = {
+            not_active: {
+              badge: `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Not Active</span> ${
+                item.is_published
+                  ? `<span class="badge badge-pill badge-success"><i class="fa fa-check mr-1"></i>Published</span>`
+                  : `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Unpublish</span>`
+              }`,
+              post_btn: {
+                title: 'Ready to publish? Activate now',
+                class: 'btn btn-primary',
+                onClick: function (item) {
+                  $('#visibilityModal').modal('show');
+                  $('#visibilityModal').on('shown.bs.modal', function () {
+                    selectedJob = item;
+                  });
+                },
+              },
+              edit_btn: {
+                onClick: function (item) {
+                  $('#editJobModal').modal('show');
+                  $('#editJobModal').on('shown.bs.modal', function () {
+                    editForm(item);
+                  });
+                },
+              },
+              share_btn: {
+                onClick: function (item) {
                   showToast(
                     'alert-toast-container',
-                    'The post is currently unpublished. To view it, kindly proceed with the publishing process.',
+                    'Please activate your post to enable sharing.',
                     'danger'
                   );
-                }
-              });
-              postBtn.innerHTML = item.is_published
-                ? `Unpublish`
-                : `Publish Now`;
-              postBtn.addEventListener('click', () => {
-                publishPost(item, postBtn, postBtn.innerHTML);
-              });
-              postBtn.disabled = false;
-              postBtn.classList.value = item.is_published
-                ? 'btn btn-outline-danger'
-                : 'btn btn-success';
-              editBtn.addEventListener('click', function () {
-                $('#editJobModal').modal('show');
-                $('#editJobModal').on('shown.bs.modal', function () {
-                  editForm(item);
-                });
-              });
+                },
+              },
+              applicant_btn: {
+                onClick: function (item) {
+                  showToast(
+                    'alert-toast-container',
+                    'To begin receiving applicants, please ensure your post is active and published.',
+                    'danger'
+                  );
+                },
+              },
+              view_btn: {
+                onClick: function (item) {
+                  showToast(
+                    'alert-toast-container',
+                    'To view your post on the Job List page, please activate and publish it.',
+                    'danger'
+                  );
+                },
+              },
+            },
+            active: {
+              badge: `<span class="badge badge-pill badge-success"><i class="fa fa-check mr-1"></i>Active</span> ${
+                item.is_published
+                  ? `<span class="badge badge-pill badge-success"><i class="fa fa-check mr-1"></i>Published</span>`
+                  : `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Unpublish</span>`
+              }`,
+              post_btn: {
+                title: item.is_published ? `Unpublish` : `Publish Now`,
+                class: item.is_published
+                  ? 'btn btn-outline-secondary'
+                  : 'btn btn-primary',
+                onClick: function (item) {
+                  publishPost(item, postBtn, postBtn.innerHTML);
+                },
+              },
+              edit_btn: {
+                onClick: function (item) {
+                  $('#editJobModal').modal('show');
+                  $('#editJobModal').on('shown.bs.modal', function () {
+                    editForm(item);
+                  });
+                },
+              },
+              share_btn: {
+                onClick: function (item) {
+                  $('#channelJobModal').modal('show');
+                  $('#channelJobModal').on('shown.bs.modal', () => {
+                    selectedJob = item;
+                    populateChannel();
+                  });
+                },
+              },
+              applicant_btn: {
+                onClick: function (item) {
+                  $('#applicantModal').modal('show');
+                  $('#applicantModal').on('shown.bs.modal', () => {
+                    selectedJob = item;
+                    populateApplicantModalList(applicant_list);
+                  });
+                },
+              },
+              view_btn: {
+                onClick: function (item) {
+                  if (item.is_published) {
+                    window.open(item.internal_apply_link);
+                  } else {
+                    showToast(
+                      'alert-toast-container',
+                      'The post is currently unpublished. To view it, kindly proceed with the publishing process.',
+                      'danger'
+                    );
+                  }
+                },
+              },
+            },
+            expired: {
+              badge: `<span class="badge badge-pill badge-secondary">Expired</span>`,
+              post_btn: {
+                title: item.is_published ? `Unpublish` : `Publish Now`,
+                class: item.is_published
+                  ? 'btn btn-outline-danger'
+                  : 'btn btn-success',
+                onClick: function (item) {
+                  showToast(
+                    'alert-toast-container',
+                    "We're sorry, but the post you're trying to publish has expired, and all job postings associated with this post will no longer be available on our channels. To post a new job opportunity, please create a new post.",
+                    'danger'
+                  );
+                },
+              },
+              edit_btn: {
+                onClick: function (item) {
+                  $('#editJobModal').modal('show');
+                  $('#editJobModal').on('shown.bs.modal', function () {
+                    editForm(item);
+                  });
+                },
+              },
+              share_btn: {
+                onClick: function (item) {
+                  $('#channelJobModal').modal('show');
+                  $('#channelJobModal').on('shown.bs.modal', () => {
+                    selectedJob = item;
+                    populateChannel();
+                  });
+                },
+              },
+              applicant_btn: {
+                onClick: function (item) {
+                  $('#applicantModal').modal('show');
+                  $('#applicantModal').on('shown.bs.modal', () => {
+                    selectedJob = item;
+                    populateApplicantModalList(applicant_list);
+                  });
+                },
+              },
+              view_btn: {
+                onClick: function (item) {
+                  if (item.is_published) {
+                    window.open(item.internal_apply_link);
+                  } else {
+                    showToast(
+                      'alert-toast-container',
+                      'The post is currently unpublished. To view it, kindly proceed with the publishing process.',
+                      'danger'
+                    );
+                  }
+                },
+              },
+            },
+            blocked: {
+              badge: `<span class="badge badge-pill badge-danger">Blocked</span>`,
+              post_btn: {
+                title: item.is_published ? `Unpublish` : `Publish Now`,
+                class: item.is_published
+                  ? 'btn btn-outline-danger'
+                  : 'btn btn-success',
+                onClick: function (item) {
+                  showToast(
+                    'alert-toast-container',
+                    "Your post has been blocked due to policy violation. To appeal this decision, please submit a request through the 'Feedback' section in your account settings and include the Post ID for reference.",
+                    'danger'
+                  );
+                },
+              },
+              edit_btn: {
+                onClick: function (item) {
+                  $('#editJobModal').modal('show');
+                  $('#editJobModal').on('shown.bs.modal', function () {
+                    editForm(item);
+                  });
+                },
+              },
+              applicant_btn: {
+                onClick: function (item) {
+                  $('#applicantModal').modal('show');
+                  $('#applicantModal').on('shown.bs.modal', () => {
+                    selectedJob = item;
+                    populateApplicantModalList(applicant_list);
+                  });
+                },
+              },
+              share_btn: {
+                onClick: function (item) {
+                  $('#channelJobModal').modal('show');
+                  $('#channelJobModal').on('shown.bs.modal', () => {
+                    selectedJob = item;
+                    populateChannel();
+                  });
+                },
+              },
+              view_btn: {
+                onClick: function (item) {
+                  if (item.is_published) {
+                    window.open(item.internal_apply_link);
+                  } else {
+                    showToast(
+                      'alert-toast-container',
+                      'The post is currently unpublished. To view it, kindly proceed with the publishing process.',
+                      'danger'
+                    );
+                  }
+                },
+              },
+            },
+          };
+
+          var current_state = '';
+
+          if (item.is_active == false) {
+            current_state = 'not_active';
+          } else {
+            if (item.status_id === 3) {
+              current_state = 'expired';
+            } else if (item.status_id === 4) {
+              current_state = 'blocked';
+            } else {
+              current_state = 'active';
             }
           }
+
+          badge = handler[current_state].badge;
+          postBtn.innerHTML = handler[current_state].post_btn.title;
+          postBtn.classList.value = handler[current_state].post_btn.class;
+          postBtn.addEventListener('click', function () {
+            handler[current_state].post_btn.onClick(item);
+          });
+          editBtn.addEventListener('click', function () {
+            handler[current_state].edit_btn.onClick(item);
+          });
+          shareBtn.addEventListener('click', function () {
+            handler[current_state].share_btn.onClick(item);
+          });
+          applicantBtn.addEventListener('click', function () {
+            handler[current_state].applicant_btn.onClick(item);
+          });
+          viewBtn.addEventListener('click', function () {
+            handler[current_state].view_btn.onClick(item);
+          });
 
           const customId = divs[0].getElementsByTagName('h6');
           customId[0].innerHTML = `Post ID: ${item.custom_id} ${badge}`;
