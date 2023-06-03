@@ -12,9 +12,9 @@
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag("js", new Date());
+      gtag('js', new Date());
 
-      gtag("config", "G-57V08EMCKY");
+      gtag('config', 'G-57V08EMCKY');
     </script>
     <!-- end my function -->
     <meta charset="utf-8" />
@@ -40,7 +40,7 @@
     />
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="css/sb-admin-2.css" rel="stylesheet" />
 
     <!-- My function -->
     <script src="js/apiHelper.js"></script>
@@ -78,17 +78,17 @@
     <script src="js/sb-admin-2.min.js"></script>
     <script>
       function redirectFunction() {
-        document.getElementById("message").innerHTML =
-          "Your order has been cancelled. Redirecting to home in";
-        var countdown = document.getElementById("countdown");
+        document.getElementById('message').innerHTML =
+          'Your order has been cancelled. Redirecting to home in';
+        var countdown = document.getElementById('countdown');
         var seconds = 5;
-        countdown.textContent = seconds + " seconds";
+        countdown.textContent = seconds + ' seconds';
         var redirectTimer = setInterval(function () {
           seconds--;
-          countdown.textContent = seconds + " seconds";
+          countdown.textContent = seconds + ' seconds';
           if (seconds <= 0) {
             clearInterval(redirectTimer);
-            window.location.href = "/home";
+            window.location.href = '/home';
           }
         }, 1000);
       }

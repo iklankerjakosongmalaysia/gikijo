@@ -37,8 +37,7 @@
       rel="stylesheet"
     />
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
-
+    <link href="css/sb-admin-2.css" rel="stylesheet" />
     <!-- My function -->
     <script src="js/apiHelper.js"></script>
     <script src="js/globalFunction.js"></script>
@@ -223,9 +222,8 @@
                       <strong class="d-inline-block mt-4 mb-2 text-primary"
                         >Overview</strong
                       >
-
                       <div class="row">
-                        <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="col-xl col-md-6 mb-4">
                           <div class="card h-100 py-2">
                             <div class="card-body">
                               <div class="row no-gutters align-items-center">
@@ -233,11 +231,11 @@
                                   <div
                                     class="text-xs font-weight-bold text-success text-uppercase mb-1"
                                   >
-                                    Applied
+                                    Posts Published
                                   </div>
                                   <div
                                     class="h5 mb-0 font-weight-bold text-gray-800"
-                                    id="total-apply"
+                                    id="total-publish-post"
                                   >
                                     0
                                   </div>
@@ -251,39 +249,15 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="col-xl col-md-6 mb-4">
                           <div class="card h-100 py-2">
                             <div class="card-body">
                               <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                   <div
-                                    class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                    class="text-xs font-weight-bold text-info text-uppercase mb-1"
                                   >
-                                    Withdrawn
-                                  </div>
-                                  <div
-                                    class="h5 mb-0 font-weight-bold text-gray-800"
-                                    id="total-apply"
-                                  >
-                                    0
-                                  </div>
-                                </div>
-                                <div class="col-auto">
-                                  <i class="fas fa-ban fa-2x text-gray-300"></i>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-4">
-                          <div class="card h-100 py-2">
-                            <div class="card-body">
-                              <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                  <div
-                                    class="text-xs font-weight-bold text-danger text-uppercase mb-1"
-                                  >
-                                    Declined
+                                    Applications
                                   </div>
                                   <div
                                     class="h5 mb-0 font-weight-bold text-gray-800"
@@ -294,7 +268,7 @@
                                 </div>
                                 <div class="col-auto">
                                   <i
-                                    class="fas fa-times fa-2x text-gray-300"
+                                    class="fas fa-user fa-2x text-gray-300"
                                   ></i>
                                 </div>
                               </div>
@@ -393,8 +367,8 @@
                   </div>
 
                   <!-- Content Coupon -->
-                  <strong class="d-inline-block mb-2 text-primary"
-                    >Discount Coupon</strong
+                  <strong class="d-inline-block mt-4 mb-2 text-primary"
+                    >Coupon</strong
                   >
 
                   <div class="text-center p-5" id="home-coupon-list-loading">
@@ -424,7 +398,7 @@
                     </div>
                   </div>
 
-                  <div class="row mb-2 hidden" id="home-coupon-list-parent">
+                  <div class="row hidden" id="home-coupon-list-parent">
                     <div class="col-md-6" id="home-coupon-list-child">
                       <div class="card flex-md-row mb-4 h-md-250">
                         <div class="card-body d-flex flex-column">
@@ -433,7 +407,7 @@
                           </h5>
                           <h6 class="mb-0 text-muted">..</h6>
                           <div class="d-flex justify-content-end">
-                            <i class="fas fa-copy"></i>
+                            <!-- auto populate here -->
                           </div>
                         </div>
                       </div>
@@ -507,7 +481,7 @@
                         data-toggle="modal"
                         data-target="#addJobModal"
                       >
-                        <i class="fas fa-plus mr-2"></i>Create a New Job Slot
+                        <i class="fas fa-plus mr-2"></i>Create New Post
                       </button>
                       <button
                         type="button"
@@ -550,68 +524,6 @@
                         </div>
 
                         <div class="modal-body">
-                          <div class="alert alert-warning" role="alert">
-                            <h4 class="alert-heading">What is a Job Slot</h4>
-
-                            <p>
-                              A Job Slot is a flexible job template that allows
-                              you to store your job information, edit it, and
-                              use it to publish posts multiple times without any
-                              additional charges, as long as it remains active
-                              and valid. However, once it expires, the Job Slot
-                              cannot be used again, and any associated posts
-                              that have been published on our channels will be
-                              removed.
-                            </p>
-
-                            <p>
-                              You can update the details of your Job Slot even
-                              after it's been posted. However, please note that
-                              any posts that have already been published on our
-                              channels cannot be edited and can only be deleted.
-                              If you wish to publish a new post after deleting
-                              an existing one, simply delete the current
-                              published post and post a new one with the updated
-                              details of your Job Slot.
-                            </p>
-                            <img
-                              src="img/slot-multilple-post.png"
-                              class="img-fluid"
-                              alt="Responsive image"
-                            />
-                          </div>
-                          <div class="alert alert-info" role="alert">
-                            <h4 class="alert-heading">
-                              How to Create a Job Slot and Publish Your First
-                              Job Posting
-                            </h4>
-
-                            <h5>1. Create your new job slot</h5>
-                            <p class="text-justify">
-                              To begin, click the "Create a New Job Slot" button
-                              and select either the Free or Plus option. Fill
-                              out the required job information on the form, and
-                              then click "Create" to generate your job slot.
-                            </p>
-
-                            <h5>2. Activate your job slot</h5>
-                            <p class="text-justify">
-                              For Plus job slots, click on the "Activate" button
-                              and complete the payment process to activate your
-                              job slot. Free job slots do not require
-                              activation.
-                            </p>
-
-                            <h5>3. Make your first post to our channels</h5>
-                            <p class="text-justify">
-                              Click the "Post" button on your job slot to share
-                              it to our channels of your choice. If needed, you
-                              can edit the job slot and make a new post, but you
-                              cannot modify an already published post. Instead,
-                              you can delete it and create a new post with the
-                              updated job slot.
-                            </p>
-                          </div>
                           <div class="alert alert-secondary" role="alert">
                             <h4 class="alert-heading">
                               User Guidelines and Consequences for Policy
@@ -668,7 +580,7 @@
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="exampleModalLabel">
-                            New Job Slot
+                            Create New Post
                           </h5>
                           <button
                             type="button"
@@ -707,7 +619,7 @@
                                 role="tab"
                                 aria-controls="my-job-slot"
                                 aria-selected="true"
-                                >Create Job Slot</a
+                                >New Post</a
                               >
                             </li>
                           </ul>
@@ -718,23 +630,21 @@
                               role="tabpanel"
                               aria-labelledby="my-paid-vs-free-slot-tab"
                             >
-                              <div class="table-responsive">
+                              <div class="table-responsive mt-3">
                                 <table
-                                  class="table table-borderless table-striped mt-2"
+                                  class="table table-borderless table-striped"
                                 >
-                                  <thead>
+                                  <thead class="thead-dark">
                                     <tr>
-                                      <th scope="col">Job Slot Type</th>
+                                      <th scope="col">Post Type</th>
                                       <th scope="col">
-                                        <strong
-                                          ><i class="fas fa-coins mr-1"></i
-                                          >Coin-Based</strong
+                                        <strong id="post-type-name-1"
+                                          >...</strong
                                         >
                                       </th>
                                       <th scope="col">
-                                        <strong
-                                          ><i class="fas fa-clock mr-1"></i
-                                          >Time-Based</strong
+                                        <strong id="post-type-name-2"
+                                          >...</strong
                                         >
                                       </th>
                                     </tr>
@@ -748,29 +658,45 @@
                                         or 25 days)
                                       </td>
                                     </tr>
-                                    <!-- <tr>
-                                      <th scope="row">
-                                        Published post at a time
-                                      </th>
-                                      <td>1 post</td>
-                                      <td>2, 4, or 6 posts</td>
-                                    </tr> -->
                                     <tr>
                                       <th scope="row">Application Method</th>
                                       <td>Apply through Gikijo website only</td>
                                       <td>
-                                        Apply through Gikijo website or external
-                                        link
+                                        Apply through Gikijo website or your own
+                                        external link
                                       </td>
                                     </tr>
                                     <tr>
                                       <th scope="row">
-                                        Applicant Profile Access
+                                        Applicant Profile Access (applicable for
+                                        non-private profiles only)
                                       </th>
                                       <td>
-                                        Pay-per-view based on available coins
+                                        Unlock profile based on available coins
                                       </td>
-                                      <td>Unlimited access</td>
+                                      <td>
+                                        Applicant profiles accessible for free
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Pricing</th>
+                                      <td>Create and post for free</td>
+                                      <td>
+                                        Payment required based on the chosen
+                                        duration
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Benefits</th>
+                                      <td>
+                                        Help to invest in profiles you find most
+                                        promising only.
+                                      </td>
+                                      <td>
+                                        Accessible to all applicant without
+                                        requiring payment to unlock thier
+                                        profiles
+                                      </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -793,7 +719,8 @@
                               <form id="create-job-form" class="mt-2">
                                 <!-- Content Create Job -->
                                 <div>
-                                  <div class="form-group">
+                                  <strong>Company Details</strong>
+                                  <div class="form-group mt-2">
                                     <div class="form-group">
                                       <label>Company name</label>
                                       <input
@@ -826,24 +753,15 @@
                                       <i class="fas fa-edit mr-1"></i> Update
                                       Company Profile
                                     </button>
+                                    <small class="form-text text-muted"
+                                      >If you have already updated your company
+                                      profile, please proceed to the next
+                                      section.</small
+                                    >
                                   </div>
                                   <hr />
-                                  <div class="form-group">
-                                    <label>Job Slot Type</label>
-                                    <select
-                                      class="form-control"
-                                      id="input-create-slot-type"
-                                      required
-                                    >
-                                      <option value="coin-based">
-                                        Coin-Based
-                                      </option>
-                                      <option value="time-based">
-                                        Time-Based
-                                      </option>
-                                    </select>
-                                  </div>
-                                  <div class="form-group">
+                                  <strong>Post Details</strong>
+                                  <div class="form-group mt-2">
                                     <label>Title of the job opening</label>
                                     <input
                                       maxlength="70"
@@ -979,6 +897,14 @@
                                     />
                                   </div>
                                   <div class="form-group">
+                                    <label>Post Type</label>
+                                    <select
+                                      class="form-control"
+                                      id="input-create-slot-type"
+                                      required
+                                    ></select>
+                                  </div>
+                                  <div class="form-group">
                                     <label>Application Type:</label>
                                     <select
                                       class="form-control"
@@ -1071,15 +997,8 @@
                           <div class="modal-body">
                             <!-- Content Create Job -->
                             <div>
-                              <div class="form-group">
-                                <button
-                                  type="button"
-                                  class="btn btn-outline-primary btn-block mb-2 mt-3"
-                                  id="edit-update-company-profile"
-                                >
-                                  <i class="fas fa-edit mr-1"></i> Update
-                                  Company Profile
-                                </button>
+                              <strong>Company Details</strong>
+                              <div class="form-group mt-2">
                                 <div class="form-group">
                                   <label>Company name</label>
                                   <input
@@ -1104,20 +1023,23 @@
                                     disabled
                                   />
                                 </div>
+                                <button
+                                  type="button"
+                                  class="btn btn-outline-primary btn-block mb-2 mt-3"
+                                  id="edit-update-company-profile"
+                                >
+                                  <i class="fas fa-edit mr-1"></i> Update
+                                  Company Profile
+                                </button>
+                                <small class="form-text text-muted"
+                                  >If you have already updated your company
+                                  profile, please proceed to the next
+                                  section.</small
+                                >
                               </div>
                               <hr />
-                              <div class="form-group">
-                                <label>Job Slot Type</label>
-                                <select
-                                  class="form-control"
-                                  id="input-edit-slot-type"
-                                  disabled
-                                >
-                                  <option value="coin-based">Coin-Based</option>
-                                  <option value="time-based">Time-Based</option>
-                                </select>
-                              </div>
-                              <div class="form-group">
+                              <strong>Post Details</strong>
+                              <div class="form-group mt-2">
                                 <label>Title of the job opening</label>
                                 <input
                                   maxlength="70"
@@ -1237,6 +1159,14 @@
                                 />
                               </div>
                               <div class="form-group">
+                                <label>Post Type</label>
+                                <select
+                                  class="form-control"
+                                  id="input-edit-slot-type"
+                                  disabled
+                                ></select>
+                              </div>
+                              <div class="form-group">
                                 <label>Application Type:</label>
                                 <select
                                   class="form-control"
@@ -1307,8 +1237,8 @@
                             </div>
                             <h1 class="mt-4">Empty List</h1>
                             <p>
-                              Click "Create a New Job Slot" button to create a
-                              new job.
+                              Click "Create New Post" button to create a new job
+                              post.
                             </p>
                           </div>
                         </div>
@@ -1617,7 +1547,9 @@
                         <div class="modal-body">
                           <!-- Content Create Job -->
                           <div>
-                            <label>See who have applied for this post</label>
+                            <label
+                              >Find out who has applied for this post.</label
+                            >
                             <div
                               class="text-center p-5"
                               id="applicant-list-loader"
@@ -1741,19 +1673,19 @@
                       >
 
                       <div class="row">
-                        <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="col-xl col-md-6 mb-4">
                           <div class="card h-100 py-2">
                             <div class="card-body">
                               <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                   <div
-                                    class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                                    class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
                                   >
-                                    Applied
+                                    Job Applied
                                   </div>
                                   <div
                                     class="h5 mb-0 font-weight-bold text-gray-800"
-                                    id="total-apply"
+                                    id="total-job-applied"
                                   >
                                     0
                                   </div>
@@ -1767,50 +1699,26 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-xl-4 col-md-6 mb-4">
+                        <div class="col-xl col-md-6 mb-4">
                           <div class="card h-100 py-2">
                             <div class="card-body">
                               <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                   <div
-                                    class="text-xs font-weight-bold text-secondary text-uppercase mb-1"
+                                    class="text-xs font-weight-bold text-success text-uppercase mb-1"
                                   >
-                                    Withdrawn
+                                    Job Offered
                                   </div>
                                   <div
                                     class="h5 mb-0 font-weight-bold text-gray-800"
-                                    id="total-apply"
-                                  >
-                                    0
-                                  </div>
-                                </div>
-                                <div class="col-auto">
-                                  <i class="fas fa-ban fa-2x text-gray-300"></i>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 mb-4">
-                          <div class="card h-100 py-2">
-                            <div class="card-body">
-                              <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                  <div
-                                    class="text-xs font-weight-bold text-danger text-uppercase mb-1"
-                                  >
-                                    Declined
-                                  </div>
-                                  <div
-                                    class="h5 mb-0 font-weight-bold text-gray-800"
-                                    id="total-apply"
+                                    id="total-job-offered"
                                   >
                                     0
                                   </div>
                                 </div>
                                 <div class="col-auto">
                                   <i
-                                    class="fas fa-times fa-2x text-gray-300"
+                                    class="fas fa-briefcase fa-2x text-gray-300"
                                   ></i>
                                 </div>
                               </div>

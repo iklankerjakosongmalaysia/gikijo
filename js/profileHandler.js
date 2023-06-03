@@ -441,14 +441,14 @@ var educationContainer = document.getElementById('container_education');
 var skillsContainer = document.getElementById('container_skills');
 var languagesContainer = document.getElementById('container_languages');
 
-function updateResumeViewButton(toggle, profile_id) {
+function updateResumeViewButton(toggle, custom_id) {
   const viewResumeButton = document.getElementById('view-resume-btn');
 
   if (toggle) {
     viewResumeButton.disabled = false;
     viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
     viewResumeButton.addEventListener('click', function (e) {
-      window.open(`user-profile?profile_id=${profile_id}`);
+      window.open(`user-profile?custom_id=${custom_id}`);
     });
   } else {
     viewResumeButton.disabled = true;
@@ -644,7 +644,7 @@ resumeForm.addEventListener('submit', function (event) {
           'Resume has been successfully updated.',
           'success'
         );
-        updateResumeViewButton(true, data.profile_data.id);
+        updateResumeViewButton(true, data.profile_data.custom_id);
       }
 
       submitResumeBtn.disabled = false;
@@ -744,7 +744,7 @@ function getResumeData() {
 
           inputSelectResumeLocation.value = data.profile_data.location_id;
 
-          updateResumeViewButton(true, data.profile_data.id);
+          updateResumeViewButton(true, data.profile_data.custom_id);
         } else {
           inputResumeEmail.value = myData.userData.email;
 
