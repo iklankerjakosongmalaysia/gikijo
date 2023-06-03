@@ -26,6 +26,20 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+const typeName = {
+  type_1: {
+    id: 'type_1',
+    name: 'Post Now, Unlock Later',
+  },
+  type_2: {
+    id: 'type_2',
+    name: 'Your Time, Your Applicants',
+  },
+};
+
+document.getElementById('post-type-name-1').innerHTML = typeName.type_1.name;
+document.getElementById('post-type-name-2').innerHTML = typeName.type_2.name;
+
 const refreshChannelBtn = document.getElementById('refresh-channel-list');
 refreshChannelBtn.addEventListener('click', firstCall);
 
@@ -149,12 +163,12 @@ if (myData.userData.role_id === 3) {
     },
     {
       id: 'my-application-job-seeker-tab',
-      title: 'My Applications',
+      title: 'Applications',
       content: 'my-application-job-seeker',
     },
     {
       id: 'my-invitation-job-seeker-tab',
-      title: 'My Invitations',
+      title: 'Invitations',
       content: 'my-invitation-job-seeker',
     }
   );
@@ -172,13 +186,8 @@ if (myData.userData.role_id === 2) {
     },
     {
       id: 'my-job-tab',
-      title: 'Job Post',
+      title: 'Job Posts',
       content: 'my-job',
-    },
-    {
-      id: 'applicants-tab',
-      title: 'Applicants',
-      content: 'applicants',
     }
   );
 }
@@ -197,11 +206,6 @@ if (myData.userData.role_id === 1) {
       id: 'my-job-tab',
       title: 'Job Post',
       content: 'my-job',
-    },
-    {
-      id: 'applicants-tab',
-      title: 'Applicants',
-      content: 'applicants',
     },
     {
       id: 'admin-tab',
@@ -277,7 +281,7 @@ if (myData.userData.role_id === 2 || myData.userData.role_id === 1) {
   profileUnlockBalanceContainer.setAttribute('style', 'display: none');
 }
 
-let selectedJob;
+let selectedJob = null;
 
 const format = {
   year: 'numeric',
@@ -519,20 +523,15 @@ function populateChannel() {
     const card = listBody.cloneNode(true);
     const divs = card.getElementsByTagName('div');
 
-    let status = 1;
     let viewURL = '';
+    let exists = false;
 
-    if (selectedJob.is_shared) {
-      if (selectedJob.telegram_data.channel_id == item.id) {
-        viewURL = `${item.url}/${selectedJob.telegram_data.message_id}`;
-        status = 2;
-      } else {
-        viewURL = '';
-        status = 1;
+    for (let i = 0; i < selectedJob.telegram_data.length; i++) {
+      if (selectedJob.telegram_data[i].channel_id === item.id) {
+        exists = true;
+        viewURL = `${item.url}/${selectedJob.telegram_data[i].message_id}`;
+        break;
       }
-    } else {
-      viewURL = '';
-      status = 1;
     }
 
     const channelContainer = divs[0];
@@ -558,7 +557,7 @@ function populateChannel() {
 
     const secondRow = document.createElement('div');
 
-    if (status == 2) {
+    if (exists) {
       const channelViewButton = document.createElement('button');
       channelViewButton.className = 'btn btn-outline-primary ml-1';
       channelViewButton.type = 'button';
@@ -571,20 +570,20 @@ function populateChannel() {
       });
 
       secondRow.appendChild(channelViewButton);
-    } else {
-      const channelShareButton = document.createElement('button');
-      channelShareButton.className = 'btn btn-outline-secondary ml-1';
-      channelShareButton.type = 'button';
-      channelShareButton.style.border = 'none';
-      const channelShareIcon = document.createElement('i');
-      channelShareIcon.className = 'fa fa-external-link-alt';
-      channelShareIcon.addEventListener('click', () => {});
-      channelShareButton.appendChild(channelShareIcon);
-      channelShareButton.addEventListener('click', function () {
-        window.open(item.url, '_blank');
-      });
-      secondRow.appendChild(channelShareButton);
     }
+
+    const channelShareButton = document.createElement('button');
+    channelShareButton.className = 'btn btn-outline-secondary ml-1';
+    channelShareButton.type = 'button';
+    channelShareButton.style.border = 'none';
+    const channelShareIcon = document.createElement('i');
+    channelShareIcon.className = 'fa fa-external-link-alt';
+    channelShareIcon.addEventListener('click', () => {});
+    channelShareButton.appendChild(channelShareIcon);
+    channelShareButton.addEventListener('click', function () {
+      window.open(item.url, '_blank');
+    });
+    secondRow.appendChild(channelShareButton);
 
     mainContainer.appendChild(firstRow);
     mainContainer.appendChild(secondRow);
@@ -595,16 +594,11 @@ function populateChannel() {
       channelContainer.style.backgroundColor = '#f8f9fc';
       channelContainer.style.border = '1px solid #4d72de';
       channelContainer.style.borderRadius = '5px';
-      if (selectedJob.is_shared) {
-        if (selectedJob.telegram_data.channel_id == item.id) {
-          submitChannelBtn.innerHTML = 'Unshare';
-          submitChannelBtn.classList.remove('btn-primary');
-          submitChannelBtn.classList.add('btn-danger');
-        } else {
-          submitChannelBtn.innerHTML = 'Share Now';
-          submitChannelBtn.classList.remove('btn-danger');
-          submitChannelBtn.classList.add('btn-primary');
-        }
+
+      if (exists) {
+        submitChannelBtn.innerHTML = 'Unshare';
+        submitChannelBtn.classList.remove('btn-primary');
+        submitChannelBtn.classList.add('btn-danger');
       } else {
         submitChannelBtn.innerHTML = 'Share Now';
         submitChannelBtn.classList.remove('btn-danger');
@@ -699,7 +693,9 @@ channelForm.addEventListener('submit', function (event) {
     });
 });
 
-function populateApplicantModalList(applicantListData) {
+var selectedApplicants = [];
+
+function populateApplicantModalList() {
   const listLoader = document.getElementById('applicant-list-loader');
   const listEmpty = document.getElementById('applicant-list-empty');
   const listContainer = document.getElementById('applicant-list-container');
@@ -707,7 +703,7 @@ function populateApplicantModalList(applicantListData) {
 
   var totalRecord = [];
 
-  applicantListData.forEach((item) => {
+  selectedApplicants.forEach((item) => {
     const card = listBody.cloneNode(true);
     const divs = card.getElementsByTagName('div');
 
@@ -719,19 +715,25 @@ function populateApplicantModalList(applicantListData) {
 
     const firstRow = document.createElement('div');
     const elementH7 = document.createElement('h7');
-    elementH7.className = 'align-middle text-gray-800';
-    if (item.profile_data) {
-      const fullName = item.profile_data.full_name;
-      const truncatedName =
-        fullName.length > 3 ? fullName.slice(0, 10) + '...' : fullName;
+    const elementDetail_1 = document.createElement('h6');
+    const elementDetail_2 = document.createElement('h6');
 
-      elementH7.innerHTML = `<b>${truncatedName}</b>&nbsp;&nbsp;&nbsp;<span class="badge badge-pill badge-${
-        status_list_options[item.application_status_code].theme
-      }">${status_list_options[item.application_status_code].name}</span>`;
+    elementH7.className = 'align-middle text-gray-800';
+
+    if (item.profile_data) {
+      const fullName = item.profile_data.is_unlocked
+        ? item.profile_data.full_name
+        : item.profile_data.mask_full_name;
+      const truncatedName =
+        fullName.length > 3 ? fullName.slice(0, 15) + '...' : fullName;
+
+      elementH7.innerHTML = `<b>${truncatedName}</b>`;
 
       elementH7.addEventListener('click', function () {
         if (item.profile_data) {
-          window.open(`user-profile.html?profile_id=${item.profile_data.id}`);
+          window.open(
+            `user-profile.html?custom_id=${item.profile_data.custom_id}`
+          );
         } else {
           showToast(
             'alert-toast-container',
@@ -740,6 +742,15 @@ function populateApplicantModalList(applicantListData) {
           );
         }
       });
+
+      var created_at = new Date(item.created_at);
+      var timeAgo = moment(created_at).fromNow(true);
+      elementDetail_1.className = 'mb-0';
+      elementDetail_1.innerHTML = `Applied: ${timeAgo} ago`;
+
+      elementDetail_2.innerHTML = `Status: <span class="badge badge-pill badge-${
+        status_list_options[item.application_status_code].theme
+      }">${status_list_options[item.application_status_code].name}</span>`;
     } else {
       elementH7.innerHTML = `Deleted Profile`;
     }
@@ -761,13 +772,6 @@ function populateApplicantModalList(applicantListData) {
     dropdownMenu.classList.add('dropdown-menu');
     dropdownMenu.setAttribute('aria-labelledby', 'dropdownMenu2');
 
-    // const dropdownButtonContainer = divs[4];
-
-    // // remove existing dropdown button (if any)
-    // while (dropdownButtonContainer.firstChild) {
-    //   dropdownButtonContainer.removeChild(dropdownButtonContainer.firstChild);
-    // }
-
     // Convert the object into an array of key-value pairs
     const optionsArray = Object.entries(status_list_options);
 
@@ -779,15 +783,7 @@ function populateApplicantModalList(applicantListData) {
         buttonChild.textContent = option.name;
         buttonChild.setAttribute('value', option.code);
         buttonChild.addEventListener('click', () => {
-          if (is_post_exist) {
-            changeApplicantStatus(item.id, option.code, buttonParent);
-          } else {
-            showToast(
-              'alert-toast-container',
-              'Post no longer exits.',
-              'danger'
-            );
-          }
+          changeApplicantStatus(item.id, option.code, buttonParent);
         });
 
         const currentStatus = item.application_status_code;
@@ -817,15 +813,56 @@ function populateApplicantModalList(applicantListData) {
       }
     });
 
+    const viewBtn = document.createElement('button');
+    viewBtn.className = 'btn btn-outline-primary  mr-1';
+    viewBtn.type = 'button';
+    viewBtn.style.border = 'none';
+    const viewIcon = document.createElement('i');
+    viewIcon.className = 'fa fa-external-link-alt';
+    viewBtn.appendChild(viewIcon);
+    viewBtn.addEventListener('click', () => {
+      if (item.profile_data) {
+        window.open(
+          `user-profile.html?custom_id=${item.profile_data.custom_id}`
+        );
+      } else {
+        showToast(
+          'alert-toast-container',
+          'Profile has been deleted.',
+          'danger'
+        );
+      }
+    });
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn btn-outline-danger  mr-1';
+    deleteBtn.type = 'button';
+    deleteBtn.style.border = 'none';
+    const deleteIcon = document.createElement('i');
+    deleteIcon.className = 'fa fa-trash';
+    deleteBtn.appendChild(deleteIcon);
+    deleteBtn.addEventListener('click', () => {
+      var confirmDelete = confirm(
+        'Are you sure you want to delete this application? This action cannot be undone.'
+      );
+      if (confirmDelete) {
+        deleteApplicant(item, deleteBtn, deleteBtn.innerHTML);
+      }
+    });
+
     buttonParent.appendChild(dropdownMenu);
 
     firstRow.appendChild(elementH7);
+    firstRow.appendChild(elementDetail_1);
+    firstRow.appendChild(elementDetail_2);
+
+    secondRow.appendChild(viewBtn);
+    secondRow.appendChild(deleteBtn);
     secondRow.appendChild(buttonParent);
     mainContainer.appendChild(firstRow);
     mainContainer.appendChild(secondRow);
 
     channelContainer.appendChild(mainContainer);
-
     channelContainer.addEventListener('click', function () {});
 
     totalRecord.push(card);
@@ -849,11 +886,68 @@ function populateApplicantModalList(applicantListData) {
   }
 }
 
+const spinner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+
+function handleRedeem(item, useBtn) {
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+
+  const options = {
+    body: JSON.stringify({
+      coupon_id: item.id,
+      coupon_custom_id: item.custom_id,
+    }),
+  };
+
+  fetchAPI(
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/coupon_usage`,
+    'POST',
+    token,
+    options
+  )
+    .then((data) => {
+      if (data?.message) {
+        showToast('alert-toast-container', data.message, 'danger');
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
+      } else {
+        setTimeout(() => {
+          firstCall();
+          scrollToTop();
+          showToast(
+            'alert-toast-container',
+            'Coupon applied successfully!',
+            'success'
+          );
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
+      console.log('error', error);
+    });
+}
+
 document
   .getElementById('refresh-coupon-list')
   .addEventListener('click', firstCall);
 
-function populateCouponDashboard(data) {
+function populateCouponDashboard(coupon_list, coupon_usage) {
+  for (let i = 0; i < coupon_list.length; i++) {
+    coupon_list[i].used = false;
+    for (let x = 0; x < coupon_usage.length; x++) {
+      if (coupon_list[i].id == coupon_usage[x].coupon_id) {
+        coupon_list[i].used = true;
+        break; // No need to check further, exit the loop
+      }
+    }
+  }
+
   const loadingChannelCard = document.getElementById(
     'home-coupon-list-loading'
   );
@@ -862,25 +956,56 @@ function populateCouponDashboard(data) {
   const style = document.getElementById('home-coupon-list-child');
   const emptyDiv = [];
 
-  data.forEach(function (item) {
+  coupon_list.forEach(function (item) {
     const card = style.cloneNode(true);
     const divs = card.getElementsByTagName('div');
 
     const title = divs[0].getElementsByTagName('h5');
     const description = divs[0].getElementsByTagName('h6');
 
-    title[0].innerHTML = `${item.discount} - ${item.name}`;
-    description[0].innerHTML = `Code: ${item.code}`;
-    divs[2].addEventListener('click', function () {
-      navigator.clipboard
-        .writeText(item.code)
-        .then(() => {
-          divs[2].innerHTML = 'Code copied!';
-        })
-        .catch((error) => {
-          console.error('Failed to copy link: ', error);
+    // Clear existing child elements
+    divs[2].innerHTML = '';
+
+    // create button element
+    const useBtn = document.createElement('button');
+    useBtn.setAttribute('type', 'button');
+
+    if (item.type == 'coin') {
+      title[0].innerHTML = `Free ${item.amount} coins`;
+      description[0].innerHTML = `${item.name}`;
+
+      if (item.used == true) {
+        useBtn.classList.add('btn', 'btn-outline-secondary');
+        useBtn.textContent = 'Claimed';
+        useBtn.addEventListener('click', function () {
+          handleRedeem(item, useBtn);
         });
-    });
+      } else {
+        useBtn.classList.add('btn', 'btn-outline-primary');
+        useBtn.textContent = 'Claim Now';
+        useBtn.addEventListener('click', function () {
+          handleRedeem(item, useBtn);
+        });
+      }
+    } else {
+      title[0].innerHTML = `${item.amount}% 0ff`;
+      description[0].innerHTML = `${item.name} Code: ${item.code}`;
+      useBtn.classList.add('btn', 'btn-outline-primary');
+      useBtn.textContent = 'Copy Code';
+      useBtn.addEventListener('click', function () {
+        navigator.clipboard
+          .writeText(item.code)
+          .then(() => {
+            useBtn.innerHTML = 'Code copied!';
+          })
+          .catch((error) => {
+            console.error('Failed to copy link: ', error);
+          });
+      });
+    }
+
+    divs[2].appendChild(useBtn);
+
     emptyDiv.push(card);
   });
 
@@ -1052,6 +1177,13 @@ var location_edit = document.getElementById('input-edit-job-location');
 var apply_type_edit = document.getElementById('input-edit-apply-type');
 var external_apply_link_edit = document.getElementById('input-edit-job-url');
 var containerEditJobUrl = document.getElementById('container-edit-job-url');
+
+Object.entries(typeName).forEach(([key, option]) => {
+  const optionElement = document.createElement('option');
+  optionElement.value = option.id;
+  optionElement.text = option.name;
+  slot_type_edit.appendChild(optionElement);
+});
 
 apply_type_edit.addEventListener('change', function () {
   const selectedValue = this.value;
@@ -1273,188 +1405,17 @@ function unlockProfile(profileId, passBtn, passBtnDefaultText) {
   }
 }
 
-function populateApplication(data, userData) {
-  const loadingCard = document.getElementById('home-applicant-list-loading');
-  const emptyCard = document.getElementById('home-applicant-list-empty');
-  const parentTable = document.getElementById('home-applicant-list-parent');
-  const style = document.getElementById('home-applicant-list-child');
-  const emptyDiv = [];
-
-  data.forEach(function (item) {
-    const card = style.cloneNode(true);
-    const divs = card.getElementsByTagName('div');
-    const h6Text = divs[0].getElementsByTagName('h6');
-
-    if (item.profile_data) {
-      h6Text[0].innerHTML = `${item.profile_data.full_name}`;
-    } else {
-      h6Text[0].innerHTML = `Deleted Profile`;
-    }
-
-    var is_post_exist = false;
-
-    if (item.post_data) {
-      is_post_exist = true;
-    } else {
-      is_post_exist = false;
-    }
-
-    h6Text[1].innerHTML = `Applied For: ${
-      is_post_exist ? item.post_data.title : 'Post no longer exists'
-    }`;
-    h6Text[2].innerHTML = `Status: <span class="badge badge-pill badge-${
-      status_list_options[item.application_status_code].theme
-    }">${status_list_options[item.application_status_code].name}</span>`;
-
-    const time = divs[0].getElementsByTagName('h7');
-    var created_at = new Date(item.created_at);
-    var timeAgo = moment(created_at).fromNow(true);
-    time[0].innerHTML = `${timeAgo} ago`;
-
-    // create button element
-    const buttonParent = document.createElement('button');
-    buttonParent.classList.add('btn', 'btn-primary', 'dropdown-toggle');
-    buttonParent.setAttribute('type', 'button');
-    buttonParent.setAttribute('id', 'dropdownMenu2');
-    buttonParent.setAttribute('data-toggle', 'dropdown');
-    buttonParent.setAttribute('aria-haspopup', 'true');
-    buttonParent.setAttribute('aria-expanded', 'false');
-    buttonParent.textContent = 'Status';
-
-    // create dropdown menu element
-    const dropdownMenu = document.createElement('div');
-    dropdownMenu.classList.add('dropdown-menu');
-    dropdownMenu.setAttribute('aria-labelledby', 'dropdownMenu2');
-
-    const dropdownButtonContainer = divs[4];
-
-    // remove existing dropdown button (if any)
-    while (dropdownButtonContainer.firstChild) {
-      dropdownButtonContainer.removeChild(dropdownButtonContainer.firstChild);
-    }
-
-    // Convert the object into an array of key-value pairs
-    const optionsArray = Object.entries(status_list_options);
-
-    optionsArray.forEach(([key, option]) => {
-      if (option.is_job_seeker == false) {
-        const buttonChild = document.createElement('button');
-        buttonChild.classList.add('dropdown-item');
-        buttonChild.setAttribute('type', 'button');
-        buttonChild.textContent = option.name;
-        buttonChild.setAttribute('value', option.code);
-        buttonChild.addEventListener('click', () => {
-          if (is_post_exist) {
-            changeApplicantStatus(item.id, option.code, buttonParent);
-          } else {
-            showToast(
-              'alert-toast-container',
-              'Post no longer exits.',
-              'danger'
-            );
-          }
-        });
-
-        const currentStatus = item.application_status_code;
-        const loopStatus = option.code;
-
-        const statusesToHide = {
-          pending: ['pending'],
-          withdraw: [
-            'pending',
-            'withdraw',
-            'selected_for_interview',
-            'offered',
-            'not_selected',
-          ],
-          selected_for_interview: ['selected_for_interview'],
-          offered: ['offered'],
-          not_selected: ['not_selected'],
-        };
-
-        const isLoopStatusInStatusesToHide = statusesToHide[currentStatus]
-          ? statusesToHide[currentStatus].includes(loopStatus)
-          : statusesToHide.default.includes(loopStatus);
-
-        buttonChild.disabled = isLoopStatusInStatusesToHide;
-
-        dropdownMenu.appendChild(buttonChild);
-      }
-    });
-
-    buttonParent.appendChild(dropdownMenu);
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn-outline-danger  mr-1';
-    deleteBtn.type = 'button';
-    deleteBtn.style.border = 'none';
-    const deleteIcon = document.createElement('i');
-    deleteIcon.className = 'fa fa-trash';
-    deleteBtn.appendChild(deleteIcon);
-    deleteBtn.addEventListener('click', () => {
-      var confirmDelete = confirm(
-        'Are you sure you want to delete this application? This action cannot be undone.'
-      );
-      if (confirmDelete) {
-        deleteApplicant(item, deleteBtn, deleteBtn.innerHTML);
-      }
-    });
-
-    const viewBtn = document.createElement('button');
-    viewBtn.className = 'btn btn-outline-primary  mr-1';
-    viewBtn.type = 'button';
-    viewBtn.style.border = 'none';
-    const viewIcon = document.createElement('i');
-    viewIcon.className = 'fa fa-external-link-alt';
-    viewBtn.appendChild(viewIcon);
-    viewBtn.addEventListener('click', () => {
-      if (item.profile_data) {
-        window.open(`user-profile.html?profile_id=${item.profile_data.id}`);
-      } else {
-        showToast(
-          'alert-toast-container',
-          'Profile has been deleted.',
-          'danger'
-        );
-      }
-    });
-
-    dropdownButtonContainer.appendChild(deleteBtn);
-    dropdownButtonContainer.appendChild(viewBtn);
-    dropdownButtonContainer.appendChild(buttonParent);
-
-    emptyDiv.push(card);
-  });
-
-  loadingCard.classList.add('hidden');
-
-  if (emptyDiv.length === 0) {
-    emptyCard.classList.remove('hidden');
-    parentTable.classList.add('hidden');
-  } else {
-    emptyCard.classList.add('hidden');
-    parentTable.classList.remove('hidden');
-
-    while (parentTable.firstChild) {
-      parentTable.removeChild(parentTable.firstChild);
-    }
-    emptyDiv.forEach((item) => {
-      parentTable.appendChild(item);
-    });
-  }
-}
-
 function editForm(item) {
   selectedJob = item;
   if (item.is_free) {
     containerEditJobUrl.style.display = 'none';
-    slot_type_edit.value = 'coin-based';
+    slot_type_edit.value = typeName.type_1.id;
     apply_type_edit.value = 'internal';
     apply_type_edit.disabled = true;
     external_apply_link_edit.disabled = true;
   } else {
     containerEditJobUrl.style.display = 'block';
-    slot_type_edit.value = 'time-based';
+    slot_type_edit.value = typeName.type_2.id;
     apply_type_edit.value =
       item.is_external_apply == true ? 'external' : 'internal';
     apply_type_edit.disabled = false;
@@ -1599,11 +1560,8 @@ function populateEmployerNotification(data) {
     spanText[0].innerHTML = `${
       item?.post_data ? item.post_data.title : 'Post no longer exists'
     }`;
-    spanText[0].addEventListener('click', function () {
-      document.querySelector('#applicants-tab').click();
-    });
     spanText[1].innerHTML = `${item.message} - ${
-      myData.userData.id == item.user_data.id ? 'You' : item.user_data.username
+      myData.userData.id == item.user_data.id ? 'You' : 'Applicant'
     }`;
 
     const smallText = card.getElementsByTagName('small');
@@ -1701,11 +1659,10 @@ function fetchMyEmployer() {
         }
 
         if (data?.coupon_list) {
-          populateCouponDashboard(data.coupon_list);
-        }
-
-        if (data?.application_list) {
-          populateApplication(data.application_list, data.user_data);
+          populateCouponDashboard(
+            data.coupon_list,
+            data.user_data.coupon_usage_data
+          );
         }
 
         const profileUnlockBalance = document.getElementById(
@@ -1721,19 +1678,32 @@ function fetchMyEmployer() {
         populateVisibility(data?.visibility_list);
         visibilityListData = data?.visibility_list;
 
-        data.post_list.map((item) => {
-          var applicant_list = [];
+        let totalApplications = 0;
+        let totalPublishPost = 0;
 
-          if (data?.application_list) {
-            data.application_list.map((applicantItem) => {
-              if (item.id == applicantItem.post_id) {
-                applicant_list.push(applicantItem);
-              }
-            });
+        data.post_list.map((item) => {
+          const applicant_list = data.application_list.filter(
+            (app) => app.post_id === item.id
+          );
+
+          applicant_list.forEach((applicant) => {
+            const isUnlocked = data.user_data.unlocked_profile.some(
+              (unlockedProf) => unlockedProf.profile_id === applicant.profile_id
+            );
+            applicant.profile_data.is_unlocked = isUnlocked ? true : false;
+          });
+
+          // use after status update (inside modal)
+          if (selectedJob) {
+            if (selectedJob.custom_id == item.custom_id) {
+              selectedApplicants = applicant_list;
+              populateApplicantModalList();
+            }
           }
 
           const card = style.cloneNode(true);
           const divs = card.getElementsByTagName('div');
+
           const jobTimeline = divs[0].getElementsByTagName('h7');
           const listItem = divs[0].getElementsByTagName('li');
 
@@ -1746,8 +1716,13 @@ function fetchMyEmployer() {
             applicantBtn.getElementsByTagName('span')[0];
           const viewBtn = divs[0].getElementsByTagName('button')[4];
 
-          totalShareText.innerHTML = item.is_shared ? 1 : 0;
+          totalShareText.innerHTML = item.telegram_data.length;
           totalApplicantText.innerHTML = applicant_list.length;
+
+          totalApplications = totalApplications + applicant_list.length;
+          if (item.is_published) {
+            totalPublishPost = totalPublishPost + 1;
+          }
 
           let slotTypeIcon = '';
           let activeDateString = null;
@@ -1756,7 +1731,7 @@ function fetchMyEmployer() {
 
           if (item.is_free == true) {
             is_coin_based = true;
-            slotTypeIcon = `<i class="fas fa-coins mr-1"></i>Coin-based`;
+            slotTypeIcon = `Post Type: "${typeName.type_1.name}"`;
             activeDateString =
               item.timestamp_active &&
               new Date(item.timestamp_active).toLocaleString('en-US', format);
@@ -1764,7 +1739,7 @@ function fetchMyEmployer() {
               item.timestamp_expired &&
               new Date(item.timestamp_expired).toLocaleString('en-US', format);
           } else {
-            slotTypeIcon = `<i class="fas fa-clock mr-1"></i>Time-Based`;
+            slotTypeIcon = `Post Type: "${typeName.type_2.name}"`;
             activeDateString =
               item.timestamp_active &&
               new Date(item.timestamp_active).toLocaleString('en-US', format);
@@ -1824,7 +1799,7 @@ function fetchMyEmployer() {
               }`,
               post_btn: {
                 title: 'Ready to publish? Activate now',
-                class: 'btn btn-primary',
+                class: 'btn btn-success',
                 onClick: function (item) {
                   $('#visibilityModal').modal('show');
                   $('#visibilityModal').on('shown.bs.modal', function () {
@@ -1905,7 +1880,8 @@ function fetchMyEmployer() {
                   $('#applicantModal').modal('show');
                   $('#applicantModal').on('shown.bs.modal', () => {
                     selectedJob = item;
-                    populateApplicantModalList(applicant_list);
+                    selectedApplicants = applicant_list;
+                    populateApplicantModalList();
                   });
                 },
               },
@@ -1960,7 +1936,8 @@ function fetchMyEmployer() {
                   $('#applicantModal').modal('show');
                   $('#applicantModal').on('shown.bs.modal', () => {
                     selectedJob = item;
-                    populateApplicantModalList(applicant_list);
+                    selectedApplicants = applicant_list;
+                    populateApplicantModalList();
                   });
                 },
               },
@@ -2006,7 +1983,8 @@ function fetchMyEmployer() {
                   $('#applicantModal').modal('show');
                   $('#applicantModal').on('shown.bs.modal', () => {
                     selectedJob = item;
-                    populateApplicantModalList(applicant_list);
+                    selectedApplicants = applicant_list;
+                    populateApplicantModalList();
                   });
                 },
               },
@@ -2074,6 +2052,10 @@ function fetchMyEmployer() {
           emptyDiv.push(card);
         });
 
+        document.getElementById('total-apply').innerHTML = totalApplications;
+        document.getElementById('total-publish-post').innerHTML =
+          totalPublishPost;
+
         if (emptyDiv.length === 0) {
           emptyCard.classList.remove('hidden');
           parentTable.classList.add('hidden');
@@ -2120,9 +2102,16 @@ var external_apply_link_create = document.getElementById(
 );
 var containerCreateJobUrl = document.getElementById('container-create-job-url');
 
+Object.entries(typeName).forEach(([key, option]) => {
+  const optionElement = document.createElement('option');
+  optionElement.value = option.id;
+  optionElement.text = option.name;
+  slot_type_create.appendChild(optionElement);
+});
+
 slot_type_create.addEventListener('change', function () {
   const selectedValue = this.value;
-  if (selectedValue === 'coin-based') {
+  if (selectedValue === typeName.type_1.id) {
     apply_type_create.value = 'internal';
     apply_type_create.disabled = true;
     external_apply_link_create.disabled = true;
@@ -2147,7 +2136,7 @@ apply_type_create.addEventListener('change', function () {
 });
 
 function defaultHide() {
-  slot_type_create.value = 'coin-based';
+  slot_type_create.value = typeName.type_1.id;
   apply_type_create.value = 'internal';
   apply_type_create.disabled = true;
   external_apply_link_create.disabled = true;
@@ -2198,7 +2187,8 @@ document
             benefit: benefit_create.value,
             additional_info: additional_info_create.value,
             external_apply_link: external_apply_link_create.value,
-            is_free: slot_type_create.value == 'coin-based' ? true : false,
+            is_free:
+              slot_type_create.value == typeName.type_1.id ? true : false,
             is_external_apply:
               apply_type_create.value == 'external' ? true : false,
           }),
@@ -2728,11 +2718,6 @@ function fetchAdminMaster() {
   }
 }
 
-function populateJobSeekerSummary(data) {
-  const totalApply = document.getElementById('total-apply');
-  // totalApply.innerHTML = "5";
-}
-
 function populateJobSeekerNotification(data) {
   const loadingCard = document.getElementById(
     'home-job-seeker-notification-loading'
@@ -2838,6 +2823,8 @@ function populateJobSeekerApplication(data) {
   const style = document.getElementById('home-job-seeker-application-child');
   const emptyDiv = [];
 
+  let totalJobOffered = 0;
+
   data.forEach(function (item) {
     const card = style.cloneNode(true);
     const divs = card.getElementsByTagName('div');
@@ -2856,7 +2843,6 @@ function populateJobSeekerApplication(data) {
       is_post_exist ? item.post_data.title : 'Post no longer exists'
     }`;
 
-    // const time = divs[0].getElementsByTagName("h7");
     var created_at = new Date(item.created_at);
     var timeAgo = moment(created_at).fromNow(true);
     subText[0].innerHTML = `${timeAgo} ago`;
@@ -2867,6 +2853,10 @@ function populateJobSeekerApplication(data) {
     mainText[2].innerHTML = `Status: <span class="badge badge-pill badge-${
       status_list_options[item.application_status_code].theme
     }">${status_list_options[item.application_status_code].name}</span>`;
+
+    if (item.application_status_code == 'offered') {
+      totalJobOffered = totalJobOffered + 1;
+    }
 
     // create button element
     const buttonParent = document.createElement('button');
@@ -2978,6 +2968,9 @@ function populateJobSeekerApplication(data) {
 
     emptyDiv.push(card);
   });
+
+  document.getElementById('total-job-applied').innerHTML = data.length;
+  document.getElementById('total-job-offered').innerHTML = totalJobOffered;
 
   loadingCard.classList.add('hidden');
 
@@ -3094,7 +3087,6 @@ function fetchMyJobSeeker() {
             location.href = 'profile?code=resume';
           });
 
-        populateJobSeekerSummary(data.notification_list);
         populateJobSeekerNotification(data.notification_list);
         populateJobSeekerApplication(data.application_list);
         populateJobSeekerInvitation(data.invitation_list);
@@ -3115,3 +3107,18 @@ function firstCall() {
 }
 
 firstCall();
+
+let tabSwitchCounter = 0;
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    firstCall();
+
+    tabSwitchCounter++;
+
+    if (tabSwitchCounter >= 5) {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }
+  }
+}
+// Listen for visibility change events (tab switch)
+document.addEventListener('visibilitychange', handleVisibilityChange);

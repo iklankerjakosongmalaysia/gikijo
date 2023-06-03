@@ -4,6 +4,13 @@
 </div> */
 // showAlert("alert-login-container", "Error!", data.message, "danger", "my-login-alert");
 
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+}
+
 function maskText(text) {
   if (text) {
     return text.substring(0, 4) + '*'.repeat(text.length - 4);

@@ -12,9 +12,9 @@
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag("js", new Date());
+      gtag('js', new Date());
 
-      gtag("config", "G-57V08EMCKY");
+      gtag('config', 'G-57V08EMCKY');
     </script>
     <!-- end my function -->
     <meta charset="utf-8" />
@@ -40,7 +40,7 @@
     />
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="css/sb-admin-2.css" rel="stylesheet" />
 
     <!-- My function -->
     <script src="js/apiHelper.js"></script>
@@ -88,7 +88,7 @@
     <script>
       function verifyEmail() {
         const urlParams = new URLSearchParams(window.location.search);
-        const magicToken = urlParams.get("token");
+        const magicToken = urlParams.get('token');
 
         if (magicToken) {
           const options = {
@@ -98,41 +98,41 @@
           };
 
           fetchAPI(
-            "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/auth/verify_email/magic_login",
-            "POST",
+            'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/auth/verify_email/magic_login',
+            'POST',
             null,
             options
           )
             .then((data) => {
               if (data.authToken) {
-                document.getElementById("message").innerHTML =
-                  "Verification complete. Redirecting to login in";
-                document.getElementById("check-icon").style.display = "block";
-                document.getElementById("times-icon").style.display = "none";
-                var countdown = document.getElementById("countdown");
+                document.getElementById('message').innerHTML =
+                  'Verification complete. Redirecting to login in';
+                document.getElementById('check-icon').style.display = 'block';
+                document.getElementById('times-icon').style.display = 'none';
+                var countdown = document.getElementById('countdown');
                 var seconds = 5;
-                countdown.textContent = seconds + " seconds";
+                countdown.textContent = seconds + ' seconds';
                 var redirectTimer = setInterval(function () {
                   seconds--;
-                  countdown.textContent = seconds + " seconds";
+                  countdown.textContent = seconds + ' seconds';
                   if (seconds <= 0) {
                     clearInterval(redirectTimer);
-                    window.location.href = "/index";
+                    window.location.href = '/index';
                   }
                 }, 1000);
               } else {
-                document.getElementById("times-icon").style.display = "block";
-                document.getElementById("message").innerHTML = data.message;
+                document.getElementById('times-icon').style.display = 'block';
+                document.getElementById('message').innerHTML = data.message;
               }
             })
             .catch((error) => {
-              document.getElementById("times-icon").style.display = "block";
-              document.getElementById("check-icon").style.display = "none";
+              document.getElementById('times-icon').style.display = 'block';
+              document.getElementById('check-icon').style.display = 'none';
             });
         } else {
-          document.getElementById("message").innerHTML = "Token not found";
-          document.getElementById("times-icon").style.display = "block";
-          document.getElementById("check-icon").style.display = "none";
+          document.getElementById('message').innerHTML = 'Token not found';
+          document.getElementById('times-icon').style.display = 'block';
+          document.getElementById('check-icon').style.display = 'none';
         }
       }
 

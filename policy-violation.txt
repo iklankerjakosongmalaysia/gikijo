@@ -2,7 +2,7 @@ Policy on Responsible Use and Violations:
 
 At Gikijo, we take policy violations seriously and have established the following guidelines to ensure that our users are using our platform in a responsible and respectful manner. Violations of our policies may result in account suspension or termination, as well as other legal action as necessary.
 
-Job Slot and postings: All job slot and postings must be legitimate and not misleading in any way. This includes providing accurate necessary information related to the job.
+Job Post: All job postings must be legitimate and not misleading in any way. This includes providing accurate necessary information related to the job.
 
 Discrimination: Discrimination of any kind will not be tolerated on Gikijo. All job postings must comply with local and national anti-discrimination laws.
 
@@ -12,9 +12,7 @@ Inappropriate Content: Gikijo is a professional platform and all job postings mu
 
 Fraudulent Activities: Any attempt to manipulate or deceive our system, or to engage in any fraudulent activity on Gikijo, will result in account suspension or termination.
 
-Multiple Accounts: Each user is allowed to have only one account on Gikijo. Creating multiple accounts is strictly prohibited.
-
-Fake Job Application URL: Providing fake job application URL in job postings is strictly prohibited. All application links must lead to the legitimate application process for the relevant job.
+Fake Job Application URL: Providing fake job application URL in job postings is strictly prohibited. All external application links must lead to the legitimate application process for the relevant job.
 
 Consequences:
 
@@ -23,8 +21,6 @@ In the event of a policy violation, Gikijo may take any of the following actions
 - Remove the violating job posting or other content from the platform
 
 - Temporarily or permanently suspend or terminate the user's account
-
-- Block the associated job slot from further use on Gikijo channels.
 
 Updates:
 

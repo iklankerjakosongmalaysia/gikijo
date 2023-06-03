@@ -55,7 +55,7 @@ function populateMoreProfiles(data) {
     const divs = card.getElementsByTagName('div');
 
     divs[0].addEventListener('click', function () {
-      location.href = `user-profile.html?profile_id=${item.id}`;
+      location.href = `user-profile.html?custom_id=${item.custom_id}`;
     });
 
     const title = divs[0].getElementsByTagName('h7');
@@ -327,11 +327,11 @@ const textCurrentBalance = document.getElementById('text-current-balance');
 
 function fetchUserProfile() {
   var urlParams = new URLSearchParams(window.location.search);
-  var profileId = urlParams.get('profile_id');
+  var customId = urlParams.get('custom_id');
 
-  if (profileId) {
+  if (customId) {
     fetchAPI(
-      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/resume/list?profile_id=${profileId}`,
+      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/profile/resume/list?custom_id=${customId}`,
       'GET',
       token
     )
@@ -339,11 +339,11 @@ function fetchUserProfile() {
         if (data?.message) {
           showToast('alert-toast-container', data.message, 'danger');
         } else {
-          populateMoreProfiles(data.other_profiles);
+          // populateMoreProfiles(data.other_profiles);
 
           listInvitation(
             data.employer_posts,
-            profileId,
+            data.profile_details.id,
             data.employer_invitations
           );
 
@@ -810,10 +810,10 @@ function fetchUserProfile() {
   }
 }
 
-document
-  .getElementById('refresh-profile-list')
-  .addEventListener('click', function () {
-    fetchUserProfile();
-  });
+// document
+//   .getElementById('refresh-profile-list')
+//   .addEventListener('click', function () {
+//     fetchUserProfile();
+//   });
 
 fetchUserProfile();
