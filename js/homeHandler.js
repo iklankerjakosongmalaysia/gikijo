@@ -256,13 +256,19 @@ document
 document.getElementById('myTab').innerHTML = tabHTML;
 
 document
-  .getElementById('create-update-company-profile')
+  .getElementById('create-go-to-update-company-name')
   .addEventListener('click', () => {
     location.href = 'profile?code=company_profile';
   });
 
 document
-  .getElementById('edit-update-company-profile')
+  .getElementById('create-go-to-post-type-tab')
+  .addEventListener('click', () => {
+    document.querySelector('#my-paid-vs-free-slot-tab').click();
+  });
+
+document
+  .getElementById('edit-go-to-update-company-name')
   .addEventListener('click', () => {
     location.href = 'profile?code=company_profile';
   });
@@ -1162,7 +1168,6 @@ function adminFilterJob() {
 
 var slot_type_edit = document.getElementById('input-edit-slot-type');
 var company_name_edit = document.getElementById('input-edit-company-name');
-var ssm_number_edit = document.getElementById('input-edit-company-ssm');
 var title_edit = document.getElementById('input-edit-job-title');
 var job_type_edit = document.getElementById('input-edit-job-type');
 var min_salary_edit = document.getElementById('input-edit-job-min-salary');
@@ -1431,8 +1436,6 @@ function editForm(item) {
 
   document.getElementById('input-edit-company-name').value =
     item.company_data.name;
-  document.getElementById('input-edit-company-ssm').value =
-    item.company_data.ssm_number;
   document.getElementById('input-edit-job-title').value = item.title;
   document.getElementById('input-edit-job-type').value = item.type;
   document.getElementById('input-edit-job-min-salary').value = item.min_salary;
@@ -1641,7 +1644,6 @@ function fetchMyEmployer() {
         if (data.company_data !== null) {
           company_data = data.company_data;
           company_name_create.value = data.company_data.name;
-          ssm_number_create.value = data.company_data.ssm_number;
         } else {
           company_data = null;
         }
@@ -1759,7 +1761,7 @@ function fetchMyEmployer() {
           }
 
           listItem[0].innerHTML = `<b>Title of the job opening:</b> ${item.title}`;
-          listItem[1].innerHTML = `<b>Company name:</b> <a href="company-profile?company_id=${item.company_data.id}" target="_blank" rel="noopener noreferrer">${item.company_data.name} (${item.company_data.ssm_number})</a>`;
+          listItem[1].innerHTML = `<b>Company name:</b> <a href="company-profile?custom_id=${item.company_data.custom_id}" target="_blank" rel="noopener noreferrer">${item.company_data.name}</a>`;
           listItem[2].innerHTML = `<b>Type:</b> ${item.type}`;
           if (item.min_salary > 0) {
             listItem[3].innerHTML = `<b>Salary:</b> MYR ${item.min_salary} - ${item.max_salary} ${item.salary_type}`;
@@ -2040,7 +2042,15 @@ function fetchMyEmployer() {
             handler[current_state].share_btn.onClick(item);
           });
           applicantBtn.addEventListener('click', function () {
-            handler[current_state].applicant_btn.onClick(item);
+            if (item.is_external_apply) {
+              showToast(
+                'alert-toast-container',
+                'This post is currently set for external applications. If you would like to change the application setting to apply through the Gikijo website, please edit your post.',
+                'danger'
+              );
+            } else {
+              handler[current_state].applicant_btn.onClick(item);
+            }
           });
           viewBtn.addEventListener('click', function () {
             handler[current_state].view_btn.onClick(item);
@@ -2080,7 +2090,6 @@ function fetchMyEmployer() {
 var company_data = null;
 var slot_type_create = document.getElementById('input-create-slot-type');
 var company_name_create = document.getElementById('input-create-company-name');
-var ssm_number_create = document.getElementById('input-create-company-ssm');
 var title_create = document.getElementById('input-create-job-title');
 var job_type_create = document.getElementById('input-create-job-type');
 var min_salary_create = document.getElementById('input-create-job-min-salary');

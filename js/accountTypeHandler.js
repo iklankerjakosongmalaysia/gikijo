@@ -1,77 +1,114 @@
-const myData = getSavedData("masterData");
+const myData = getSavedData('masterData');
 const token = myData?.authToken;
 
-const topbarNotAuth = document.getElementById("topbar-not-auth");
-const topbarWithAuth = document.getElementById("topbar-with-auth");
-const topbarUsername = document.getElementById("topbar-username");
-const topBarPostJobButton = document.getElementById("topbar-post-job-btn");
-const logoutBtn = document.getElementById("button-logout-yes");
-logoutBtn.addEventListener("click", clearSession);
+const topbarNotAuth = document.getElementById('topbar-not-auth');
+const topbarWithAuth = document.getElementById('topbar-with-auth');
+const topbarUsername = document.getElementById('topbar-username');
+const topBarPostJobButton = document.getElementById('topbar-post-job-btn');
+const logoutBtn = document.getElementById('button-logout-yes');
+logoutBtn.addEventListener('click', clearSession);
 
 if (token) {
-  topbarWithAuth.removeAttribute("style");
-  topbarNotAuth.setAttribute("style", "display: none");
+  topbarWithAuth.removeAttribute('style');
+  topbarNotAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = myData.userData.username;
 } else {
-  topbarNotAuth.removeAttribute("style");
-  topbarWithAuth.setAttribute("style", "display: none");
-  topbarUsername.innerHTML = "...";
-  topBarPostJobButton.addEventListener("click", function () {
-    location.href = "index?login=true";
+  topbarNotAuth.removeAttribute('style');
+  topbarWithAuth.setAttribute('style', 'display: none');
+  topbarUsername.innerHTML = '...';
+  topBarPostJobButton.addEventListener('click', function () {
+    location.href = 'index?login=true';
   });
-  location.href = "index";
+  location.href = 'index';
 }
 
 document
-  .getElementById("topbar-job-list-btn")
-  .addEventListener("click", function () {
-    location.href = "job-list";
+  .getElementById('topbar-job-list-btn')
+  .addEventListener('click', function () {
+    location.href = 'job-list';
   });
 
-let submitEmployerBtn = document.getElementById("submit-employer-btn");
+var input_company_name = document.getElementById('input-company-name');
 
-submitEmployerBtn.addEventListener("click", function () {
-  handlingAccountType("employer", submitEmployerBtn);
-});
+document
+  .getElementById('employer-form')
+  .addEventListener('submit', function (e) {
+    e.preventDefault();
 
-let submitJobSeekerBtn = document.getElementById("submit-job-seeker-btn");
+    let submitEmployerBtn = document.getElementById('submit-employer-btn');
+    handlingAccountType(
+      'employer',
+      input_company_name.value,
+      '',
+      submitEmployerBtn
+    );
+  });
 
-submitJobSeekerBtn.addEventListener("click", function () {
-  handlingAccountType("job-seeker", submitJobSeekerBtn);
-});
+var input_full_name = document.getElementById('input-full-name');
 
-function handlingAccountType(accountTye, submitBtn) {
-  var btnResetTitle = "";
+document
+  .getElementById('job-seeker-form')
+  .addEventListener('submit', function (e) {
+    e.preventDefault();
 
-  if (accountTye == "employer") {
-    btnResetTitle = `I'm an Employer`;
-  } else {
-    btnResetTitle = `I'm a Job Seeker`;
-  }
+    let submitJobSeekerBtn = document.getElementById('submit-job-seeker-btn');
+    handlingAccountType(
+      'job-seeker',
+      '',
+      input_full_name.value,
+      submitJobSeekerBtn
+    );
+  });
+
+function handlingAccountType(
+  accountTye,
+  companyName = '',
+  fullName = '',
+  submitBtn
+) {
+  var btnResetTitle = '';
 
   submitBtn.disabled = true;
   submitBtn.innerHTML =
     '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-  const options = {
-    body: JSON.stringify({
-      username: myData.userData.username,
-      account_type: accountTye == "employer" ? 2 : 3,
-    }),
-  };
+  let options = {};
+
+  if (accountTye == 'employer') {
+    options = {
+      body: JSON.stringify({
+        username: myData.userData.username,
+        account_type: 2,
+        company_name: companyName,
+      }),
+    };
+
+    btnResetTitle = `I'm an Employer`;
+  } else {
+    options = {
+      body: JSON.stringify({
+        username: myData.userData.username,
+        account_type: 3,
+        full_name: fullName,
+        mask_full_name: maskText(fullName),
+      }),
+    };
+
+    btnResetTitle = `I'm a Job Seeker`;
+  }
 
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/edit_user`,
-    "PUT",
+    'PUT',
     token,
     options
   )
     .then((data) => {
       if (data) {
         if (data.message) {
-          showToast("alert-toast-container", data.message, "danger");
+          showToast('alert-toast-container', data.message, 'danger');
         } else {
-          saveData("masterData", {
+          saveData('masterData', {
             userData: {
               ...myData.userData,
               username: data.username,
@@ -80,7 +117,7 @@ function handlingAccountType(accountTye, submitBtn) {
             },
             authToken: myData.authToken,
           });
-          location.href = "home";
+          location.href = 'home';
         }
       }
       submitBtn.disabled = false;

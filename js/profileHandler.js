@@ -213,7 +213,7 @@ const inputSelectCompanySize = document.getElementById(
 const inputCompanyWebsite = document.getElementById('input-company-website');
 const inputBusinessAddress = document.getElementById('input-business-address');
 
-function updateCompanyProfileViewButton(toggle, company_id) {
+function updateCompanyProfileViewButton(toggle, custom_id) {
   const viewCompanyProfileButton = document.getElementById(
     'view-company-profile-btn'
   );
@@ -222,7 +222,7 @@ function updateCompanyProfileViewButton(toggle, company_id) {
     viewCompanyProfileButton.disabled = false;
     viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Company Profile`;
     viewCompanyProfileButton.addEventListener('click', function (e) {
-      window.open(`company-profile?company_id=${company_id}`);
+      window.open(`company-profile?custom_id=${custom_id}`);
     });
   } else {
     viewCompanyProfileButton.disabled = true;
@@ -295,7 +295,7 @@ function getCompanyProfileData() {
           inputCompanyWebsite.value = data.company_data.website;
           inputBusinessAddress.value = data.company_data.business_address;
 
-          updateCompanyProfileViewButton(true, data.company_data.id);
+          updateCompanyProfileViewButton(true, data.company_data.custom_id);
         } else {
           updateCompanyProfileViewButton(false);
         }
@@ -379,7 +379,7 @@ companyProfileForm.addEventListener('submit', function (event) {
           'Company profile has been successfully updated.',
           'success'
         );
-        updateCompanyProfileViewButton(true, data.company_data.id);
+        updateCompanyProfileViewButton(true, data.company_data.custom_id);
       }
 
       submitCompanyProfileBtn.disabled = false;

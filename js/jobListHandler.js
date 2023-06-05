@@ -1,60 +1,60 @@
-const myData = getSavedData("masterData");
+const myData = getSavedData('masterData');
 const token = myData?.authToken;
 
-const topbarNotAuth = document.getElementById("topbar-not-auth");
-const topbarWithAuth = document.getElementById("topbar-with-auth");
-const topbarUsername = document.getElementById("topbar-username");
-const topBarPostJobButton = document.getElementById("topbar-post-job-btn");
-const logoutBtn = document.getElementById("button-logout-yes");
-logoutBtn.addEventListener("click", clearSession);
+const topbarNotAuth = document.getElementById('topbar-not-auth');
+const topbarWithAuth = document.getElementById('topbar-with-auth');
+const topbarUsername = document.getElementById('topbar-username');
+const topBarPostJobButton = document.getElementById('topbar-post-job-btn');
+const logoutBtn = document.getElementById('button-logout-yes');
+logoutBtn.addEventListener('click', clearSession);
 
 if (token) {
-  topbarWithAuth.removeAttribute("style");
-  topbarNotAuth.setAttribute("style", "display: none");
+  topbarWithAuth.removeAttribute('style');
+  topbarNotAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = myData.userData.username;
 } else {
-  topbarNotAuth.removeAttribute("style");
-  topbarWithAuth.setAttribute("style", "display: none");
-  topbarUsername.innerHTML = "...";
-  topBarPostJobButton.addEventListener("click", function () {
-    location.href = "index?login=true";
+  topbarNotAuth.removeAttribute('style');
+  topbarWithAuth.setAttribute('style', 'display: none');
+  topbarUsername.innerHTML = '...';
+  topBarPostJobButton.addEventListener('click', function () {
+    location.href = 'index?login=true';
   });
 }
 
 document
-  .getElementById("topbar-job-list-btn-not-auth")
-  .addEventListener("click", function () {
-    location.href = "job-list";
+  .getElementById('topbar-job-list-btn-not-auth')
+  .addEventListener('click', function () {
+    location.href = 'job-list';
   });
 
 document
-  .getElementById("topbar-job-list-btn-with-auth")
-  .addEventListener("click", function () {
-    location.href = "job-list";
+  .getElementById('topbar-job-list-btn-with-auth')
+  .addEventListener('click', function () {
+    location.href = 'job-list';
   });
 
 document
-  .getElementById("button-empty-list-post-job")
-  .addEventListener("click", function () {
-    location.href = "index?login=true";
+  .getElementById('button-empty-list-post-job')
+  .addEventListener('click', function () {
+    location.href = 'index?login=true';
   });
 
 function populateContent(passData) {
-  const listLoader = document.getElementById("content-list-loader");
-  const listEmpty = document.getElementById("content-list-empty");
-  const listContainer = document.getElementById("content-list-container");
-  const listBody = document.getElementById("content-list-body");
+  const listLoader = document.getElementById('content-list-loader');
+  const listEmpty = document.getElementById('content-list-empty');
+  const listContainer = document.getElementById('content-list-container');
+  const listBody = document.getElementById('content-list-body');
 
   var totalRecord = [];
 
   passData.forEach((item) => {
     const card = listBody.cloneNode(true);
-    const divs = card.getElementsByTagName("div");
+    const divs = card.getElementsByTagName('div');
 
-    const title = divs[0].getElementsByTagName("strong");
-    const postedAt = divs[0].getElementsByTagName("h8");
-    const listItem = divs[0].getElementsByTagName("li");
-    const applyButton = divs[0].getElementsByTagName("button");
+    const title = divs[0].getElementsByTagName('strong');
+    const postedAt = divs[0].getElementsByTagName('h8');
+    const listItem = divs[0].getElementsByTagName('li');
+    const applyButton = divs[0].getElementsByTagName('button');
 
     var created_at = new Date(item.created_at);
     var timeAgo = moment(created_at).fromNow(true);
@@ -62,7 +62,7 @@ function populateContent(passData) {
     postedAt[0].innerHTML = ` ${timeAgo} ago`;
     title[0].innerHTML = item.title;
 
-    listItem[0].innerHTML = `<i class="fas fa-building"></i> <a href="company-profile?company_id=${item.company_data.id}">${item.company_data.name} (${item.company_data.ssm_number})</a>`;
+    listItem[0].innerHTML = `<i class="fas fa-building"></i> <a href="company-profile?custom_id=${item.company_data.custom_id}">${item.company_data.name}</a>`;
 
     listItem[1].innerHTML = `<i class="fas fa-tag"></i> ${item.type}`;
 
@@ -74,38 +74,16 @@ function populateContent(passData) {
 
     listItem[3].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
 
-    // listItem[4].innerHTML = `<br>Requirement<br>${item.requirement.replace(
-    //   /\n/g,
-    //   "<br>"
-    // )}`;
-    // listItem[5].innerHTML = `<br>Benefit<br>${item.benefit.replace(
-    //   /\n/g,
-    //   "<br>"
-    // )}`;
-    // listItem[6].innerHTML = `<br>Additional Information<br>${item.additional_info.replace(
-    //   /\n/g,
-    //   "<br>"
-    // )}`;
-
-    applyButton[0].addEventListener("click", function () {
-      window.open(item.internal_apply_link, "_blank");
+    applyButton[0].addEventListener('click', function () {
+      window.open(item.internal_apply_link, '_blank');
     });
-
-    // const paragraph = divs[0].getElementsByTagName("p");
-    // paragraph[0].innerHTML = item.content.replace(/\n/g, "<br>");
-
-    // const collapse = divs[0].getElementsByTagName("a")[0];
-    // const collapseId = `collapseSummary${index}`;
-    // paragraph[0].setAttribute("id", collapseId);
-    // collapse.setAttribute("href", `#${collapseId}`);
-    // collapse.setAttribute("aria-controls", collapseId);
 
     totalRecord.push(card);
   });
 
-  listLoader.classList.add("hidden");
+  listLoader.classList.add('hidden');
 
-  const textTotalJOb = document.getElementById("text-total-job");
+  const textTotalJOb = document.getElementById('text-total-job');
   if (totalRecord.length > 0) {
     textTotalJOb.innerText = `Showing ${totalRecord.length} jobs`;
   } else {
@@ -113,11 +91,11 @@ function populateContent(passData) {
   }
 
   if (totalRecord.length === 0) {
-    listEmpty.classList.remove("hidden");
-    listContainer.classList.add("hidden");
+    listEmpty.classList.remove('hidden');
+    listContainer.classList.add('hidden');
   } else {
-    listEmpty.classList.add("hidden");
-    listContainer.classList.remove("hidden");
+    listEmpty.classList.add('hidden');
+    listContainer.classList.remove('hidden');
 
     while (listContainer.firstChild) {
       listContainer.removeChild(listContainer.firstChild);
@@ -129,44 +107,44 @@ function populateContent(passData) {
 }
 
 document
-  .getElementById("refresh-channel-list")
-  .addEventListener("click", function () {
+  .getElementById('refresh-channel-list')
+  .addEventListener('click', function () {
     populateChannel();
   });
 
 var channelListData = [];
 
 function populateChannel() {
-  const listLoader = document.getElementById("channel-list-loader");
-  const listEmpty = document.getElementById("channel-list-empty");
-  const listContainer = document.getElementById("channel-list-container");
-  const listBody = document.getElementById("channel-list-body");
+  const listLoader = document.getElementById('channel-list-loader');
+  const listEmpty = document.getElementById('channel-list-empty');
+  const listContainer = document.getElementById('channel-list-container');
+  const listBody = document.getElementById('channel-list-body');
 
   var totalRecord = [];
 
   channelListData.forEach((item) => {
     const card = listBody.cloneNode(true);
-    const divs = card.getElementsByTagName("div");
+    const divs = card.getElementsByTagName('div');
 
-    const title = divs[0].getElementsByTagName("h7");
+    const title = divs[0].getElementsByTagName('h7');
 
     title[0].innerHTML = `${item.source_name} ∙ ${item.name}`;
 
-    divs[0].addEventListener("click", function () {
-      window.open(item.url, "_blank");
+    divs[0].addEventListener('click', function () {
+      window.open(item.url, '_blank');
     });
 
     totalRecord.push(card);
   });
 
-  listLoader.classList.add("hidden");
+  listLoader.classList.add('hidden');
 
   if (totalRecord.length === 0) {
-    listEmpty.classList.remove("hidden");
-    listContainer.classList.add("hidden");
+    listEmpty.classList.remove('hidden');
+    listContainer.classList.add('hidden');
   } else {
-    listEmpty.classList.add("hidden");
-    listContainer.classList.remove("hidden");
+    listEmpty.classList.add('hidden');
+    listContainer.classList.remove('hidden');
 
     while (listContainer.firstChild) {
       listContainer.removeChild(listContainer.firstChild);
@@ -177,29 +155,29 @@ function populateChannel() {
   }
 }
 
-const inputKeyword = document.getElementById("input-keyword");
-const inputLocation = document.getElementById("input-job-location");
-const inputType = document.getElementById("input-job-type");
-const inputMinSalary = document.getElementById("input-job-min-salary");
-const inputMaxSalary = document.getElementById("input-job-max-salary");
+const inputKeyword = document.getElementById('input-keyword');
+const inputLocation = document.getElementById('input-job-location');
+const inputType = document.getElementById('input-job-type');
+const inputMinSalary = document.getElementById('input-job-min-salary');
+const inputMaxSalary = document.getElementById('input-job-max-salary');
 
 var postData = [];
 
 document
-  .getElementById("reset-filter-job-btn")
-  .addEventListener("click", function () {
-    inputLocation.value = "";
-    inputType.value = "";
-    inputMinSalary.value = "";
-    inputMaxSalary.value = "";
-    fetchPostList("", "");
+  .getElementById('reset-filter-job-btn')
+  .addEventListener('click', function () {
+    inputLocation.value = '';
+    inputType.value = '';
+    inputMinSalary.value = '';
+    inputMaxSalary.value = '';
+    fetchPostList('', '');
   });
 
-const submitFilterJobBtn = document.getElementById("submit-filter-job-btn");
+const submitFilterJobBtn = document.getElementById('submit-filter-job-btn');
 
 document
-  .getElementById("filter-job-form")
-  .addEventListener("submit", function (e) {
+  .getElementById('filter-job-form')
+  .addEventListener('submit', function (e) {
     e.preventDefault();
 
     submitFilterJobBtn.disabled = true;
@@ -209,10 +187,10 @@ document
     fetchPostList(inputKeyword.value);
   });
 
-const buttonRetryPostList = document.getElementById("button-retry-post-list");
+const buttonRetryPostList = document.getElementById('button-retry-post-list');
 let canClickRetryButton = true;
 
-buttonRetryPostList.addEventListener("click", function () {
+buttonRetryPostList.addEventListener('click', function () {
   if (canClickRetryButton) {
     canClickRetryButton = false;
     fetchPostList(inputKeyword.value);
@@ -225,11 +203,11 @@ buttonRetryPostList.addEventListener("click", function () {
       } else {
         clearInterval(countdownInterval);
         canClickRetryButton = true;
-        buttonRetryPostList.textContent = "Retry";
+        buttonRetryPostList.textContent = 'Retry';
       }
     }, 1000);
   } else {
-    buttonRetryPostList.textContent = "Please wait ...";
+    buttonRetryPostList.textContent = 'Please wait ...';
   }
 });
 
@@ -249,13 +227,13 @@ function fetchPostList(passKeyword, passPostId) {
 
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/list/all`,
-    "POST",
+    'POST',
     null,
     options
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
         postData = data.post_list;
         channelListData = data.channel_list;
@@ -264,26 +242,26 @@ function fetchPostList(passKeyword, passPostId) {
       }
 
       submitFilterJobBtn.disabled = false;
-      submitFilterJobBtn.innerHTML = "Search";
+      submitFilterJobBtn.innerHTML = 'Search';
     })
     .catch((error) => {
       populateChannel();
       populateContent(postData);
       submitFilterJobBtn.disabled = false;
-      submitFilterJobBtn.innerHTML = "Search";
+      submitFilterJobBtn.innerHTML = 'Search';
       console.error(error);
     });
 }
 
-const toggleFilterBtn = document.getElementById("toggle-filter-btn");
-const filterJobForm = document.getElementById("filter-job-form");
+const toggleFilterBtn = document.getElementById('toggle-filter-btn');
+const filterJobForm = document.getElementById('filter-job-form');
 
-toggleFilterBtn.addEventListener("click", () => {
-  if (filterJobForm.style.display === "block") {
-    filterJobForm.style.display = "none";
+toggleFilterBtn.addEventListener('click', () => {
+  if (filterJobForm.style.display === 'block') {
+    filterJobForm.style.display = 'none';
     toggleFilterBtn.innerHTML = `<i class="fas fa-filter"></i> Show Filter`;
   } else {
-    filterJobForm.style.display = "block";
+    filterJobForm.style.display = 'block';
     toggleFilterBtn.innerHTML = `<i class="fas fa-filter"></i> Hide Filter`;
   }
 });

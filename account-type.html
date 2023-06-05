@@ -139,7 +139,7 @@
           <div class="container-fluid">
             <!-- Your content -->
 
-            <div class="container text-center mt-5">
+            <div class="container mt-5">
               <h2 class="mb-5 text-primary">Choose Your Account Type</h2>
               <div class="row">
                 <div class="col-md-6 mb-4">
@@ -152,15 +152,28 @@
                         You can easily post job openings and manage applications
                         from one place.
                       </p>
-                      <div class="mt-auto">
-                        <button
-                          type="button"
-                          class="btn btn-primary btn-block"
-                          id="submit-employer-btn"
-                        >
-                          I'm an Employer
-                        </button>
-                      </div>
+                      <form id="employer-form" class="mt-2">
+                        <div class="form-group">
+                          <label>Company Name</label>
+                          <input
+                            maxlength="80"
+                            type="text"
+                            class="form-control"
+                            id="input-company-name"
+                            placeholder=""
+                            required
+                          />
+                        </div>
+                        <div class="mt-auto">
+                          <button
+                            type="submit"
+                            class="btn btn-primary btn-lg btn-block"
+                            id="submit-employer-btn"
+                          >
+                            I'm an Employer
+                          </button>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -174,15 +187,28 @@
                         Find your dream job with ease. Search for job openings
                         and submit applications quickly and effortlessly.
                       </p>
-                      <div class="mt-auto">
-                        <button
-                          type="button"
-                          class="btn btn-primary btn-block"
-                          id="submit-job-seeker-btn"
-                        >
-                          I'm a Job Seeker
-                        </button>
-                      </div>
+                      <form id="job-seeker-form" class="mt-2">
+                        <div class="form-group">
+                          <label>Full Name</label>
+                          <input
+                            maxlength="50"
+                            type="text"
+                            class="form-control"
+                            id="input-full-name"
+                            placeholder=""
+                            required
+                          />
+                        </div>
+                        <div class="mt-auto">
+                          <button
+                            type="submit"
+                            class="btn btn-primary btn-lg btn-block"
+                            id="submit-job-seeker-btn"
+                          >
+                            I'm a Job Seeker
+                          </button>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
