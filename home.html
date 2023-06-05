@@ -669,7 +669,8 @@
                                     <tr>
                                       <th scope="row">
                                         Applicant Profile Access (applicable for
-                                        non-private profiles only)
+                                        non-private profiles & apply through
+                                        Gikijo website only)
                                       </th>
                                       <td>
                                         Unlock profile based on available coins
@@ -719,49 +720,25 @@
                               <form id="create-job-form" class="mt-2">
                                 <!-- Content Create Job -->
                                 <div>
-                                  <strong>Company Details</strong>
-                                  <div class="form-group mt-2">
-                                    <div class="form-group">
-                                      <label>Company name</label>
-                                      <input
-                                        maxlength="80"
-                                        type="text"
-                                        class="form-control"
-                                        id="input-create-company-name"
-                                        placeholder=""
-                                        required
-                                        disabled
-                                      />
-                                    </div>
-                                    <div class="form-group">
-                                      <label>Company SSM number</label>
-                                      <input
-                                        maxlength="30"
-                                        type="text"
-                                        class="form-control"
-                                        id="input-create-company-ssm"
-                                        placeholder=""
-                                        required
-                                        disabled
-                                      />
-                                    </div>
-                                    <button
-                                      type="button"
-                                      class="btn btn-outline-primary btn-block mb-2 mt-3"
-                                      id="create-update-company-profile"
-                                    >
-                                      <i class="fas fa-edit mr-1"></i> Update
-                                      Company Profile
-                                    </button>
-                                    <small class="form-text text-muted"
-                                      >If you have already updated your company
-                                      profile, please proceed to the next
-                                      section.</small
+                                  <div class="form-group">
+                                    <label>Company name</label>
+                                    <input
+                                      maxlength="80"
+                                      type="text"
+                                      class="form-control"
+                                      id="input-create-company-name"
+                                      placeholder=""
+                                      required
+                                      disabled
+                                    />
+                                    <small class="form-text text-muted">
+                                      To update your company name,
+                                      <b id="create-go-to-update-company-name"
+                                        >click here</b
+                                      ></small
                                     >
                                   </div>
-                                  <hr />
-                                  <strong>Post Details</strong>
-                                  <div class="form-group mt-2">
+                                  <div class="form-group">
                                     <label>Title of the job opening</label>
                                     <input
                                       maxlength="70"
@@ -862,6 +839,7 @@
                                       rows="3"
                                       placeholder=""
                                       required
+                                      onInput="handleInput(event)"
                                     ></textarea>
                                   </div>
                                   <div class="form-group">
@@ -873,6 +851,7 @@
                                       rows="3"
                                       placeholder=""
                                       required
+                                      onInput="handleInput(event)"
                                     ></textarea>
                                   </div>
                                   <div class="form-group">
@@ -883,6 +862,7 @@
                                       id="input-create-job-additional-info"
                                       rows="3"
                                       placeholder=""
+                                      onInput="handleInput(event)"
                                     ></textarea>
                                   </div>
                                   <div class="form-group">
@@ -903,6 +883,12 @@
                                       id="input-create-slot-type"
                                       required
                                     ></select>
+                                    <small class="form-text text-muted">
+                                      For more information about the post type,
+                                      <b id="create-go-to-post-type-tab"
+                                        >click here</b
+                                      ></small
+                                    >
                                   </div>
                                   <div class="form-group">
                                     <label>Application Type:</label>
@@ -997,49 +983,25 @@
                           <div class="modal-body">
                             <!-- Content Create Job -->
                             <div>
-                              <strong>Company Details</strong>
-                              <div class="form-group mt-2">
-                                <div class="form-group">
-                                  <label>Company name</label>
-                                  <input
-                                    maxlength="80"
-                                    type="text"
-                                    class="form-control"
-                                    id="input-edit-company-name"
-                                    placeholder=""
-                                    required
-                                    disabled
-                                  />
-                                </div>
-                                <div class="form-group">
-                                  <label>Company SSM number</label>
-                                  <input
-                                    maxlength="30"
-                                    type="text"
-                                    class="form-control"
-                                    id="input-edit-company-ssm"
-                                    placeholder=""
-                                    required
-                                    disabled
-                                  />
-                                </div>
-                                <button
-                                  type="button"
-                                  class="btn btn-outline-primary btn-block mb-2 mt-3"
-                                  id="edit-update-company-profile"
-                                >
-                                  <i class="fas fa-edit mr-1"></i> Update
-                                  Company Profile
-                                </button>
-                                <small class="form-text text-muted"
-                                  >If you have already updated your company
-                                  profile, please proceed to the next
-                                  section.</small
+                              <div class="form-group">
+                                <label>Company name</label>
+                                <input
+                                  maxlength="80"
+                                  type="text"
+                                  class="form-control"
+                                  id="input-edit-company-name"
+                                  placeholder=""
+                                  required
+                                  disabled
+                                />
+                                <small class="form-text text-muted">
+                                  To update your company name,
+                                  <b id="edit-go-to-update-company-name"
+                                    >click here</b
+                                  ></small
                                 >
                               </div>
-                              <hr />
-                              <strong>Post Details</strong>
-                              <div class="form-group mt-2">
+                              <div class="form-group">
                                 <label>Title of the job opening</label>
                                 <input
                                   maxlength="70"
@@ -1124,6 +1086,7 @@
                                   rows="3"
                                   placeholder=""
                                   required
+                                  onInput="handleInput(event)"
                                 ></textarea>
                               </div>
                               <div class="form-group">
@@ -1135,6 +1098,7 @@
                                   rows="3"
                                   placeholder=""
                                   required
+                                  onInput="handleInput(event)"
                                 ></textarea>
                               </div>
                               <div class="form-group">
@@ -1145,6 +1109,7 @@
                                   id="input-edit-job-additional-info"
                                   rows="3"
                                   placeholder=""
+                                  onInput="handleInput(event)"
                                 ></textarea>
                               </div>
                               <div class="form-group">
