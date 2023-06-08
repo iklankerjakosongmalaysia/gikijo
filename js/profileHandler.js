@@ -171,7 +171,7 @@ accountForm.addEventListener('submit', function (event) {
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
         showToast(
           'alert-toast-container',
@@ -238,7 +238,7 @@ function getCompanyProfileData() {
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
         [
           { name: 'Public', value: 1 },
@@ -347,8 +347,10 @@ companyProfileForm.addEventListener('submit', function (event) {
 
   const totalPointsEarned = completedFields * POINTS_PER_FIELD;
   const totalPossiblePoints = textElements.length * POINTS_PER_FIELD;
-  const progressPercentage =
-    ((totalPointsEarned / totalPossiblePoints) * 100).toFixed(0) + '%';
+  const progressPercentage = (
+    (totalPointsEarned / totalPossiblePoints) *
+    100
+  ).toFixed(0);
 
   const options = {
     body: JSON.stringify({
@@ -372,7 +374,7 @@ companyProfileForm.addEventListener('submit', function (event) {
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
         showToast(
           'alert-toast-container',
@@ -470,8 +472,10 @@ resumeForm.addEventListener('submit', function (event) {
     ) {
       // proceed
     } else {
-      alert(
-        'Expected maximum salary should be greater or equal to minimum salary'
+      showToast(
+        'alert-toast-container',
+        'Expected maximum salary should be greater or equal to minimum salary',
+        'danger'
       );
       submitResumeBtn.disabled = false;
       submitResumeBtn.innerHTML = 'Update';
@@ -595,8 +599,10 @@ resumeForm.addEventListener('submit', function (event) {
 
   const totalPointsEarned = completedFields * POINTS_PER_FIELD;
   const totalPossiblePoints = textElements.length * POINTS_PER_FIELD;
-  const progressPercentage =
-    ((totalPointsEarned / totalPossiblePoints) * 100).toFixed(0) + '%';
+  const progressPercentage = (
+    (totalPointsEarned / totalPossiblePoints) *
+    100
+  ).toFixed(0);
 
   const options = {
     body: JSON.stringify({
@@ -637,7 +643,7 @@ resumeForm.addEventListener('submit', function (event) {
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
         showToast(
           'alert-toast-container',

@@ -892,8 +892,6 @@ function populateApplicantModalList() {
   }
 }
 
-const spinner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-
 function handleRedeem(item, useBtn) {
   let defaultBtnText = useBtn.innerHTML;
 
@@ -1502,44 +1500,80 @@ function publishPost(passData, passBtn, passBtnDefaultText) {
   }
 }
 
-function deletePost(passData, passBtn, passBtnDefaultText) {
-  if (loading) {
-    showToast(
-      'alert-toast-container',
-      'Deletion is still in progress. Please wait...',
-      'danger'
-    );
-  } else {
-    loading = true;
-    passBtn.disabled = true;
-    passBtn.innerHTML = loadingIcon;
+function renewPost(item, useBtn) {
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+
+  fetchAPI(
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/renew/${item.id}`,
+    'PUT',
+    token
+  )
+    .then((data) => {
+      if (data?.message) {
+        showToast('alert-toast-container', data.message, 'danger');
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
+      } else {
+        setTimeout(() => {
+          firstCall();
+          showToast(
+            'alert-toast-container',
+            'Post renewed successfully!',
+            'success'
+          );
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
+      console.log('error', error);
+    });
+}
+
+function deletePost(item, useBtn) {
+  var confirmDelete = confirm(
+    `Are you sure you want to delete this post? deleting it will remove all associated applicants and this action cannot be undone. To proceed, click "OK" button`
+  );
+
+  if (confirmDelete) {
+    let defaultBtnText = useBtn.innerHTML;
+
+    useBtn.disabled = true;
+    useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
 
     fetchAPI(
-      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/delete/${passData.id}`,
+      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/delete/${item.id}`,
       'DELETE',
       token
     )
       .then((data) => {
         if (data?.message) {
           showToast('alert-toast-container', data.message, 'danger');
-          passBtn.disabled = false;
-          passBtn.innerHTML = passBtnDefaultText;
-          loading = false;
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
         } else {
           setTimeout(() => {
             firstCall();
-            setTimeout(() => {
-              passBtn.disabled = false;
-              passBtn.innerHTML = passBtnDefaultText;
-              loading = false;
-            }, 1000);
+            showToast(
+              'alert-toast-container',
+              'Post deleted successfully!',
+              'success'
+            );
+            useBtn.disabled = false;
+            useBtn.innerHTML = defaultBtnText;
           }, 2000);
         }
       })
       .catch((error) => {
-        passBtn.disabled = false;
-        passBtn.innerHTML = passBtnDefaultText;
-        loading = false;
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
+        console.log('error', error);
       });
   }
 }
@@ -1563,9 +1597,14 @@ function populateEmployerNotification(data) {
     spanText[0].innerHTML = `${
       item?.post_data ? item.post_data.title : 'Post no longer exists'
     }`;
-    spanText[1].innerHTML = `${item.message} - ${
-      myData.userData.id == item.user_data.id ? 'You' : 'Applicant'
-    }`;
+
+    if (item?.user_data) {
+      spanText[1].innerHTML = `${item.message} - ${
+        myData.userData.id == item.user_data.id ? 'You' : 'Applicant'
+      }`;
+    } else {
+      spanText[1].innerHTML = `${item.message} - Deleted Account`;
+    }
 
     const smallText = card.getElementsByTagName('small');
     var created_at = new Date(item.created_at);
@@ -1610,16 +1649,25 @@ function fetchMyEmployer() {
         const progressContainerTitle = document.getElementById(
           'employer-profile-progress-title'
         );
+        const profileVisibilitySummary = document.getElementById(
+          'profile-visibility-summary'
+        );
 
         let percentageProgress = '0%';
 
         if (data.company_data) {
           percentageProgress = data.company_data.progress_percentage;
+          profileVisibility = data.company_data.profile_visibility;
+
+          profileVisibilitySummary.innerHTML = data.company_data
+            .profile_visibility
+            ? 'Public'
+            : 'Private';
         }
 
-        progressContainer.style.width = percentageProgress;
-        progressContainer.innerHTML = percentageProgress;
-        progressContainerTitle.innerHTML = `Your company profile is ${percentageProgress} done`;
+        progressContainer.style.width = `${percentageProgress}%`;
+        progressContainer.innerHTML = `${percentageProgress}%`;
+        progressContainerTitle.innerHTML = `Your company profile is ${percentageProgress}% done`;
         document
           .getElementById('update-employer-profile-btn')
           .addEventListener('click', () => {
@@ -1692,7 +1740,9 @@ function fetchMyEmployer() {
             const isUnlocked = data.user_data.unlocked_profile.some(
               (unlockedProf) => unlockedProf.profile_id === applicant.profile_id
             );
-            applicant.profile_data.is_unlocked = isUnlocked ? true : false;
+            if (applicant.profile_data) {
+              applicant.profile_data.is_unlocked = isUnlocked ? true : false;
+            }
           });
 
           // use after status update (inside modal)
@@ -1717,6 +1767,7 @@ function fetchMyEmployer() {
           const totalApplicantText =
             applicantBtn.getElementsByTagName('span')[0];
           const viewBtn = divs[0].getElementsByTagName('button')[4];
+          const deleteBtn = divs[0].getElementsByTagName('button')[5];
 
           totalShareText.innerHTML = item.telegram_data.length;
           totalApplicantText.innerHTML = applicant_list.length;
@@ -1844,6 +1895,11 @@ function fetchMyEmployer() {
                   );
                 },
               },
+              delete_btn: {
+                onClick: function (item) {
+                  deletePost(item, deleteBtn);
+                },
+              },
             },
             active: {
               badge: `<span class="badge badge-pill badge-success"><i class="fa fa-check mr-1"></i>Active</span> ${
@@ -1900,20 +1956,27 @@ function fetchMyEmployer() {
                   }
                 },
               },
+              delete_btn: {
+                onClick: function (item) {
+                  deletePost(item, deleteBtn);
+                },
+              },
             },
             expired: {
               badge: `<span class="badge badge-pill badge-secondary">Expired</span>`,
               post_btn: {
-                title: item.is_published ? `Unpublish` : `Publish Now`,
-                class: item.is_published
-                  ? 'btn btn-outline-danger'
-                  : 'btn btn-success',
+                title: item.is_free ? `Renew` : `Expired`,
+                class: item.is_free ? 'btn btn-warning' : 'btn btn-secondary',
                 onClick: function (item) {
-                  showToast(
-                    'alert-toast-container',
-                    "We're sorry, but the post you're trying to publish has expired, and all job postings associated with this post will no longer be available on our channels. To post a new job opportunity, please create a new post.",
-                    'danger'
-                  );
+                  if (item.is_free) {
+                    renewPost(item, postBtn);
+                  } else {
+                    showToast(
+                      'alert-toast-container',
+                      "We're sorry, but the post you're trying to publish has expired, and all job postings associated with this post will no longer be available on our channels. To post a new job opportunity, please create a new post.",
+                      'danger'
+                    );
+                  }
                 },
               },
               edit_btn: {
@@ -1954,6 +2017,11 @@ function fetchMyEmployer() {
                       'danger'
                     );
                   }
+                },
+              },
+              delete_btn: {
+                onClick: function (item) {
+                  deletePost(item, deleteBtn);
                 },
               },
             },
@@ -2012,6 +2080,11 @@ function fetchMyEmployer() {
                   }
                 },
               },
+              delete_btn: {
+                onClick: function (item) {
+                  deletePost(item, deleteBtn);
+                },
+              },
             },
           };
 
@@ -2054,6 +2127,9 @@ function fetchMyEmployer() {
           });
           viewBtn.addEventListener('click', function () {
             handler[current_state].view_btn.onClick(item);
+          });
+          deleteBtn.addEventListener('click', function () {
+            handler[current_state].delete_btn.onClick(item);
           });
 
           const customId = divs[0].getElementsByTagName('h6');
@@ -2941,7 +3017,7 @@ function populateJobSeekerApplication(data) {
     buttonParent.appendChild(dropdownMenu);
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn-outline-danger  mr-1';
+    deleteBtn.className = 'btn btn-outline-secondary  mr-1';
     deleteBtn.type = 'button';
     deleteBtn.style.border = 'none';
     const deleteIcon = document.createElement('i');
@@ -3086,10 +3162,21 @@ function fetchMyJobSeeker() {
         const progressContainerTitle = document.getElementById(
           'job-seeker-profile-progress-title'
         );
+        const resumeVisibilitySummary = document.getElementById(
+          'resume-visibility-summary'
+        );
 
-        progressContainer.style.width = data.progress_percentage;
-        progressContainer.innerHTML = data.progress_percentage;
-        progressContainerTitle.innerHTML = `Your resume is ${data.progress_percentage} done`;
+        let percentageProgress = '0%';
+
+        if (data.profile_data) {
+          percentageProgress = data.profile_data.progress_percentage;
+          resumeVisibilitySummary.innerHTML = `${data.profile_data.contact_visibility_data.name}`;
+        }
+
+        progressContainer.style.width = `${percentageProgress}%`;
+        progressContainer.innerHTML = `${percentageProgress}%`;
+        progressContainerTitle.innerHTML = `Your resume is ${percentageProgress}% done`;
+
         document
           .getElementById('update-job-seeker-profile-btn')
           .addEventListener('click', () => {
