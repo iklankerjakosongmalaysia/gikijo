@@ -163,7 +163,6 @@ document
     submitRegisterBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    const accountType = document.getElementById('input-account-type').value;
     const username = document.getElementById('input-username-register').value;
     const email = document.getElementById('input-email-register').value;
     const password = document.getElementById('input-password-register').value;
@@ -174,7 +173,6 @@ document
     if (password == repeatPassword) {
       const options = {
         body: JSON.stringify({
-          account_type: accountType,
           username: username,
           email: email,
           password: password,
