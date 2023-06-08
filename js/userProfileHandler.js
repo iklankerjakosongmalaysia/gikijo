@@ -357,10 +357,8 @@ function fetchUserProfile() {
 
             const progressContainer =
               document.getElementById('profile-progress');
-            progressContainer.style.width =
-              data.profile_details.progress_percentage;
-            progressContainer.innerHTML =
-              data.profile_details.progress_percentage;
+            progressContainer.style.width = `${data.profile_details.progress_percentage}%`;
+            progressContainer.innerHTML = `${data.profile_details.progress_percentage}%`;
 
             const actionProfileBtnContainer = document.getElementById(
               'action-profile-button-container'

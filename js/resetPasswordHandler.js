@@ -1,26 +1,26 @@
 let token = null;
 let submitResetPasswordBtn = document.querySelector(
-  "#submit-reset-password-btn"
+  '#submit-reset-password-btn'
 );
 
 document
-  .getElementById("return-to-login-btn")
-  .addEventListener("click", function () {
-    window.location.href = "/index";
+  .getElementById('return-to-login-btn')
+  .addEventListener('click', function () {
+    window.location.href = '/index';
   });
 
 document
-  .getElementById("reset-password-form")
-  .addEventListener("submit", function (e) {
+  .getElementById('reset-password-form')
+  .addEventListener('submit', function (e) {
     e.preventDefault();
 
     submitResetPasswordBtn.disabled = true;
     submitResetPasswordBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
-    const newPasswordForm = document.getElementById("input-new-reset-password");
+    const newPasswordForm = document.getElementById('input-new-reset-password');
     const repeatNewPasswordForm = document.getElementById(
-      "input-repeat-new-reset-password"
+      'input-repeat-new-reset-password'
     );
 
     if (token !== null) {
@@ -28,9 +28,9 @@ document
       const repeatPassword = repeatNewPasswordForm.value;
 
       if (newPassword !== repeatPassword) {
-        showToast("alert-toast-container", "Passwords do not match.", "danger");
+        showToast('alert-toast-container', 'Passwords do not match.', 'danger');
         submitResetPasswordBtn.disabled = false;
-        submitResetPasswordBtn.innerHTML = "Reset Password";
+        submitResetPasswordBtn.innerHTML = 'Reset Password';
         return;
       } else {
         const options = {
@@ -42,40 +42,40 @@ document
 
         fetchAPI(
           `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/auth/password/update_password`,
-          "POST",
+          'POST',
           token,
           options
         )
           .then((data) => {
             submitResetPasswordBtn.disabled = false;
-            submitResetPasswordBtn.innerHTML = "Reset Password";
+            submitResetPasswordBtn.innerHTML = 'Reset Password';
 
             if (data === undefined) {
               showToast(
-                "alert-toast-container",
-                "Something went wrong.",
-                "danger"
+                'alert-toast-container',
+                'Something went wrong.',
+                'danger'
               );
             } else {
-              showToast("alert-toast-container", data.message, "success");
+              showToast('alert-toast-container', data.message, 'success');
             }
           })
           .catch((error) => {
             submitResetPasswordBtn.disabled = false;
-            submitResetPasswordBtn.innerHTML = "Reset Password";
-            alert(error);
+            submitResetPasswordBtn.innerHTML = 'Reset Password';
+            console.log('error', error);
           });
       }
     } else {
-      showToast("alert-toast-container", "Token not found.", "danger");
+      showToast('alert-toast-container', 'Token not found.', 'danger');
       submitResetPasswordBtn.disabled = false;
-      submitResetPasswordBtn.innerHTML = "Reset Password";
+      submitResetPasswordBtn.innerHTML = 'Reset Password';
     }
   });
 
 function verifyMagicToken() {
   const urlParams = new URLSearchParams(window.location.search);
-  const magicToken = urlParams.get("token");
+  const magicToken = urlParams.get('token');
 
   if (magicToken) {
     const options = {
@@ -85,8 +85,8 @@ function verifyMagicToken() {
     };
 
     fetchAPI(
-      "https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/auth/verify_magic_token/auth_token",
-      "POST",
+      'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/auth/verify_magic_token/auth_token',
+      'POST',
       null,
       options
     )
@@ -95,14 +95,14 @@ function verifyMagicToken() {
           token = data.authToken;
         } else {
           submitResetPasswordBtn.disabled = true;
-          showToast("alert-toast-container", data.message, "danger");
+          showToast('alert-toast-container', data.message, 'danger');
         }
       })
       .catch((error) => {
-        alert(error);
+        console.log('error', error);
       });
   } else {
-    showToast("alert-toast-container", "Token not found.", "danger");
+    showToast('alert-toast-container', 'Token not found.', 'danger');
   }
 }
 

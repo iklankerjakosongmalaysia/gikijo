@@ -198,7 +198,7 @@ document
         .catch((error) => {
           submitRegisterBtn.disabled = false;
           submitRegisterBtn.innerHTML = 'Register';
-          alert(error);
+          console.log('error', error);
         });
     } else {
       showToast(
@@ -249,7 +249,7 @@ document
       .catch((error) => {
         submitForgotPasswordBtn.disabled = false;
         submitForgotPasswordBtn.innerHTML = 'Reset Password';
-        alert(error);
+        console.log('error', error);
       });
   });
 
@@ -317,7 +317,7 @@ function initGoogleCode() {
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
         window.location.href = data.authUrl;
       }
@@ -344,7 +344,7 @@ function continueOauth(code) {
   )
     .then((data) => {
       if (data?.message) {
-        alert(data.message);
+        showToast('alert-toast-container', data.message, 'danger');
       } else {
         if (data?.authToken) {
           saveData('masterData', {
@@ -358,7 +358,7 @@ function continueOauth(code) {
             window.location.href = selectRole;
           }
         } else {
-          alert('Token not found');
+          showToast('alert-toast-container', 'Token not found', 'danger');
         }
       }
     })

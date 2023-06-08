@@ -84,24 +84,24 @@ function populateOtherPost(data) {
   }
 }
 
-const loadingIcon =
-  '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-const loadingText =
-  '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+document
+  .getElementById('update-now-resume-btn')
+  .addEventListener('click', function () {
+    location.href = 'profile?code=resume';
+  });
 
-var loading = false;
+function applyJob(item, useBtn) {
+  let defaultBtnText = useBtn.innerHTML;
 
-function applyJob(passData, passBtn, passBtnDefaultText) {
+  useBtn.disabled = true;
+  useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+
   const options = {
     body: JSON.stringify({
-      user_id: passData.user_id,
-      post_id: passData.id,
+      user_id: item.user_id,
+      post_id: item.id,
     }),
   };
-
-  loading = true;
-  passBtn.disabled = true;
-  passBtn.innerHTML = loadingIcon;
 
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/apply`,
@@ -111,25 +111,39 @@ function applyJob(passData, passBtn, passBtnDefaultText) {
   )
     .then((data) => {
       if (data?.message) {
-        showToast('alert-toast-container', data.message, 'danger');
-        passBtn.disabled = false;
-        passBtn.innerHTML = passBtnDefaultText;
-        loading = false;
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
+        if (data.payload) {
+          if (data.payload.is_resume_not_complete == true) {
+            const progressContainer = document.getElementById(
+              'resume-progress-bar'
+            );
+
+            progressContainer.style.width = `${data.payload.value}%`;
+            progressContainer.innerHTML = `${data.payload.value}%`;
+
+            document.getElementById('update-resume-message').innerHTML =
+              data.payload.message;
+            $('#updateResumeModal').modal('show');
+          }
+        } else {
+          showToast('alert-toast-container', data.message, 'danger');
+        }
       } else {
-        passBtn.disabled = false;
-        passBtn.innerHTML = `<i class="fas fa-check"></i> Applied`;
-        passBtn.setAttribute('class', 'btn btn-success');
         showToast(
           'alert-toast-container',
           'Your application has been submitted successfully.',
           'success'
         );
+        useBtn.setAttribute('class', 'btn btn-success');
+        useBtn.innerHTML = `<i class="fas fa-check"></i> Applied`;
+        useBtn.disabled = false;
       }
     })
     .catch((error) => {
-      passBtn.disabled = false;
-      passBtn.innerHTML = passBtnDefaultText;
-      loading = false;
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
+      console.log('error', error);
     });
 }
 
@@ -180,18 +194,16 @@ function populateToJobDetails(item, is_applied) {
     actionProfileBtnContainer.removeChild(actionProfileBtnContainer.firstChild);
   }
 
-  const buttonInvite = document.createElement('button');
-  buttonInvite.setAttribute('type', 'button');
-  buttonInvite.setAttribute('class', 'btn btn-outline-secondary mr-1');
-  buttonInvite.setAttribute('data-toggle', 'modal');
-  buttonInvite.setAttribute('data-target', '#inviteModal');
-  buttonInvite.setAttribute('id', 'button-send-invite');
-  buttonInvite.innerHTML = `<i class="fas fa-link"></i>`;
-  buttonInvite.addEventListener('click', function () {
+  const buttonCopyLink = document.createElement('button');
+  buttonCopyLink.setAttribute('type', 'button');
+  buttonCopyLink.setAttribute('class', 'btn btn-outline-secondary mr-1');
+  buttonCopyLink.setAttribute('id', 'button-send-invite');
+  buttonCopyLink.innerHTML = `<i class="fas fa-link"></i>`;
+  buttonCopyLink.addEventListener('click', function () {
     navigator.clipboard
       .writeText(item.internal_apply_link)
       .then(() => {
-        buttonInvite.innerHTML = 'Link copied!';
+        buttonCopyLink.innerHTML = 'Link copied!';
       })
       .catch((error) => {
         console.error('Failed to copy link: ', error);
@@ -214,7 +226,7 @@ function populateToJobDetails(item, is_applied) {
   } else {
     if (token) {
       buttonApply.addEventListener('click', () => {
-        applyJob(item, buttonApply, buttonApply.innerHTML);
+        applyJob(item, buttonApply);
       });
       if (is_applied) {
         buttonApply.innerHTML = `<i class="fas fa-check"></i> Applied`;
@@ -231,7 +243,7 @@ function populateToJobDetails(item, is_applied) {
     }
   }
 
-  actionProfileBtnContainer.appendChild(buttonInvite);
+  actionProfileBtnContainer.appendChild(buttonCopyLink);
   actionProfileBtnContainer.appendChild(buttonApply);
 }
 

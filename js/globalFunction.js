@@ -4,6 +4,8 @@
 </div> */
 // showAlert("alert-login-container", "Error!", data.message, "danger", "my-login-alert");
 
+const spinner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+
 let previousLength = 0;
 
 function handleInput(event) {
@@ -31,7 +33,11 @@ function scrollToTop() {
 
 function maskText(text) {
   if (text) {
-    return text.substring(0, 4) + '*'.repeat(text.length - 4);
+    if (text.length >= 4) {
+      return text.substring(0, 4) + '*'.repeat(text.length - 4);
+    } else {
+      return text;
+    }
   } else {
     return '-';
   }
