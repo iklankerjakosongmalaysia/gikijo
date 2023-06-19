@@ -151,10 +151,11 @@ const accountEmailForm = document.getElementById('input-email');
 accountForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  let submitAccountBtn = document.getElementById('submit-account-btn');
-  submitAccountBtn.disabled = true;
-  submitAccountBtn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  let useBtn = document.getElementById('submit-account-btn');
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   const options = {
     body: JSON.stringify({
@@ -164,7 +165,7 @@ accountForm.addEventListener('submit', function (event) {
   };
 
   fetchAPI(
-    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/edit_user`,
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/edit_account`,
     'PUT',
     token,
     options
@@ -188,12 +189,12 @@ accountForm.addEventListener('submit', function (event) {
           authToken: myData.authToken,
         });
       }
-      submitAccountBtn.disabled = false;
-      submitAccountBtn.innerHTML = 'Update';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     })
     .catch((error) => {
-      submitAccountBtn.disabled = false;
-      submitAccountBtn.innerHTML = 'Update';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     });
 });
 
@@ -220,13 +221,13 @@ function updateCompanyProfileViewButton(toggle, custom_id) {
 
   if (toggle) {
     viewCompanyProfileButton.disabled = false;
-    viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Company Profile`;
+    viewCompanyProfileButton.innerHTML = `<i class="fa fa-eye ml-1"></i> View Company Profile`;
     viewCompanyProfileButton.addEventListener('click', function (e) {
-      window.open(`company-profile?custom_id=${custom_id}`);
+      window.open(`company-profile?custom_id=${custom_id}`, '_self');
     });
   } else {
     viewCompanyProfileButton.disabled = true;
-    viewCompanyProfileButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> Update to view company profile`;
+    viewCompanyProfileButton.innerHTML = `<i class="fa fa-eye ml-1"></i> Update to view company profile`;
   }
 }
 
@@ -448,13 +449,13 @@ function updateResumeViewButton(toggle, custom_id) {
 
   if (toggle) {
     viewResumeButton.disabled = false;
-    viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> View Resume`;
+    viewResumeButton.innerHTML = `<i class="fa fa-eye ml-1"></i> View Resume`;
     viewResumeButton.addEventListener('click', function (e) {
-      window.open(`user-profile?custom_id=${custom_id}`);
+      window.open(`user-profile?custom_id=${custom_id}`, '_self');
     });
   } else {
     viewResumeButton.disabled = true;
-    viewResumeButton.innerHTML = `<i class="fa fa-external-link-alt ml-1"></i> Update to view resume`;
+    viewResumeButton.innerHTML = `<i class="fa fa-eye ml-1"></i> Update to view resume`;
   }
 }
 
@@ -1019,13 +1020,17 @@ function generateDynamicForms(
 }
 
 $(document).ready(function () {
-  var urlParams = new URLSearchParams(window.location.search);
-  var code = urlParams.get('code');
-  if (code === 'company_profile') {
-    document.querySelector('#company-profile-tab').click();
+  if (myData.userData.role_id) {
+    var urlParams = new URLSearchParams(window.location.search);
+    var code = urlParams.get('code');
+    if (code === 'company_profile') {
+      document.querySelector('#company-profile-tab').click();
+    }
+    if (code === 'resume') {
+      document.querySelector('#my-resume-tab').click();
+    }
+    firstFetch();
+  } else {
+    location.href = 'account-type';
   }
-  if (code === 'resume') {
-    document.querySelector('#my-resume-tab').click();
-  }
-  firstFetch();
 });

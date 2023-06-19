@@ -274,50 +274,56 @@ function listInvitation(passData, profileId, applicationList) {
   }
 }
 
-var unlockProfileLoading = false;
+var selectedProfileId = null;
 
-function unlockProfile(profileId, passBtn, passBtnDefaultText) {
-  if (unlockProfileLoading) {
-    showToast(
-      'alert-toast-container',
-      'Unlock profile is still in progress. Please wait...',
-      'danger'
-    );
-  } else {
-    const options = {
-      body: JSON.stringify({
-        profile_id: profileId,
-      }),
-    };
-    unlockProfileLoading = true;
-    passBtn.innerHTML = loadingText;
-    fetchAPI(
-      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/unlock/profile`,
-      'POST',
-      token,
-      options
-    )
-      .then((data) => {
-        if (data?.message) {
-          showToast('alert-toast-container', data.message, 'danger');
-          unlockProfileLoading = false;
-          passBtn.innerHTML = passBtnDefaultText;
-          $('#coinBalanceModal').modal('hide');
-        } else {
-          setTimeout(() => {
-            fetchUserProfile();
-            unlockProfileLoading = false;
-            passBtn.innerHTML = passBtnDefaultText;
-            $('#coinBalanceModal').modal('hide');
-          }, 2000);
-        }
-      })
-      .catch((error) => {
-        unlockProfileLoading = false;
-        passBtn.innerHTML = passBtnDefaultText;
-      });
+unlockProfileForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  let useBtn = document.getElementById('unlock-now');
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
+
+  if (!selectedProfileId) {
+    showToast('alert-toast-container', 'Profile Id not found.', 'danger');
+    useBtn.disabled = false;
+    useBtn.innerHTML = defaultBtnText;
+    return;
   }
-}
+
+  const options = {
+    body: JSON.stringify({
+      profile_id: selectedProfileId,
+    }),
+  };
+
+  fetchAPI(
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/unlock/profile`,
+    'POST',
+    token,
+    options
+  )
+    .then((data) => {
+      if (data?.message) {
+        showToast('alert-toast-container', data.message, 'danger');
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
+        $('#coinBalanceModal').modal('hide');
+      } else {
+        setTimeout(() => {
+          fetchUserProfile();
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
+          $('#coinBalanceModal').modal('hide');
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
+    });
+});
 
 const unlockNowButton = document.getElementById('unlock-now');
 const textCoinAmountToUnlockProfile = document.getElementById(
@@ -347,8 +353,8 @@ function fetchUserProfile() {
             data.employer_invitations
           );
 
-          textCoinAmountToUnlockProfile.innerHTML = `Spend <b>${data.coin_amount_to_unlock_profile}</b> <i class="fas fa-coins mr-1"></i> coins to unlock this profile and gain access to complete details, including contact information.`;
-          textCurrentBalance.innerHTML = `Your Current Coin Balance: <b>${data.employer_coin_balance}</b> <i class="fas fa-coins mr-1"></i>`;
+          textCoinAmountToUnlockProfile.innerHTML = `Unlock this profile and view what's hidden behind the "****" symbol for just <b>${data.coin_amount_to_unlock_profile}</b> <i class="fas fa-coins mr-1"></i> token.`;
+          textCurrentBalance.innerHTML = `Your Current Balance: <b>${data.employer_coin_balance}</b> <i class="fas fa-coins mr-1"></i> token`;
 
           if (data.profile_details !== null) {
             const emailFormTitle = document.getElementById('email-from-title');
@@ -408,6 +414,10 @@ function fetchUserProfile() {
               ? data.profile_details.full_name
               : data.profile_details.mask_full_name;
 
+            document.getElementById(
+              'invite-subtitle'
+            ).innerHTML = `Send an invitation to ${my_full_name} to apply for your job posting.`;
+
             if (data.profile_details?.gender == 'male') {
               my_gender = 'Male';
             } else if (data.profile_details?.gender == 'female') {
@@ -441,8 +451,8 @@ function fetchUserProfile() {
               ? data.profile_details.address
               : data.profile_details.mask_address;
             my_summary = data.profile_unlocked
-              ? data.profile_details.summary
-              : data.profile_details.mask_summary;
+              ? structureText(data.profile_details.summary)
+              : structureText(data.profile_details.mask_summary);
 
             textElements[0].innerHTML = `<i class="fas fa-user"></i> ${my_full_name}`;
             textElements[1].innerHTML = my_gender;
@@ -474,8 +484,8 @@ function fetchUserProfile() {
                       } ◦ ${item.start_date} - ${item.end_date}</h6>
                       <h6>${
                         data.profile_unlocked
-                          ? item.responsibility
-                          : item.mask_responsibility
+                          ? structureText(item.responsibility)
+                          : structureText(item.mask_responsibility)
                       }</h6>
               `;
 
@@ -550,8 +560,8 @@ function fetchUserProfile() {
             }
 
             my_other_information = data.profile_unlocked
-              ? data.profile_details.other_information
-              : data.profile_details.mask_other_information;
+              ? structureText(data.profile_details.other_information)
+              : structureText(data.profile_details.mask_other_information);
 
             textElements[15].innerHTML = my_other_information;
 
@@ -680,7 +690,7 @@ function fetchUserProfile() {
                   // Generate the HTML content
                   var htmlContent = '<div style="font-size: 13px;">';
 
-                  htmlContent += '<h2>My Resume</h2>';
+                  htmlContent += '<h2>User Profile</h2>';
 
                   Object.keys(profileResumeData).forEach(function (key) {
                     var data = profileResumeData[key];
@@ -691,13 +701,19 @@ function fetchUserProfile() {
                       ': </span>';
 
                     if (data.type === 'string') {
-                      htmlContent += '<span>' + (data.value || '') + '</span>';
+                      htmlContent += '<span>' + (data.value || '-') + '</span>';
                     } else if (data.type === 'array') {
                       if (Array.isArray(data.value) && data.value.length > 0) {
                         htmlContent += '<ul>';
                         data.value.forEach(function (item) {
                           if (data.title == 'Work Experience') {
-                            htmlContent += `<li>${item.job_title} at ${item.company_name} (${item.start_date} - ${item.end_date}) - ${item.responsibility}</li>`;
+                            htmlContent += `<li>${item.job_title} at ${
+                              item.company_name
+                            } (${item.start_date} - ${
+                              item.end_date
+                            })</li><li>${structureText(
+                              item.responsibility
+                            )}</li>`;
                           } else if (data.title == 'Education') {
                             htmlContent += `<li>${item.field_of_study} at ${item.institution_name} (${item.start_date} - ${item.end_date})</li>`;
                           } else {
@@ -710,7 +726,7 @@ function fetchUserProfile() {
                         htmlContent += '</ul>';
                       } else {
                         htmlContent +=
-                          '<span>No ' +
+                          '<span>Not ' +
                           data.title.toLowerCase() +
                           ' available</span>';
                       }
@@ -722,13 +738,13 @@ function fetchUserProfile() {
                   htmlContent += '</div>';
 
                   // Generate the PDF from HTML content
-                  doc.fromHTML(htmlContent, 15, 15, {
+                  doc.fromHTML(htmlContent, 15, 0, {
                     width: 170,
                   });
 
                   var fileName =
-                    profileResumeData.full_name.title.replace(/\s+/g, '_') +
-                    '_resume.pdf';
+                    profileResumeData.full_name.value.replace(/\s+/g, '_') +
+                    '_Profile.pdf';
                   doc.save(fileName);
                 } else {
                   showToast(
@@ -765,14 +781,7 @@ function fetchUserProfile() {
                 buttonUnlock.setAttribute('data-toggle', 'modal');
                 buttonUnlock.setAttribute('data-target', '#coinBalanceModal');
 
-                // unclock now button on modal open
-                unlockNowButton.addEventListener('click', () => {
-                  unlockProfile(
-                    data.profile_details.id,
-                    unlockNowButton,
-                    unlockNowButton.innerHTML
-                  );
-                });
+                selectedProfileId = data.profile_details.id;
 
                 if (
                   data.employer_coin_balance >=
@@ -784,7 +793,7 @@ function fetchUserProfile() {
                 } else {
                   unlockNowButton.setAttribute('class', 'btn btn-secondary');
                   unlockNowButton.innerHTML =
-                    '<i class="fas fa-lock mr-1"></i> Not enough coins';
+                    '<i class="fas fa-lock mr-1"></i> Unlock Now';
                 }
               }
 

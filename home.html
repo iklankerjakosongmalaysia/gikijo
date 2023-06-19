@@ -188,9 +188,10 @@
                       class="btn btn-outline-primary"
                       disabled
                     >
+                      <span class="mr-2"><i class="fas fa-coins"></i></span>
                       <span class="font-weight-bold" id="profile-unlock-balance"
                         >..</span
-                      ><span class="ml-2"><i class="fas fa-coins"></i></span>
+                      >
                     </button>
                     <button
                       type="button"
@@ -349,7 +350,7 @@
                           class="list-group list-group-flush hidden"
                           id="home-employer-notification-parent"
                           style="
-                            max-height: 273px;
+                            max-height: 300px;
                             overflow: auto;
                             padding-right: 15px;
                             margin-bottom: 0;
@@ -372,7 +373,7 @@
 
                   <!-- Content Coupon -->
                   <strong class="d-inline-block mt-4 mb-2 text-primary"
-                    >Coupon</strong
+                    >Coupons</strong
                   >
 
                   <div class="text-center p-5" id="home-coupon-list-loading">
@@ -410,7 +411,7 @@
                             ...
                           </h5>
                           <h6 class="mb-0 text-muted">..</h6>
-                          <div class="d-flex justify-content-end">
+                          <div class="d-flex justify-content-end mt-2">
                             <!-- auto populate here -->
                           </div>
                         </div>
@@ -507,16 +508,12 @@
                     aria-labelledby="exampleModalLabel"
                     aria-hidden="true"
                   >
-                    <div
-                      class="modal-dialog modal-dialog-centered"
-                      role="document"
-                    >
+                    <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="exampleModalLabel">
                             Learn More
                           </h5>
-
                           <button
                             type="button"
                             class="close"
@@ -527,33 +524,342 @@
                           </button>
                         </div>
 
-                        <div class="modal-body">
-                          <div class="alert alert-secondary" role="alert">
-                            <h4 class="alert-heading">
-                              User Guidelines and Consequences for Policy
-                              Violations
-                            </h4>
-                            <p class="text-justify">
-                              To view our Policy on Responsible Use and
-                              Violations, please click on the following link:
-                              <a href="policy-violation.txt" target="_blank"
-                                ><b>Policy</b></a
-                              >. This policy outlines guidelines for using our
-                              platform in a responsible and respectful manner,
-                              as well as the consequences for policy violations.
-                            </p>
-                          </div>
-                          <div class="alert alert-primary" role="alert">
-                            <h4 class="alert-heading">
-                              Let us know if you're having issues
-                            </h4>
-                            <p class="text-justify">
-                              If you encounter any issues or have questions
-                              about this process, please don't hesitate to send
-                              us your feedback through the settings menu. We're
-                              committed to continuously improving our platform
-                              and appreciate your input.
-                            </p>
+                        <div class="modal-body p-0">
+                          <div class="accordion" id="accordionExample">
+                            <div class="card">
+                              <div class="card-header" id="heading_1">
+                                <h2 class="mb-0">
+                                  <button
+                                    class="btn btn-link btn-block shadow-none text-left"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse_1"
+                                    aria-expanded="true"
+                                    aria-controls="collapse_1"
+                                  >
+                                    <b>How to create a new post?</b>
+                                  </button>
+                                </h2>
+                              </div>
+                              <div
+                                id="collapse_1"
+                                class="collapse show"
+                                aria-labelledby="heading_1"
+                                data-parent="#accordionExample"
+                              >
+                                <div class="card-body">
+                                  <video
+                                    class="card"
+                                    width="100%"
+                                    height="100%"
+                                    controls
+                                  >
+                                    <source
+                                      src="video/create-new-post.mov"
+                                      type="video/mp4"
+                                    />
+                                  </video>
+                                  <p class="text-justify mt-2">
+                                    Follow these easy steps to create a new
+                                    post:
+                                  </p>
+                                  <ul class="text-justify mt-2">
+                                    <li>
+                                      Click the "+ Create New Post" button.
+                                    </li>
+                                    <li>Select the "+ Create Now" tab.</li>
+                                    <li>
+                                      Fill in all the required information about
+                                      the job post.
+                                    </li>
+                                    <li>Click the "Create" button.</li>
+                                    <li>Your post is now ready!</li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card">
+                              <div class="card-header" id="heading_2">
+                                <h2 class="mb-0">
+                                  <button
+                                    class="btn btn-link btn-block shadow-none text-left collapsed"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse_2"
+                                    aria-expanded="false"
+                                    aria-controls="collapse_2"
+                                  >
+                                    <b>How to publish my post (ViewUnlock)?</b>
+                                  </button>
+                                </h2>
+                              </div>
+                              <div
+                                id="collapse_2"
+                                class="collapse"
+                                aria-labelledby="heading_2"
+                                data-parent="#accordionExample"
+                              >
+                                <div class="card-body">
+                                  <video
+                                    class="card"
+                                    width="100%"
+                                    height="100%"
+                                    controls
+                                  >
+                                    <source
+                                      src="video/publish-post.mov"
+                                      type="video/mp4"
+                                    />
+                                  </video>
+                                  <p class="text-justify mt-2">
+                                    Follow these steps to publish your post:
+                                  </p>
+                                  <ul class="text-justify mt-2">
+                                    <li>Click the "Publish Now" button.</li>
+                                    <li>
+                                      Your post is now published, and you can
+                                      view it.
+                                    </li>
+                                    <li>
+                                      Click the "View" button to see your post.
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card">
+                              <div class="card-header" id="heading_3">
+                                <h2 class="mb-0">
+                                  <button
+                                    class="btn btn-link btn-block shadow-none text-left collapsed"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse_3"
+                                    aria-expanded="false"
+                                    aria-controls="collapse_3"
+                                  >
+                                    <b
+                                      >How to share my post to Telegram
+                                      channels?</b
+                                    >
+                                  </button>
+                                </h2>
+                              </div>
+                              <div
+                                id="collapse_3"
+                                class="collapse"
+                                aria-labelledby="heading_3"
+                                data-parent="#accordionExample"
+                              >
+                                <div class="card-body">
+                                  <!-- <video class="card" width="100%" height="100%" controls>
+                                    <source
+                                      src="video/publish-post.mov"
+                                      type="video/mp4"
+                                    />
+                                  </video> -->
+                                  <p class="text-justify mt-2">
+                                    Follow these steps to share your post to our
+                                    Telegram channels:
+                                  </p>
+                                  <ul class="text-justify mt-2">
+                                    <li>Click the "Share" button.</li>
+                                    <li>
+                                      Select the channel where you want to share
+                                      your post.
+                                    </li>
+                                    <li>Click the "Share Now" button.</li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card">
+                              <div class="card-header" id="heading_4">
+                                <h2 class="mb-0">
+                                  <button
+                                    class="btn btn-link btn-block shadow-none text-left collapsed"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse_4"
+                                    aria-expanded="false"
+                                    aria-controls="collapse_4"
+                                  >
+                                    <b>How to edit my post details?</b>
+                                  </button>
+                                </h2>
+                              </div>
+                              <div
+                                id="collapse_4"
+                                class="collapse"
+                                aria-labelledby="heading_4"
+                                data-parent="#accordionExample"
+                              >
+                                <div class="card-body">
+                                  <video
+                                    class="card"
+                                    width="100%"
+                                    height="100%"
+                                    controls
+                                  >
+                                    <source
+                                      src="video/edit-post.mov"
+                                      type="video/mp4"
+                                    />
+                                  </video>
+                                  <p class="text-justify mt-2">
+                                    Follow these steps to edit your post
+                                    details:
+                                  </p>
+                                  <ul class="text-justify mt-2">
+                                    <li>Click the "Edit" button.</li>
+                                    <li>
+                                      Make the desired changes to the details of
+                                      your post.
+                                    </li>
+                                    <li>
+                                      Click the "Submit" button to save your
+                                      edits.
+                                    </li>
+                                    <li>
+                                      To view your edited post, click the "View"
+                                      button.
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card">
+                              <div class="card-header" id="heading_5">
+                                <h2 class="mb-0">
+                                  <button
+                                    class="btn btn-link btn-block shadow-none text-left collapsed"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse_5"
+                                    aria-expanded="false"
+                                    aria-controls="collapse_5"
+                                  >
+                                    <b
+                                      >How to view who has applied to my
+                                      post?</b
+                                    >
+                                  </button>
+                                </h2>
+                              </div>
+                              <div
+                                id="collapse_5"
+                                class="collapse"
+                                aria-labelledby="heading_5"
+                                data-parent="#accordionExample"
+                              >
+                                <div class="card-body">
+                                  <video
+                                    class="card"
+                                    width="100%"
+                                    height="100%"
+                                    controls
+                                  >
+                                    <source
+                                      src="video/view-applicant-profile.mov"
+                                      type="video/mp4"
+                                    />
+                                  </video>
+                                  <!-- <p class="text-justify mt-2">
+                                    Follow these steps to edit your post
+                                    details:
+                                  </p>
+                                  <ul class="text-justify mt-2">
+                                    <li>Click the "Edit" button.</li>
+                                    <li>
+                                      Make the desired changes to the details of
+                                      your post.
+                                    </li>
+                                    <li>
+                                      Click the "Submit" button to save your
+                                      edits.
+                                    </li>
+                                    <li>
+                                      To view your edited post, click the "View"
+                                      button.
+                                    </li>
+                                  </ul> -->
+                                </div>
+                              </div>
+                            </div>
+                            <!-- <div class="card">
+                              <div class="card-header" id="heading_3">
+                                <h2 class="mb-0">
+                                  <button
+                                    class="btn btn-link btn-block shadow-none text-left collapsed"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse_3"
+                                    aria-expanded="false"
+                                    aria-controls="collapse_3"
+                                  >
+                                    <b
+                                      >User Guidelines and Consequences for
+                                      Policy Violations</b
+                                    >
+                                  </button>
+                                </h2>
+                              </div>
+                              <div
+                                id="collapse_3"
+                                class="collapse"
+                                aria-labelledby="heading_3"
+                                data-parent="#accordionExample"
+                              >
+                                <div class="card-body">
+                                  <p class="text-justify">
+                                    To view our Policy on Responsible Use and
+                                    Violations, please click on the following
+                                    link:
+                                    <a
+                                      href="policy-violation.txt"
+                                      target="_blank"
+                                      ><b>Policy</b></a
+                                    >. This policy outlines guidelines for using
+                                    our platform in a responsible and respectful
+                                    manner, as well as the consequences for
+                                    policy violations.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card">
+                              <div class="card-header" id="heading_4">
+                                <h2 class="mb-0">
+                                  <button
+                                    class="btn btn-link btn-block shadow-none text-left collapsed"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse_4"
+                                    aria-expanded="false"
+                                    aria-controls="collapse_4"
+                                  >
+                                    <b>Let us know if you're having issues</b>
+                                  </button>
+                                </h2>
+                              </div>
+                              <div
+                                id="collapse_4"
+                                class="collapse"
+                                aria-labelledby="heading_4"
+                                data-parent="#accordionExample"
+                              >
+                                <div class="card-body">
+                                  <p class="text-justify">
+                                    If you encounter any issues or have
+                                    questions about this process, please don't
+                                    hesitate to send us your feedback through
+                                    the settings menu. We're committed to
+                                    continuously improving our platform and
+                                    appreciate your input.
+                                  </p>
+                                </div>
+                              </div>
+                            </div> -->
                           </div>
                         </div>
                         <div class="modal-footer">
@@ -577,10 +883,7 @@
                     aria-labelledby="exampleModalLabel"
                     aria-hidden="true"
                   >
-                    <div
-                      class="modal-dialog modal-dialog-centered"
-                      role="document"
-                    >
+                    <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="exampleModalLabel">
@@ -623,7 +926,8 @@
                                 role="tab"
                                 aria-controls="my-job-slot"
                                 aria-selected="true"
-                                >New Post</a
+                              >
+                                <i class="fas fa-plus mr-1"></i> Create Now</a
                               >
                             </li>
                           </ul>
@@ -655,52 +959,99 @@
                                   </thead>
                                   <tbody>
                                     <tr>
-                                      <th scope="row">Active Time</th>
-                                      <td>30 days (renewable)</td>
-                                      <td>
-                                        Active for a specific duration (5, 15,
-                                        or 25 days)
+                                      <th scope="row">
+                                        Active Days
+                                        <i
+                                          class="fas fa-info-circle"
+                                          data-toggle="tooltip"
+                                          data-placement="top"
+                                          title="Specific number of days during which the post must remain active in order for you to publish it on our platform."
+                                        ></i>
+                                      </th>
+                                      <td style="text-align: center">
+                                        30 days
                                       </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">Application Method</th>
-                                      <td>Apply through Gikijo website only</td>
-                                      <td>
-                                        Apply through Gikijo website or your own
-                                        external link
+                                      <td style="text-align: center">
+                                        7/14/30 days
                                       </td>
                                     </tr>
                                     <tr>
                                       <th scope="row">
-                                        Applicant Profile Access (applicable for
-                                        non-private profiles & apply through
-                                        Gikijo website only)
+                                        Renewable
+                                        <i
+                                          class="fas fa-info-circle"
+                                          data-toggle="tooltip"
+                                          data-placement="top"
+                                          title="Ability to extend the active period of the post after it has reached its expiration date."
+                                        ></i>
                                       </th>
-                                      <td>
-                                        Unlock profile based on available coins
+                                      <td style="text-align: center">
+                                        <i class="fas fa-check"></i>
                                       </td>
-                                      <td>
-                                        Applicant profiles accessible for free
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">Pricing</th>
-                                      <td>Create and post for free</td>
-                                      <td>
-                                        Payment required based on the chosen
-                                        duration
+                                      <td style="text-align: center">
+                                        <i class="fas fa-times"></i>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <th scope="row">Benefits</th>
-                                      <td>
-                                        Help to invest in profiles you find most
-                                        promising only.
+                                      <th scope="row">
+                                        Apply through Gikijo website
+                                        <i
+                                          class="fas fa-info-circle"
+                                          data-toggle="tooltip"
+                                          data-placement="top"
+                                          title="Job seekers are required to submit application through the Gikijo website only."
+                                        ></i>
+                                      </th>
+                                      <td style="text-align: center">
+                                        <i class="fas fa-check"></i>
                                       </td>
-                                      <td>
-                                        Accessible to all applicant without
-                                        requiring payment to unlock thier
-                                        profiles
+                                      <td style="text-align: center">
+                                        <i class="fas fa-check"></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">
+                                        Apply through external link
+                                        <i
+                                          class="fas fa-info-circle"
+                                          data-toggle="tooltip"
+                                          data-placement="top"
+                                          title="External link provided by employer where job seeker can submit application instead of applying directly on Gikijo website."
+                                        ></i>
+                                      </th>
+                                      <td style="text-align: center">
+                                        <i class="fas fa-times"></i>
+                                      </td>
+                                      <td style="text-align: center">
+                                        <i class="fas fa-check"></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">
+                                        Unlock to view applicant profile
+                                        <i
+                                          class="fas fa-info-circle"
+                                          data-toggle="tooltip"
+                                          data-placement="top"
+                                          title="When a job seeker applies for a job, their profile is locked, and the employer needs to unlock it in order to view the applicant's details (applicable for
+                                        non-private profiles & apply through
+                                        Gikijo website only)"
+                                        ></i>
+                                      </th>
+                                      <td style="text-align: center">
+                                        <i class="fas fa-check"></i>
+                                      </td>
+                                      <td style="text-align: center">
+                                        <i class="fas fa-times"></i>
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Publish for free</th>
+                                      <td style="text-align: center">
+                                        <i class="fas fa-check"></i>
+                                      </td>
+                                      <td style="text-align: center">
+                                        <i class="fas fa-times"></i>
                                       </td>
                                     </tr>
                                   </tbody>
@@ -1224,9 +1575,15 @@
                                 >...</span
                               >
                             </h6>
-                            <div class="col d-flex justify-content-end">
+                            <div class="d-flex justify-content-end">
                               <button class="btn btn-primary" type="button">
                                 ...
+                              </button>
+                              <button
+                                class="btn btn-primary ml-1"
+                                type="button"
+                              >
+                                View
                               </button>
                             </div>
                           </div>
@@ -1238,11 +1595,12 @@
                             <div class="d-flex justify-content-between">
                               <li></li>
                               <button
-                                class="btn btn-outline-secondary"
+                                class="btn btn-outline-primary"
                                 type="button"
                                 style="border: none"
                               >
-                                <i class="fa fa-edit ml-1"></i>
+                                <i class="fa fa-edit mr-1"></i>
+                                <small class="text-secondary">Edit</small>
                               </button>
                             </div>
                             <li></li>
@@ -1269,6 +1627,7 @@
                                 />
                                 <!-- <i class="fa fa-share"></i> -->
                                 <span class="badge badge-light">0</span>
+                                <small class="text-secondary">Share</small>
                               </button>
                               <button
                                 class="btn btn-outline-primary mr-1"
@@ -1277,22 +1636,19 @@
                               >
                                 <i class="fa fa-user"></i>
                                 <span class="badge badge-light">0</span>
+                                <small class="text-secondary">Applicants</small>
                               </button>
+                            </div>
+                            <div>
                               <button
-                                class="btn btn-outline-primary mr-1"
+                                class="btn btn-outline-secondary mr-1"
                                 type="button"
                                 style="border: none"
                               >
-                                <i class="fa fa-external-link-alt"></i>
+                                <i class="fa fa-trash mr-1"></i>
+                                <small class="text-secondary">Delete</small>
                               </button>
                             </div>
-                            <button
-                              class="btn btn-outline-secondary mr-1"
-                              type="button"
-                              style="border: none"
-                            >
-                              <i class="fa fa-trash"></i>
-                            </button>
                           </div>
                         </div>
                       </div>
@@ -1396,7 +1752,7 @@
                               class="btn btn-primary"
                               id="submit-visibility-btn"
                             >
-                              Proceed
+                              Confirm and Purchase
                             </button>
                           </div>
                         </form>
@@ -1777,7 +2133,7 @@
                           class="list-group list-group-flush hidden"
                           id="home-job-seeker-notification-parent"
                           style="
-                            max-height: 273px;
+                            max-height: 300px;
                             overflow: auto;
                             padding-right: 15px;
                             margin-bottom: 0;
@@ -2242,7 +2598,7 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">
-                          Recharge Coins
+                          Recharge Token
                         </h5>
                         <button
                           type="button"
@@ -2299,15 +2655,15 @@
                           </div>
 
                           <!-- Total -->
-                          <div
-                            class="d-flex justify-content-between align-items-center pt-3 mt-2"
+                          <!-- <div
+                            class="d-flex justify-content-end align-items-center pt-3"
                           >
-                            <h4>Total</h4>
+                            <h4 class="mr-2">Total:</h4>
                             <h4 id="topup-total-price-element">RM 0</h4>
-                          </div>
+                          </div> -->
                           <!-- Confirmation -->
-                          <div>
-                            <div class="form-check pt-3">
+                          <div class="pt-2">
+                            <div class="form-check">
                               <input
                                 class="form-check-input"
                                 type="checkbox"
@@ -2318,13 +2674,16 @@
                                 class="form-check-label"
                                 for="flexCheckChecked"
                               >
-                                By checking this box, I agree to the website's
-                                terms and conditions.
-                                <!-- Check this box to confirm
-                                that your Job Slot duration will be calculated
-                                from your first job post and will expire at the
-                                end of the selected period. After expiration,
-                                your Job Slot will no longer be usable. -->
+                                <small
+                                  >By checking this box, I confirm that I have
+                                  read, understood, and agree to abide by the
+                                  <a
+                                    href="token-purchase-usage-tnc.txt"
+                                    target="_blank"
+                                    >Terms and Conditions for Token Purchase and
+                                    Usage.</a
+                                  >
+                                </small>
                               </label>
                             </div>
                           </div>

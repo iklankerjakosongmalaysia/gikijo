@@ -75,7 +75,7 @@ function populateContent(passData) {
     listItem[3].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
 
     applyButton[0].addEventListener('click', function () {
-      window.open(item.internal_apply_link, '_blank');
+      window.open(item.internal_apply_link, '_self');
     });
 
     totalRecord.push(card);

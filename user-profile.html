@@ -292,7 +292,7 @@
               >
             </li>
           </ul>
-          <div class="tab-content" id="myTabContent">
+          <div class="tab-content text-break" id="myTabContent">
             <div
               class="tab-pane fade show active"
               id="about-me"
@@ -381,59 +381,74 @@
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Unlock Profile</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h5 id="text-coin-amount-to-unlock-profile">...</h5>
-            <h7 id="text-current-balance" class="mt-2">...</h7>
-            <br />
-            <div class="small mt-4">
-              Before unlocking, please ensure the following:
-            </div>
-            <ul>
-              <li class="small">
-                The "****" indicates hidden information. Unlock to reveal it.
-              </li>
-              <li class="small">
-                The "-" indicates that the user did not provide the information.
-              </li>
-              <li class="small">Double-check user profile details</li>
-              <li class="small">
-                Once unlocked, the action cannot be reversed.
-              </li>
-            </ul>
-            <label class="form-check-label small mt-3">
-              By clicking on the "Unlock Now" button, you are acknowledging and
-              accepting our
-              <a href="unlock-profile-tnc.txt" target="_blank"
-                >Unlock Profile Terms and Conditions.</a
+        <form id="unlockProfileForm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Unlock Profile</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
               >
-            </label>
-          </div>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h5 id="text-coin-amount-to-unlock-profile">...</h5>
+              <h7 id="text-current-balance" class="mt-2">...</h7>
+              <br />
+              <div class="small mt-4">
+                Before unlocking, please ensure the following:
+              </div>
+              <ul>
+                <li class="small">
+                  The "****" indicates hidden information. Unlock to reveal it.
+                </li>
+                <li class="small">
+                  The "-" indicates that the user did not provide the
+                  information.
+                </li>
+                <li class="small">Double-check user profile details</li>
+                <li class="small">
+                  Once unlocked, the action cannot be reversed.
+                </li>
+              </ul>
+              <!-- Confirmation -->
+              <div class="pt-2">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="flexCheckChecked"
+                    required="true"
+                  />
+                  <label class="form-check-label" for="flexCheckChecked">
+                    <small
+                      >By checking this box, I acknowledge and accept the
+                      <a href="unlock-profile-tnc.txt" target="_blank"
+                        >Unlock Profile Terms and Conditions.</a
+                      >
+                    </small>
+                  </label>
+                </div>
+              </div>
+            </div>
 
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button type="button" class="btn btn-success" id="unlock-now">
-              ...
-            </button>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-success" id="unlock-now">
+                ...
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
     <!-- Invite Modal -->
@@ -473,7 +488,7 @@
                   </div>
                 </div>
               </div>
-              <label> Send an invitation to apply for your job posting. </label>
+              <label id="invite-subtitle">...</label>
               <div class="hidden" id="posted-job-card-list-parent">
                 <div class="modal-body" id="posted-job-card-list-child">
                   <div class="row justify-content-between">
