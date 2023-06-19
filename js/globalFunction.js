@@ -4,7 +4,12 @@
 </div> */
 // showAlert("alert-login-container", "Error!", data.message, "danger", "my-login-alert");
 
-const spinner = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
+function spinnerLoading(currentText) {
+  return `<div class="d-flex" style="justify-content: center; align-items: center">
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+            ${currentText}
+          </div>`;
+}
 
 let previousLength = 0;
 
@@ -40,6 +45,14 @@ function maskText(text) {
     }
   } else {
     return '-';
+  }
+}
+
+function structureText(text) {
+  if (text) {
+    return `<p>${text.replace(/\n/g, '<p>')}</p>`;
+  } else {
+    return '';
   }
 }
 

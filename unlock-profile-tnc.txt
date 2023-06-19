@@ -2,14 +2,14 @@ Terms and Conditions for Unlocking Candidate Profiles
 
 By unlocking a candidate profile on our Gikijo website, you agree to the following terms and conditions:
 
-Coin Requirement: To unlock a candidate profile, you must spend the specified number of coins as indicated on the website.
-Coin Deduction: The corresponding number of coins will be deducted from your account upon unlocking a candidate profile.
-Profile Access: Once unlocked, you will have access to the candidate's complete profile information, including contact details and resume, unless the candidate sets their profile to private.
+Token Requirement: To unlock a candidate profile, you must spend the specified number of Tokens as indicated on the website.
+Token Deduction: The corresponding number of Tokens will be deducted from your account upon unlocking a candidate profile.
+Profile Access: Once unlocked, you will have to view what's hidden behind the "****" symbol unless the candidate sets their profile to private.
 Private Profiles: Some candidates may choose to set their profiles to private, which restricts access to their information. In such cases, unlocking the profile will not grant you access to the candidate's private details.
 Non-transferability: Unlocked candidate profiles are for your exclusive use only and should not be shared or transferred to any other party.
 Prohibited Use: Unlocked candidate profiles should be used solely for legitimate recruitment purposes related to your business. Any unauthorized use, including spamming or unsolicited communication, is strictly prohibited.
 Profile Privacy: As the user unlocking the profile, you are responsible for maintaining the privacy and confidentiality of the candidate's information and should comply with all applicable data protection regulations.
-Refund Policy: Coin deductions for unlocking candidate profiles are non-refundable. Please review the candidate profiles carefully before unlocking.
+Refund Policy: Token deductions for unlocking candidate profiles are non-refundable. Please review the candidate profiles carefully before unlocking.
 Profile Availability: The availability of candidate profiles for unlocking may vary and is subject to change without prior notice. We do not guarantee the availability of specific candidates.
 Account Suspension: Violation of these terms and conditions may result in the suspension or termination of your account without refund.
 Modification of Terms: We reserve the right to modify these terms and conditions at any time. Any changes will be communicated to you through the website or other appropriate means.

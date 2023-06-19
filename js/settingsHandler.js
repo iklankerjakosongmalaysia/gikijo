@@ -281,7 +281,7 @@ deleteProfileForm.addEventListener('submit', function (event) {
   let defaultBtnText = useBtn.innerHTML;
 
   useBtn.disabled = true;
-  useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   const options = {
     body: JSON.stringify({
@@ -317,4 +317,11 @@ deleteProfileForm.addEventListener('submit', function (event) {
       useBtn.disabled = false;
       useBtn.innerHTML = defaultBtnText;
     });
+});
+
+$(document).ready(function () {
+  if (myData.userData.role_id) {
+  } else {
+    location.href = 'account-type';
+  }
 });

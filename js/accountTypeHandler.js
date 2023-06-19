@@ -64,13 +64,12 @@ function handlingAccountType(
   accountTye,
   companyName = '',
   fullName = '',
-  submitBtn
+  useBtn
 ) {
-  var btnResetTitle = '';
+  let defaultBtnText = useBtn.innerHTML;
 
-  submitBtn.disabled = true;
-  submitBtn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   let options = {};
 
@@ -82,8 +81,6 @@ function handlingAccountType(
         company_name: companyName,
       }),
     };
-
-    btnResetTitle = `I'm an Employer`;
   } else {
     options = {
       body: JSON.stringify({
@@ -91,14 +88,14 @@ function handlingAccountType(
         account_type: 3,
         full_name: fullName,
         mask_full_name: maskText(fullName),
+        email: myData.userData.email,
+        mask_email: maskText(myData.userData.email),
       }),
     };
-
-    btnResetTitle = `I'm a Job Seeker`;
   }
 
   fetchAPI(
-    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/edit_user`,
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/user/account_type`,
     'PUT',
     token,
     options
@@ -120,11 +117,11 @@ function handlingAccountType(
           location.href = 'home';
         }
       }
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = btnResetTitle;
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     })
     .catch((error) => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = btnResetTitle;
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     });
 }

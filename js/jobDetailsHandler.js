@@ -94,7 +94,7 @@ function applyJob(item, useBtn) {
   let defaultBtnText = useBtn.innerHTML;
 
   useBtn.disabled = true;
-  useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   const options = {
     body: JSON.stringify({
@@ -238,7 +238,7 @@ function populateToJobDetails(item, is_applied) {
     } else {
       buttonApply.innerHTML = `Login to Apply`;
       buttonApply.addEventListener('click', () => {
-        window.open('index?postJob=true', '_blank');
+        window.open('index?postJob=true', '_self');
       });
     }
   }

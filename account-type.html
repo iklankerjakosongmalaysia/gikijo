@@ -120,6 +120,23 @@
                   class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
                 >
+                  <a class="dropdown-item" href="home">
+                    <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Home
+                  </a>
+                  <a class="dropdown-item" href="profile">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                  </a>
+                  <a class="dropdown-item" href="job-list">
+                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Job List
+                  </a>
+                  <a class="dropdown-item" href="settings">
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Settings
+                  </a>
+                  <div class="dropdown-divider"></div>
                   <a
                     class="dropdown-item"
                     data-toggle="modal"
@@ -140,43 +157,12 @@
             <!-- Your content -->
 
             <div class="container mt-5">
-              <h2 class="mb-5 text-primary">Choose Your Account Type</h2>
+              <h2 class="mb-0 text-primary">Choose Your Account Type</h2>
+              <h6 class="mb-4 text-secondary">
+                Select your preferred option carefully, as it can't be changed
+                later.
+              </h6>
               <div class="row">
-                <div class="col-md-6 mb-4">
-                  <div class="card shadow-sm h-100">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="mb-3">
-                        <i class="fas fa-building mr-2"></i>Employer Account
-                      </h5>
-                      <p class="card-text">
-                        You can easily post job openings and manage applications
-                        from one place.
-                      </p>
-                      <form id="employer-form" class="mt-2">
-                        <div class="form-group">
-                          <label>Company Name</label>
-                          <input
-                            maxlength="80"
-                            type="text"
-                            class="form-control"
-                            id="input-company-name"
-                            placeholder=""
-                            required
-                          />
-                        </div>
-                        <div class="mt-auto">
-                          <button
-                            type="submit"
-                            class="btn btn-primary btn-lg btn-block"
-                            id="submit-employer-btn"
-                          >
-                            I'm an Employer
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
                 <div class="col-md-6 mb-4">
                   <div class="card shadow-sm h-100">
                     <div class="card-body d-flex flex-column">
@@ -185,7 +171,7 @@
                       </h5>
                       <p class="card-text">
                         Find your dream job with ease. Search for job openings
-                        and submit applications quickly and effortlessly.
+                        and submit applications quickly.
                       </p>
                       <form id="job-seeker-form" class="mt-2">
                         <div class="form-group">
@@ -206,6 +192,41 @@
                             id="submit-job-seeker-btn"
                           >
                             I'm a Job Seeker
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                  <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="mb-3">
+                        <i class="fas fa-building mr-2"></i>Employer Account
+                      </h5>
+                      <p class="card-text">
+                        Simplify your hiring process. Easily post job openings
+                        and manage applications from one place.
+                      </p>
+                      <form id="employer-form" class="mt-2">
+                        <div class="form-group">
+                          <label>Company Name</label>
+                          <input
+                            maxlength="80"
+                            type="text"
+                            class="form-control"
+                            id="input-company-name"
+                            placeholder=""
+                            required
+                          />
+                        </div>
+                        <div class="mt-auto">
+                          <button
+                            type="submit"
+                            class="btn btn-primary btn-lg btn-block"
+                            id="submit-employer-btn"
+                          >
+                            I'm an Employer
                           </button>
                         </div>
                       </form>

@@ -29,11 +29,11 @@ $(function () {
 const typeName = {
   type_1: {
     id: 'type_1',
-    name: 'Post Now, Unlock Later',
+    name: 'ViewUnlock',
   },
   type_2: {
     id: 'type_2',
-    name: 'Your Time, Your Applicants',
+    name: 'DirectView',
   },
 };
 
@@ -246,14 +246,14 @@ for (let i = 0; i < tabs.length; i++) {
   `;
 }
 
+// const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+document.getElementById('myTab').innerHTML = tabHTML;
+
 document
   .getElementById('jump-to-create-job-slot-tab-button')
   .addEventListener('click', () => {
     document.querySelector('#my-job-slot-tab').click();
   });
-
-// const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-document.getElementById('myTab').innerHTML = tabHTML;
 
 document
   .getElementById('create-go-to-update-company-name')
@@ -335,11 +335,11 @@ function populateCoin(allData = []) {
       }
 
       divs[0].addEventListener('click', function () {
-        var totalPriceElement = document.getElementById(
-          'topup-total-price-element'
-        );
-        coinPrice = parseInt(item.metadata.price, 10);
-        totalPriceElement.innerHTML = `RM ${coinPrice}`;
+        // var totalPriceElement = document.getElementById(
+        //   'topup-total-price-element'
+        // );
+        // coinPrice = parseInt(item.metadata.price, 10);
+        // totalPriceElement.innerHTML = `RM ${coinPrice}`;
         selectedTopupItem = item;
         populateCoin(coinListData); // update background color
       });
@@ -390,10 +390,11 @@ function fetchCoinList() {
 buyTopupForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  let submitPayTopupBtn = document.getElementById('submit-topup-btn');
-  submitPayTopupBtn.disabled = true;
-  submitPayTopupBtn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  let useBtn = document.getElementById('submit-topup-btn');
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   if (selectedTopupItem == null) {
     showToast(
@@ -401,8 +402,8 @@ buyTopupForm.addEventListener('submit', function (event) {
       'In order to continue, please pick one of the product items',
       'danger'
     );
-    submitPayTopupBtn.disabled = false;
-    submitPayTopupBtn.innerHTML = 'Continue to payment';
+    useBtn.disabled = false;
+    useBtn.innerHTML = defaultBtnText;
     return;
   }
 
@@ -445,12 +446,12 @@ buyTopupForm.addEventListener('submit', function (event) {
           );
         }
       }
-      submitPayTopupBtn.disabled = false;
-      submitPayTopupBtn.innerHTML = 'Continue to payment';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     })
     .catch((error) => {
-      submitPayTopupBtn.disabled = false;
-      submitPayTopupBtn.innerHTML = 'Continue to payment';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     });
 });
 
@@ -583,7 +584,7 @@ function populateChannel() {
     channelShareButton.type = 'button';
     channelShareButton.style.border = 'none';
     const channelShareIcon = document.createElement('i');
-    channelShareIcon.className = 'fa fa-external-link-alt';
+    channelShareIcon.className = 'fa fa-eye';
     channelShareIcon.addEventListener('click', () => {});
     channelShareButton.appendChild(channelShareIcon);
     channelShareButton.addEventListener('click', function () {
@@ -646,9 +647,11 @@ function populateChannel() {
 channelForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  submitChannelBtn.disabled = true;
-  submitChannelBtn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  let defaultBtnText = submitChannelBtn.innerHTML;
+  let useBtn = submitChannelBtn;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   if (selectedChannelItem?.id == null) {
     showToast(
@@ -656,8 +659,8 @@ channelForm.addEventListener('submit', function (event) {
       'Please select a channel in order to proceed.',
       'danger'
     );
-    submitChannelBtn.disabled = false;
-    submitChannelBtn.innerHTML = 'Share Now';
+    useBtn.disabled = false;
+    useBtn.innerHTML = defaultBtnText;
     return;
   }
 
@@ -678,8 +681,8 @@ channelForm.addEventListener('submit', function (event) {
       if (data?.message) {
         // delay of 2 seconds before calling fetchMyEmployer
         setTimeout(() => {
-          submitChannelBtn.disabled = false;
-          submitChannelBtn.innerHTML = 'Share Now';
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
           showToast('alert-toast-container', data.message, 'danger');
         }, 2000);
       } else {
@@ -688,14 +691,14 @@ channelForm.addEventListener('submit', function (event) {
           fetchMyEmployer();
           $('#channelJobModal').modal('hide');
           showToast('alert-toast-container', data.status_message, 'success');
-          submitChannelBtn.disabled = false;
-          submitChannelBtn.innerHTML = 'Share Now';
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
         }, 2000);
       }
     })
     .catch((error) => {
-      submitChannelBtn.disabled = false;
-      submitChannelBtn.innerHTML = 'Share Now';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     });
 });
 
@@ -738,7 +741,8 @@ function populateApplicantModalList() {
       elementH7.addEventListener('click', function () {
         if (item.profile_data) {
           window.open(
-            `user-profile.html?custom_id=${item.profile_data.custom_id}`
+            `user-profile.html?custom_id=${item.profile_data.custom_id}`,
+            '_blank'
           );
         } else {
           showToast(
@@ -829,7 +833,8 @@ function populateApplicantModalList() {
     viewBtn.addEventListener('click', () => {
       if (item.profile_data) {
         window.open(
-          `user-profile.html?custom_id=${item.profile_data.custom_id}`
+          `user-profile.html?custom_id=${item.profile_data.custom_id}`,
+          '_blank'
         );
       } else {
         showToast(
@@ -896,7 +901,7 @@ function handleRedeem(item, useBtn) {
   let defaultBtnText = useBtn.innerHTML;
 
   useBtn.disabled = true;
-  useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   const options = {
     body: JSON.stringify({
@@ -975,32 +980,32 @@ function populateCouponDashboard(coupon_list, coupon_usage) {
     useBtn.setAttribute('type', 'button');
 
     if (item.type == 'coin') {
-      title[0].innerHTML = `Free ${item.amount} coins`;
+      title[0].innerHTML = `Free ${item.amount} tokens`;
       description[0].innerHTML = `${item.name}`;
 
       if (item.used == true) {
         useBtn.classList.add('btn', 'btn-outline-secondary');
-        useBtn.textContent = 'Claimed';
+        useBtn.innerHTML = 'Claimed';
         useBtn.addEventListener('click', function () {
           handleRedeem(item, useBtn);
         });
       } else {
         useBtn.classList.add('btn', 'btn-outline-primary');
-        useBtn.textContent = 'Claim Now';
+        useBtn.innerHTML = 'Claim Now';
         useBtn.addEventListener('click', function () {
           handleRedeem(item, useBtn);
         });
       }
     } else {
       title[0].innerHTML = `${item.amount}% 0ff`;
-      description[0].innerHTML = `${item.name} Code: ${item.code}`;
+      description[0].innerHTML = `${item.name}`;
       useBtn.classList.add('btn', 'btn-outline-primary');
-      useBtn.textContent = 'Copy Code';
+      useBtn.innerHTML = '<i class="fa fa-copy mr-1"></i> Copy Code';
       useBtn.addEventListener('click', function () {
         navigator.clipboard
           .writeText(item.code)
           .then(() => {
-            useBtn.innerHTML = 'Code copied!';
+            useBtn.innerHTML = '<i class="fa fa-check mr-1"></i> Copied!';
           })
           .catch((error) => {
             console.error('Failed to copy link: ', error);
@@ -1090,10 +1095,11 @@ function populateChannelDashboard(data) {
 visibilityForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  let submitPayVisibilityBtn = document.getElementById('submit-visibility-btn');
-  submitPayVisibilityBtn.disabled = true;
-  submitPayVisibilityBtn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  let useBtn = document.getElementById('submit-visibility-btn');
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   if (selectedVisibilityItem == null) {
     showToast(
@@ -1101,8 +1107,8 @@ visibilityForm.addEventListener('submit', function (event) {
       'In order to continue, please pick one of the visibility items',
       'danger'
     );
-    submitPayVisibilityBtn.disabled = false;
-    submitPayVisibilityBtn.innerHTML = 'Proceed';
+    useBtn.disabled = false;
+    useBtn.innerHTML = defaultBtnText;
     return;
   }
 
@@ -1122,13 +1128,13 @@ visibilityForm.addEventListener('submit', function (event) {
     .then((data) => {
       if (data?.message) {
         showToast('alert-toast-container', data.message, 'danger');
-        submitPayVisibilityBtn.disabled = false;
-        submitPayVisibilityBtn.innerHTML = 'Proceed';
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
       } else {
         firstCall();
         setTimeout(() => {
-          submitPayVisibilityBtn.disabled = false;
-          submitPayVisibilityBtn.innerHTML = 'Proceed';
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
           showToast(
             'alert-toast-container',
             'Visibility added successfully',
@@ -1139,8 +1145,8 @@ visibilityForm.addEventListener('submit', function (event) {
       }
     })
     .catch((error) => {
-      submitPayVisibilityBtn.disabled = false;
-      submitPayVisibilityBtn.innerHTML = 'Proceed';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     });
 });
 
@@ -1204,11 +1210,11 @@ document
   .addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let submitEditJobBtn = document.getElementById('submit-edit-job-btn');
+    let useBtn = document.getElementById('submit-edit-job-btn');
+    let defaultBtnText = useBtn.innerHTML;
 
-    submitEditJobBtn.disabled = true;
-    submitEditJobBtn.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+    useBtn.disabled = true;
+    useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
     if (token) {
       if (min_salary_edit.value) {
@@ -1220,8 +1226,8 @@ document
             'Maximum salary should be greater or equal to minimum salary',
             'danger'
           );
-          submitEditJobBtn.disabled = false;
-          submitEditJobBtn.innerHTML = 'Submit';
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
           return;
         }
       }
@@ -1252,20 +1258,22 @@ document
         .then((data) => {
           if (data?.message) {
             showToast('alert-toast-container', data.message, 'danger');
+            useBtn.disabled = false;
+            useBtn.innerHTML = defaultBtnText;
           } else {
             // delay of 2 seconds before calling fetchMyEmployer
             setTimeout(() => {
               fetchMyEmployer();
               $('#editJobModal').modal('hide');
-              submitEditJobBtn.disabled = false;
-              submitEditJobBtn.innerHTML = 'Submit';
+              useBtn.disabled = false;
+              useBtn.innerHTML = defaultBtnText;
             }, 2000);
           }
         })
         .catch((error) => {
           $('#addJobModal').modal('hide');
-          submitEditJobBtn.disabled = false;
-          submitEditJobBtn.innerHTML = 'Submit';
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
         });
     }
   });
@@ -1452,59 +1460,48 @@ function editForm(item) {
 
 var loading = false;
 
-function publishPost(passData, passBtn, passBtnDefaultText) {
-  if (loading) {
-    showToast(
-      'alert-toast-container',
-      'Posting is still in progress. Please wait...',
-      'danger'
-    );
-  } else {
-    loading = true;
-    passBtn.disabled = true;
-    passBtn.innerHTML = loadingIcon;
+function publishPost(passData, useBtn) {
+  let defaultBtnText = useBtn.innerHTML;
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
-    const options = {
-      body: JSON.stringify({
-        custom_id: passData.custom_id,
-      }),
-    };
+  const options = {
+    body: JSON.stringify({
+      custom_id: passData.custom_id,
+    }),
+  };
 
-    fetchAPI(
-      `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/publish`,
-      'PUT',
-      token,
-      options
-    )
-      .then((data) => {
-        if (data?.message) {
-          showToast('alert-toast-container', data.message, 'danger');
-          passBtn.disabled = false;
-          passBtn.innerHTML = passBtnDefaultText;
-          loading = false;
-        } else {
-          setTimeout(() => {
-            firstCall();
-            passBtn.disabled = false;
-            passBtn.innerHTML = passBtnDefaultText;
-            loading = false;
-            showToast('alert-toast-container', data.custom_message, 'success');
-          }, 2000);
-        }
-      })
-      .catch((error) => {
-        passBtn.disabled = false;
-        passBtn.innerHTML = passBtnDefaultText;
-        loading = false;
-      });
-  }
+  fetchAPI(
+    `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/publish`,
+    'PUT',
+    token,
+    options
+  )
+    .then((data) => {
+      if (data?.message) {
+        showToast('alert-toast-container', data.message, 'danger');
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
+      } else {
+        setTimeout(() => {
+          firstCall();
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
+          showToast('alert-toast-container', data.custom_message, 'success');
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      useBtn.disabled = false;
+      useBtn.innerHTML = passBtnDefaultText;
+    });
 }
 
 function renewPost(item, useBtn) {
   let defaultBtnText = useBtn.innerHTML;
 
   useBtn.disabled = true;
-  useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   fetchAPI(
     `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/renew/${item.id}`,
@@ -1545,7 +1542,7 @@ function deletePost(item, useBtn) {
     let defaultBtnText = useBtn.innerHTML;
 
     useBtn.disabled = true;
-    useBtn.innerHTML = `${spinner} ${useBtn.innerHTML}`;
+    useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
     fetchAPI(
       `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/delete/${item.id}`,
@@ -1594,17 +1591,18 @@ function populateEmployerNotification(data) {
 
     const spanText = card.getElementsByTagName('span');
 
-    spanText[0].innerHTML = `${
-      item?.post_data ? item.post_data.title : 'Post no longer exists'
-    }`;
+    spanText[0].innerHTML = `<b>${
+      item?.post_data
+        ? item.post_data.title.length > 20
+          ? item.post_data.title.slice(0, 20) + '...'
+          : item.post_data.title
+        : 'Post no longer exists'
+    }</b>`;
 
-    if (item?.user_data) {
-      spanText[1].innerHTML = `${item.message} - ${
-        myData.userData.id == item.user_data.id ? 'You' : 'Applicant'
-      }`;
-    } else {
-      spanText[1].innerHTML = `${item.message} - Deleted Account`;
-    }
+    spanText[0].addEventListener('click', function () {
+      document.querySelector('#my-job-tab').click();
+    });
+    spanText[1].innerHTML = `${item.message}`;
 
     const smallText = card.getElementsByTagName('small');
     var created_at = new Date(item.created_at);
@@ -1673,21 +1671,6 @@ function fetchMyEmployer() {
           .addEventListener('click', () => {
             location.href = 'profile?code=company_profile';
           });
-
-        // var job_list = data.job_list;
-        // var post_list = data.post_list;
-
-        // post_list.map((item1) => {
-        //   job_list.map((item2, index) => {
-        //     if (item1.job_id == item2.id) {
-        //       if (job_list[index].postData) {
-        //         job_list[index].postData.push(item1);
-        //       } else {
-        //         job_list[index].postData = [item1];
-        //       }
-        //     }
-        //   });
-        // });
 
         if (data.company_data !== null) {
           company_data = data.company_data;
@@ -1760,13 +1743,13 @@ function fetchMyEmployer() {
           const listItem = divs[0].getElementsByTagName('li');
 
           const postBtn = divs[0].getElementsByTagName('button')[0];
-          const editBtn = divs[0].getElementsByTagName('button')[1];
-          const shareBtn = divs[0].getElementsByTagName('button')[2];
+          const viewBtn = divs[0].getElementsByTagName('button')[1];
+          const editBtn = divs[0].getElementsByTagName('button')[2];
+          const shareBtn = divs[0].getElementsByTagName('button')[3];
           const totalShareText = shareBtn.getElementsByTagName('span')[0];
-          const applicantBtn = divs[0].getElementsByTagName('button')[3];
+          const applicantBtn = divs[0].getElementsByTagName('button')[4];
           const totalApplicantText =
             applicantBtn.getElementsByTagName('span')[0];
-          const viewBtn = divs[0].getElementsByTagName('button')[4];
           const deleteBtn = divs[0].getElementsByTagName('button')[5];
 
           totalShareText.innerHTML = item.telegram_data.length;
@@ -1784,7 +1767,7 @@ function fetchMyEmployer() {
 
           if (item.is_free == true) {
             is_coin_based = true;
-            slotTypeIcon = `Post Type: "${typeName.type_1.name}"`;
+            slotTypeIcon = `${typeName.type_1.name}`;
             activeDateString =
               item.timestamp_active &&
               new Date(item.timestamp_active).toLocaleString('en-US', format);
@@ -1792,7 +1775,7 @@ function fetchMyEmployer() {
               item.timestamp_expired &&
               new Date(item.timestamp_expired).toLocaleString('en-US', format);
           } else {
-            slotTypeIcon = `Post Type: "${typeName.type_2.name}"`;
+            slotTypeIcon = `${typeName.type_2.name}`;
             activeDateString =
               item.timestamp_active &&
               new Date(item.timestamp_active).toLocaleString('en-US', format);
@@ -1848,7 +1831,7 @@ function fetchMyEmployer() {
               badge: `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Not Active</span> ${
                 item.is_published
                   ? `<span class="badge badge-pill badge-success"><i class="fa fa-check mr-1"></i>Published</span>`
-                  : `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Unpublish</span>`
+                  : `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Not Published</span>`
               }`,
               post_btn: {
                 title: 'Ready to publish? Activate now',
@@ -1894,6 +1877,7 @@ function fetchMyEmployer() {
                     'danger'
                   );
                 },
+                display: 'none',
               },
               delete_btn: {
                 onClick: function (item) {
@@ -1905,7 +1889,7 @@ function fetchMyEmployer() {
               badge: `<span class="badge badge-pill badge-success"><i class="fa fa-check mr-1"></i>Active</span> ${
                 item.is_published
                   ? `<span class="badge badge-pill badge-success"><i class="fa fa-check mr-1"></i>Published</span>`
-                  : `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Unpublish</span>`
+                  : `<span class="badge badge-pill badge-secondary"><i class="fa fa-exclamation-triangle mr-1"></i>Not Published</span>`
               }`,
               post_btn: {
                 title: item.is_published ? `Unpublish` : `Publish Now`,
@@ -1913,7 +1897,7 @@ function fetchMyEmployer() {
                   ? 'btn btn-outline-secondary'
                   : 'btn btn-primary',
                 onClick: function (item) {
-                  publishPost(item, postBtn, postBtn.innerHTML);
+                  publishPost(item, postBtn);
                 },
               },
               edit_btn: {
@@ -1946,15 +1930,16 @@ function fetchMyEmployer() {
               view_btn: {
                 onClick: function (item) {
                   if (item.is_published) {
-                    window.open(item.internal_apply_link);
+                    window.open(item.internal_apply_link, '_blank');
                   } else {
                     showToast(
                       'alert-toast-container',
-                      'The post is currently unpublished. To view it, kindly proceed with the publishing process.',
+                      'The post is currently not published. To view it, kindly proceed with the publishing process.',
                       'danger'
                     );
                   }
                 },
+                display: item.is_published ? 'block' : 'none',
               },
               delete_btn: {
                 onClick: function (item) {
@@ -2009,15 +1994,16 @@ function fetchMyEmployer() {
               view_btn: {
                 onClick: function (item) {
                   if (item.is_published) {
-                    window.open(item.internal_apply_link);
+                    window.open(item.internal_apply_link, '_blank');
                   } else {
                     showToast(
                       'alert-toast-container',
-                      'The post is currently unpublished. To view it, kindly proceed with the publishing process.',
+                      'The post is currently not published. To view it, kindly proceed with the publishing process.',
                       'danger'
                     );
                   }
                 },
+                display: 'none',
               },
               delete_btn: {
                 onClick: function (item) {
@@ -2070,15 +2056,16 @@ function fetchMyEmployer() {
               view_btn: {
                 onClick: function (item) {
                   if (item.is_published) {
-                    window.open(item.internal_apply_link);
+                    window.open(item.internal_apply_link, '_blank');
                   } else {
                     showToast(
                       'alert-toast-container',
-                      'The post is currently unpublished. To view it, kindly proceed with the publishing process.',
+                      'The post is currently not published. To view it, kindly proceed with the publishing process.',
                       'danger'
                     );
                   }
                 },
+                display: 'none',
               },
               delete_btn: {
                 onClick: function (item) {
@@ -2128,6 +2115,8 @@ function fetchMyEmployer() {
           viewBtn.addEventListener('click', function () {
             handler[current_state].view_btn.onClick(item);
           });
+          viewBtn.style.display = handler[current_state].view_btn.display;
+
           deleteBtn.addEventListener('click', function () {
             handler[current_state].delete_btn.onClick(item);
           });
@@ -2237,11 +2226,11 @@ document
     e.preventDefault();
 
     if (company_data) {
-      let submitCreateJobBtn = document.getElementById('submit-create-job-btn');
+      let useBtn = document.getElementById('submit-create-job-btn');
+      let defaultBtnText = useBtn.innerHTML;
 
-      submitCreateJobBtn.disabled = true;
-      submitCreateJobBtn.innerHTML =
-        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+      useBtn.disabled = true;
+      useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
       if (token) {
         if (min_salary_create.value) {
@@ -2253,8 +2242,8 @@ document
               'Maximum salary should be greater or equal to minimum salary',
               'danger'
             );
-            submitCreateJobBtn.disabled = false;
-            submitCreateJobBtn.innerHTML = 'Create';
+            useBtn.disabled = false;
+            useBtn.innerHTML = defaultBtnText;
             return;
           }
         }
@@ -2288,22 +2277,22 @@ document
           .then((data) => {
             if (data?.message) {
               showToast('alert-toast-container', data.message, 'danger');
-              submitCreateJobBtn.disabled = false;
-              submitCreateJobBtn.innerHTML = 'Create';
+              useBtn.disabled = false;
+              useBtn.innerHTML = defaultBtnText;
             } else {
               // delay of 2 seconds before calling fetchMyEmployer
               setTimeout(() => {
                 fetchMyEmployer();
                 $('#addJobModal').modal('hide');
-                submitCreateJobBtn.disabled = false;
-                submitCreateJobBtn.innerHTML = 'Create';
+                useBtn.disabled = false;
+                useBtn.innerHTML = defaultBtnText;
               }, 2000);
             }
           })
           .catch((error) => {
             $('#addJobModal').modal('hide');
-            submitCreateJobBtn.disabled = false;
-            submitCreateJobBtn.innerHTML = 'Create';
+            useBtn.disabled = false;
+            useBtn.innerHTML = defaultBtnText;
           });
       }
     } else {
@@ -2822,14 +2811,17 @@ function populateJobSeekerNotification(data) {
     const spanText = card.getElementsByTagName('span');
 
     spanText[0].innerHTML = `<b>${
-      item?.post_data ? item.post_data.title : 'Post no longer exists'
+      item?.post_data
+        ? item.post_data.title.length > 20
+          ? item.post_data.title.slice(0, 20) + '...'
+          : item.post_data.title
+        : 'Post no longer exists'
     }</b>`;
+
     spanText[0].addEventListener('click', function () {
       document.querySelector('#my-application-job-seeker-tab').click();
     });
-    spanText[1].innerHTML = `${item.message} - ${
-      myData.userData.id == item.user_data.id ? 'You' : item.user_data.username
-    }`;
+    spanText[1].innerHTML = `${item.message}`;
 
     const smallText = card.getElementsByTagName('small');
     var created_at = new Date(item.created_at);
@@ -3202,8 +3194,6 @@ function firstCall() {
   }
 }
 
-firstCall();
-
 let tabSwitchCounter = 0;
 function handleVisibilityChange() {
   if (document.visibilityState === 'visible') {
@@ -3218,3 +3208,11 @@ function handleVisibilityChange() {
 }
 // Listen for visibility change events (tab switch)
 document.addEventListener('visibilitychange', handleVisibilityChange);
+
+$(document).ready(function () {
+  if (myData.userData.role_id) {
+    firstCall();
+  } else {
+    location.href = 'account-type';
+  }
+});
