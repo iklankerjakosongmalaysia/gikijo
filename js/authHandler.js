@@ -97,11 +97,11 @@ document
 document.getElementById('login-form').addEventListener('submit', function (e) {
   e.preventDefault();
 
-  let submitLoginBtn = document.querySelector('#submit-btn-login');
+  let useBtn = document.querySelector('#submit-btn-login');
+  let defaultBtnText = useBtn.innerHTML;
 
-  submitLoginBtn.disabled = true;
-  submitLoginBtn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -122,8 +122,8 @@ document.getElementById('login-form').addEventListener('submit', function (e) {
     .then((data) => {
       const hasKey = Object.keys(data).includes('authToken');
       if (hasKey === false) {
-        submitLoginBtn.disabled = false;
-        submitLoginBtn.innerHTML = 'Login';
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
         if (data.payload === 700) {
           $('#startNowModal').modal('hide');
           $('#reverifyModal').modal('show');
@@ -136,8 +136,8 @@ document.getElementById('login-form').addEventListener('submit', function (e) {
           userData: data.userData,
           authToken: data.authToken,
         });
-        submitLoginBtn.disabled = false;
-        submitLoginBtn.innerHTML = 'Login';
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
 
         if (data.userData.role_id) {
           location.href = 'home';
@@ -147,8 +147,8 @@ document.getElementById('login-form').addEventListener('submit', function (e) {
       }
     })
     .catch((error) => {
-      submitLoginBtn.disabled = false;
-      submitLoginBtn.innerHTML = 'Login';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     });
 });
 
@@ -157,11 +157,11 @@ document
   .addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let submitRegisterBtn = document.querySelector('#submit-btn-register');
+    let useBtn = document.querySelector('#submit-btn-register');
+    let defaultBtnText = useBtn.innerHTML;
 
-    submitRegisterBtn.disabled = true;
-    submitRegisterBtn.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+    useBtn.disabled = true;
+    useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
     const username = document.getElementById('input-username-register').value;
     const email = document.getElementById('input-email-register').value;
@@ -185,8 +185,8 @@ document
         options
       )
         .then((data) => {
-          submitRegisterBtn.disabled = false;
-          submitRegisterBtn.innerHTML = 'Register';
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
           if (data.code) {
             showToast('alert-toast-container', data.message, 'danger');
           } else {
@@ -194,8 +194,8 @@ document
           }
         })
         .catch((error) => {
-          submitRegisterBtn.disabled = false;
-          submitRegisterBtn.innerHTML = 'Register';
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
           console.log('error', error);
         });
     } else {
@@ -204,8 +204,8 @@ document
         'Password and confirm password does not match.',
         'danger'
       );
-      submitRegisterBtn.disabled = false;
-      submitRegisterBtn.innerHTML = 'Register';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     }
   });
 
@@ -214,13 +214,11 @@ document
   .addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let submitForgotPasswordBtn = document.querySelector(
-      '#submit-btn-forgot-password'
-    );
+    let useBtn = document.querySelector('#submit-btn-forgot-password');
+    let defaultBtnText = useBtn.innerHTML;
 
-    submitForgotPasswordBtn.disabled = true;
-    submitForgotPasswordBtn.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+    useBtn.disabled = true;
+    useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
     const email = document.getElementById('email-forgot-password').value;
 
@@ -236,17 +234,21 @@ document
       options
     )
       .then((data) => {
-        submitForgotPasswordBtn.disabled = false;
-        submitForgotPasswordBtn.innerHTML = 'Reset Password';
-        if (data.code) {
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
+        if (data?.message) {
           showToast('alert-toast-container', data.message, 'danger');
         } else {
-          showToast('alert-toast-container', data.message.message, 'success');
+          showToast(
+            'alert-toast-container',
+            'Password reset email sent. Please check your inbox for further instructions.',
+            'success'
+          );
         }
       })
       .catch((error) => {
-        submitForgotPasswordBtn.disabled = false;
-        submitForgotPasswordBtn.innerHTML = 'Reset Password';
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
         console.log('error', error);
       });
   });
@@ -256,11 +258,11 @@ document
   .addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let submitReverifyBtn = document.querySelector('#submit-btn-reverify');
+    let useBtn = document.querySelector('#submit-btn-reverify');
+    let defaultBtnText = useBtn.innerHTML;
 
-    submitReverifyBtn.disabled = true;
-    submitReverifyBtn.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+    useBtn.disabled = true;
+    useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
     const email = document.getElementById('email-reverify').value;
 
@@ -277,8 +279,8 @@ document
       options
     )
       .then((data) => {
-        submitReverifyBtn.disabled = false;
-        submitReverifyBtn.innerHTML = 'Resend Verification Link';
+        useBtn.disabled = falseś;
+        useBtn.innerHTML = defaultBtnText;
         if (data.code) {
           showToast('alert-toast-container', data.message, 'danger');
         } else {
@@ -286,8 +288,8 @@ document
         }
       })
       .catch((error) => {
-        submitReverifyBtn.disabled = false;
-        submitReverifyBtn.innerHTML = 'Resend Verification Link';
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
       });
   });
 

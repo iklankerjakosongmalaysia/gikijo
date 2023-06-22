@@ -98,7 +98,7 @@ if (myData.userData.role_id === 3) {
     },
     {
       id: 'my-resume-tab',
-      title: 'My Resume',
+      title: 'My Public Resume',
       content: 'my-resume',
     }
   );
@@ -398,9 +398,9 @@ companyProfileForm.addEventListener('submit', function (event) {
 // -- end of company profile section
 // -- resume section
 
-const inputSelectContactInformationVisibility = document.getElementById(
-  'input-select-contact-information-visibility'
-);
+// const inputSelectContactInformationVisibility = document.getElementById(
+//   'input-select-contact-information-visibility'
+// );
 const inputSummary = document.getElementById('input-summary');
 const inputResumeFullName = document.getElementById('input-resume-full-name');
 const inputSelectResumeGender = document.getElementById(
@@ -462,10 +462,11 @@ function updateResumeViewButton(toggle, custom_id) {
 resumeForm.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  let submitResumeBtn = document.getElementById('submit-resume-btn');
-  submitResumeBtn.disabled = true;
-  submitResumeBtn.innerHTML =
-    '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+  let useBtn = document.getElementById('submit-resume-btn');
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
 
   if (inputResumeExpectedMinSalary.value) {
     if (
@@ -478,8 +479,8 @@ resumeForm.addEventListener('submit', function (event) {
         'Expected maximum salary should be greater or equal to minimum salary',
         'danger'
       );
-      submitResumeBtn.disabled = false;
-      submitResumeBtn.innerHTML = 'Update';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
       return;
     }
   }
@@ -562,7 +563,6 @@ resumeForm.addEventListener('submit', function (event) {
   }
 
   const textElements = [
-    inputSelectContactInformationVisibility,
     inputSummary,
     inputResumeFullName,
     inputSelectResumeGender,
@@ -607,31 +607,30 @@ resumeForm.addEventListener('submit', function (event) {
 
   const options = {
     body: JSON.stringify({
-      contact_visibility_id: textElements[0].value,
-      summary: textElements[1].value,
-      mask_summary: maskText(textElements[1].value),
-      full_name: textElements[2].value,
-      mask_full_name: maskText(textElements[2].value),
-      gender: textElements[3].value,
-      date_of_birth: textElements[4].value,
-      email: textElements[5].value,
-      mask_email: maskText(textElements[5].value),
-      phone_number: textElements[6].value,
-      mask_phone_number: maskText(textElements[6].value),
-      location_id: textElements[7].value,
-      address: textElements[8].value,
-      mask_address: maskText(textElements[8].value),
-      preferred_job: textElements[9].value,
-      current_job_status: textElements[10].value,
-      expected_min_salary: textElements[11].value,
-      expected_max_salary: textElements[12].value,
-      expected_salary_type: textElements[13].value,
-      work_experience: textElements[14],
-      education: textElements[15],
-      skills: textElements[16],
-      languages: textElements[17],
-      other_information: textElements[18].value,
-      mask_other_information: maskText(textElements[18].value),
+      summary: textElements[0].value,
+      mask_summary: maskText(textElements[0].value),
+      full_name: textElements[1].value,
+      mask_full_name: maskText(textElements[1].value),
+      gender: textElements[2].value,
+      date_of_birth: textElements[3].value,
+      email: textElements[4].value,
+      mask_email: maskText(textElements[4].value),
+      phone_number: textElements[5].value,
+      mask_phone_number: maskText(textElements[5].value),
+      location_id: textElements[6].value,
+      address: textElements[7].value,
+      mask_address: maskText(textElements[7].value),
+      preferred_job: textElements[8].value,
+      current_job_status: textElements[9].value,
+      expected_min_salary: textElements[10].value,
+      expected_max_salary: textElements[11].value,
+      expected_salary_type: textElements[12].value,
+      work_experience: textElements[13],
+      education: textElements[14],
+      skills: textElements[15],
+      languages: textElements[16],
+      other_information: textElements[17].value,
+      mask_other_information: maskText(textElements[17].value),
       progress_percentage: progressPercentage,
     }),
   };
@@ -654,12 +653,12 @@ resumeForm.addEventListener('submit', function (event) {
         updateResumeViewButton(true, data.profile_data.custom_id);
       }
 
-      submitResumeBtn.disabled = false;
-      submitResumeBtn.innerHTML = 'Update';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
     })
     .catch((error) => {
-      submitResumeBtn.disabled = false;
-      submitResumeBtn.innerHTML = 'Update';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
       updateResumeViewButton(false);
     });
 });
@@ -674,13 +673,13 @@ function getResumeData() {
       if (data?.message) {
         showToast('alert-toast-container', data.message, 'danger');
       } else {
-        inputSelectContactInformationVisibility.innerHTML = '';
-        data.contact_visibility_list.forEach((option) => {
-          const optionElement = document.createElement('option');
-          optionElement.value = option.id;
-          optionElement.text = `${option.name} - ${option.description}`;
-          inputSelectContactInformationVisibility.appendChild(optionElement);
-        });
+        // inputSelectContactInformationVisibility.innerHTML = '';
+        // data.contact_visibility_list.forEach((option) => {
+        //   const optionElement = document.createElement('option');
+        //   optionElement.value = option.id;
+        //   optionElement.text = `${option.name} - ${option.description}`;
+        //   inputSelectContactInformationVisibility.appendChild(optionElement);
+        // });
 
         inputSelectResumeLocation.innerHTML = '';
         data.location_list.forEach((option) => {
@@ -691,8 +690,8 @@ function getResumeData() {
         });
 
         if (data.profile_data !== null) {
-          inputSelectContactInformationVisibility.value =
-            data.profile_data.contact_visibility_data.id;
+          // inputSelectContactInformationVisibility.value =
+          //   data.profile_data.contact_visibility_data.id;
 
           inputSummary.value = data.profile_data.summary;
 
@@ -803,11 +802,6 @@ function firstFetch() {
   if (myData?.userData) {
     accoutUsernameForm.value = myData.userData.username;
     accountEmailForm.value = myData.userData.email;
-  }
-
-  if (myData?.userData.verify) {
-    const emailFormLabel = document.getElementById('email-form-title');
-    emailFormLabel.innerHTML = `Email  <span class="badge badge-success">Verified</span>`;
   }
 
   if (myData.userData.role_id === 3) {

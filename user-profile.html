@@ -214,12 +214,10 @@
                   <h7 class="text-muted mb-0">Last Updated</h7>
                   <h6 class="font-weight-bold" id="text-last-updated"></h6>
                 </div>
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                   <h7 class="text-muted mb-0">Resume Visibility</h7>
                   <h6 class="font-weight-bold" id="text-resume-visibility"></h6>
-                </div>
-              </div>
-              <div class="row mt-4">
+                </div> -->
                 <div class="col-md-4">
                   <h7 class="text-muted mb-0">Current Job Status</h7>
                   <h6
@@ -227,6 +225,8 @@
                     id="text-current-job-status"
                   ></h6>
                 </div>
+              </div>
+              <div class="row mt-4">
                 <div class="col-md-4">
                   <h7 class="text-muted mb-0">Preferred Job</h7>
                   <h6 class="font-weight-bold" id="text-preferred-job"></h6>
@@ -235,26 +235,26 @@
                   <h7 class="text-muted mb-0">Expected Salary (MYR)</h7>
                   <h6 class="font-weight-bold" id="text-expected-salary"></h6>
                 </div>
-              </div>
-              <div class="row mt-4">
                 <div class="col-md-4">
                   <h7 class="text-muted mb-0">Gender</h7>
                   <h6 class="font-weight-bold" id="text-gender"></h6>
                 </div>
+              </div>
+              <div class="row mt-4">
                 <div class="col-md-4">
                   <h7 class="text-muted mb-0">Date of Birth</h7>
                   <h6 class="font-weight-bold" id="text-date-of-birth"></h6>
                 </div>
                 <div class="col-md-4">
-                  <h7 class="text-muted mb-0" id="email-from-title">Email</h7>
+                  <h7 class="text-muted mb-0">Email</h7>
                   <h6 class="font-weight-bold" id="text-email"></h6>
                 </div>
-              </div>
-              <div class="row mt-4">
                 <div class="col-md-4">
                   <h7 class="text-muted mb-0">Phone Number</h7>
                   <h6 class="font-weight-bold" id="text-phone-number"></h6>
                 </div>
+              </div>
+              <div class="row mt-4">
                 <div class="col-md-4">
                   <h7 class="text-muted mb-0">Location</h7>
                   <h6 class="font-weight-bold" id="text-location"></h6>
@@ -475,6 +475,7 @@
           </div>
           <form id="postedJobForm">
             <div class="modal-body">
+              <label id="invite-subtitle">...</label>
               <div id="posted-job-card-empty">
                 <div class="container mt-4">
                   <div class="row justify-content-center align-items-center">
@@ -488,7 +489,6 @@
                   </div>
                 </div>
               </div>
-              <label id="invite-subtitle">...</label>
               <div class="hidden" id="posted-job-card-list-parent">
                 <div class="modal-body" id="posted-job-card-list-child">
                   <div class="row justify-content-between">
