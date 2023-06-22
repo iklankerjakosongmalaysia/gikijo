@@ -347,16 +347,16 @@ function fetchUserProfile() {
         } else {
           // populateMoreProfiles(data.other_profiles);
 
-          listInvitation(
-            data.employer_posts,
-            data.profile_details.id,
-            data.employer_invitations
-          );
-
-          textCoinAmountToUnlockProfile.innerHTML = `Unlock this profile and view what's hidden behind the "****" symbol for just <b>${data.coin_amount_to_unlock_profile}</b> <i class="fas fa-coins mr-1"></i> token.`;
-          textCurrentBalance.innerHTML = `Your Current Balance: <b>${data.employer_coin_balance}</b> <i class="fas fa-coins mr-1"></i> token`;
-
           if (data.profile_details !== null) {
+            listInvitation(
+              data.employer_posts,
+              data.profile_details.id,
+              data.employer_invitations
+            );
+
+            textCoinAmountToUnlockProfile.innerHTML = `Unlock this profile and view what's hidden behind the "****" symbol for just <b>${data.coin_amount_to_unlock_profile}</b> <i class="fas fa-coins mr-1"></i> token.`;
+            textCurrentBalance.innerHTML = `Your Current Balance: <b>${data.employer_coin_balance}</b> <i class="fas fa-coins mr-1"></i> token`;
+
             const emailFormTitle = document.getElementById('email-from-title');
             emailFormTitle.innerHTML =
               'Email <span class="badge badge-pill badge-success">Verified</span>';
@@ -808,11 +808,11 @@ function fetchUserProfile() {
         }
       })
       .catch((error) => {
-        populateMoreProfiles([]);
+        // populateMoreProfiles([]);
         console.error(error);
       });
   } else {
-    populateMoreProfiles([]);
+    // populateMoreProfiles([]);
     showToast('alert-toast-container', 'Resume Id not found', 'danger');
   }
 }

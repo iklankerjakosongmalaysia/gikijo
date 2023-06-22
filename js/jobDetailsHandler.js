@@ -115,15 +115,38 @@ function applyJob(item, useBtn) {
         useBtn.innerHTML = defaultBtnText;
         if (data.payload) {
           if (data.payload.is_resume_not_complete == true) {
-            const progressContainer = document.getElementById(
-              'resume-progress-bar'
+            // const progressContainer = document.getElementById(
+            //   'resume-progress-bar'
+            // );
+
+            // progressContainer.style.width = `${data.payload.value}%`;
+            // progressContainer.innerHTML = `${data.payload.value}%`;
+
+            const updateResumeMessage = document.getElementById(
+              'update-resume-message'
             );
+            const isResumeIncomplete = data.payload.value.progress < 50;
+            const isVisibilityNotPublic = data.payload.value.visibility !== 2;
 
-            progressContainer.style.width = `${data.payload.value}%`;
-            progressContainer.innerHTML = `${data.payload.value}%`;
+            let resumeMessageHTML = `<ul style="list-style-type: none;">
+              <li>
+                <i class="fas ${
+                  isVisibilityNotPublic
+                    ? 'fa-times text-danger mr-2'
+                    : 'fa-check text-success mr-1'
+                }"></i> Your resume is set to "Public" visibility.
+              </li>
+              <li>
+                <i class="fas ${
+                  isResumeIncomplete
+                    ? 'fa-times text-danger mr-2'
+                    : 'fa-check text-success mr-1'
+                } mr-1"></i> Your resume is at least 70% complete.
+              </li>
+            </ul>`;
 
-            document.getElementById('update-resume-message').innerHTML =
-              data.payload.message;
+            updateResumeMessage.innerHTML = resumeMessageHTML;
+
             $('#updateResumeModal').modal('show');
           }
         } else {
