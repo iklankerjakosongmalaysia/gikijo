@@ -689,10 +689,11 @@ channelForm.addEventListener('submit', function (event) {
         // delay of 2 seconds before calling fetchMyEmployer
         setTimeout(() => {
           fetchMyEmployer();
-          $('#channelJobModal').modal('hide');
-          showToast('alert-toast-container', data.status_message, 'success');
-          useBtn.disabled = false;
-          useBtn.innerHTML = defaultBtnText;
+          setTimeout(() => {
+            showToast('alert-toast-container', data.status_message, 'success');
+            useBtn.disabled = false;
+            useBtn.innerHTML = defaultBtnText;
+          }, 2000);
         }, 2000);
       }
     })
@@ -1053,6 +1054,12 @@ function populateChannelDashboard(data) {
     const subscribers = divs[0].getElementsByTagName('h7');
     const description = divs[0].getElementsByTagName('p');
 
+    // const telegramImage = document.createElement('img');
+    // telegramImage.src = 'https://telegram.org/img/t_logo.png';
+    // telegramImage.className = 'mr-2';
+    // telegramImage.width = 25;
+    // telegramImage.height = 25;
+
     if (item.is_new) {
       title[0].innerHTML = `${item.name} <span class="badge badge-danger">New</span>`;
     } else {
@@ -1060,7 +1067,7 @@ function populateChannelDashboard(data) {
     }
 
     title[0].setAttribute('href', item.url);
-    title[1].innerHTML = 'View';
+    title[1].innerHTML = 'Visit Channel';
 
     if (item.source_code === 'job_list') {
       subscribers[0].innerHTML = `${item.source_name}`;
@@ -1641,6 +1648,7 @@ function fetchMyEmployer() {
         showToast('alert-toast-container', data.message, 'danger');
       } else {
         fetchCoinList();
+
         const progressContainer = document.getElementById(
           'employer-profile-progress-bar'
         );
@@ -1823,6 +1831,16 @@ function fetchMyEmployer() {
               listItem[8].innerHTML = `<b>External Job application URL:</b> <a href="${item.external_apply_link}" target="_blank"> ${item.external_apply_link}</a>`;
             } else {
               listItem[8].innerHTML = ``;
+            }
+          }
+
+          // update new data from last selected share item if exist
+          if (selectedJob) {
+            if (selectedJob.id == item.id) {
+              if (selectedChannelItem) {
+                selectedJob = item;
+                populateChannel();
+              }
             }
           }
 
