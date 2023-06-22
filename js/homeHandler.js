@@ -3172,15 +3172,15 @@ function fetchMyJobSeeker() {
         const progressContainerTitle = document.getElementById(
           'job-seeker-profile-progress-title'
         );
-        const resumeVisibilitySummary = document.getElementById(
-          'resume-visibility-summary'
-        );
+        // const resumeVisibilitySummary = document.getElementById(
+        //   'resume-visibility-summary'
+        // );
 
         let percentageProgress = '0%';
 
         if (data.profile_data) {
           percentageProgress = data.profile_data.progress_percentage;
-          resumeVisibilitySummary.innerHTML = `${data.profile_data.contact_visibility_data.name}`;
+          // resumeVisibilitySummary.innerHTML = `${data.profile_data.contact_visibility_data.name}`;
         }
 
         progressContainer.style.width = `${percentageProgress}%`;

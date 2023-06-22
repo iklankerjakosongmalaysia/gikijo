@@ -83,20 +83,30 @@ function populateMoreProfiles(data) {
   }
 }
 
-const loadingText =
-  '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
-
-var loading = false;
+let loading = false;
 
 function cancelInvite(invite_id, inviteBtn) {
+  if (loading) {
+    showToast(
+      'alert-toast-container',
+      'Another task is currently in progress. Please wait for it to complete...',
+      'danger'
+    );
+
+    return;
+  }
+
   var confirmDelete = confirm(
     `Are you sure you want to cancel this invitation? This action cannot be undone.`
   );
 
   if (confirmDelete) {
+    let useBtn = inviteBtn;
+    let defaultBtnText = useBtn.innerHTML;
+
+    useBtn.disabled = true;
+    useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
     loading = true;
-    inviteBtn.disabled = true;
-    inviteBtn.innerHTML = loadingText;
 
     fetchAPI(
       `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/invitation/${invite_id}`,
@@ -106,8 +116,8 @@ function cancelInvite(invite_id, inviteBtn) {
       .then((data) => {
         if (data?.message) {
           showToast('alert-toast-container', data.message, 'danger');
-          inviteBtn.disabled = false;
-          inviteBtn.innerHTML = `Invite`;
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
           loading = false;
           $('#inviteModal').modal('hide');
         } else {
@@ -118,16 +128,16 @@ function cancelInvite(invite_id, inviteBtn) {
               `The invitation has been successfully canceled.`,
               'success'
             );
-            inviteBtn.disabled = false;
-            inviteBtn.innerHTML = `Invite`;
+            useBtn.disabled = false;
+            useBtn.innerHTML = defaultBtnText;
             loading = false;
             $('#inviteModal').modal('hide');
           }, 2000);
         }
       })
       .catch((error) => {
-        inviteBtn.disabled = false;
-        inviteBtn.innerHTML = `Invite`;
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
         loading = false;
         $('#inviteModal').modal('hide');
       });
@@ -138,56 +148,61 @@ function sendInvite(postId, inviteBtn, profileId) {
   if (loading) {
     showToast(
       'alert-toast-container',
-      'The invitation process is still in progress. Please wait...',
+      'Another task is currently in progress. Please wait for it to complete...',
       'danger'
     );
-  } else {
-    const options = {
-      body: JSON.stringify({
-        post_id: postId,
-        profile_id: profileId,
-      }),
-    };
 
-    loading = true;
-    inviteBtn.disabled = true;
-    inviteBtn.innerHTML = loadingText;
+    return;
+  }
 
-    fetchAPI(
-      'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/invitation',
-      'POST',
-      token,
-      options
-    )
-      .then((data) => {
-        if (data?.message) {
-          showToast('alert-toast-container', data.message, 'danger');
-          inviteBtn.disabled = false;
-          inviteBtn.innerHTML = `Invite`;
-          loading = false;
-          $('#inviteModal').modal('hide');
-        } else {
-          setTimeout(() => {
-            fetchUserProfile();
-            showToast(
-              'alert-toast-container',
-              'The invitation has been sent successfully.',
-              'success'
-            );
-            inviteBtn.disabled = false;
-            inviteBtn.innerHTML = `Invite`;
-            loading = false;
-            $('#inviteModal').modal('hide');
-          }, 2000);
-        }
-      })
-      .catch((error) => {
-        inviteBtn.disabled = false;
-        inviteBtn.innerHTML = loadingText;
+  const options = {
+    body: JSON.stringify({
+      post_id: postId,
+      profile_id: profileId,
+    }),
+  };
+
+  let useBtn = inviteBtn;
+  let defaultBtnText = useBtn.innerHTML;
+
+  useBtn.disabled = true;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
+  loading = true;
+
+  fetchAPI(
+    'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/invitation',
+    'POST',
+    token,
+    options
+  )
+    .then((data) => {
+      if (data?.message) {
+        showToast('alert-toast-container', data.message, 'danger');
+        useBtn.disabled = false;
+        useBtn.innerHTML = defaultBtnText;
         loading = false;
         $('#inviteModal').modal('hide');
-      });
-  }
+      } else {
+        setTimeout(() => {
+          fetchUserProfile();
+          showToast(
+            'alert-toast-container',
+            'The invitation has been sent successfully.',
+            'success'
+          );
+          useBtn.disabled = false;
+          useBtn.innerHTML = defaultBtnText;
+          loading = false;
+          $('#inviteModal').modal('hide');
+        }, 2000);
+      }
+    })
+    .catch((error) => {
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
+      loading = false;
+      $('#inviteModal').modal('hide');
+    });
 }
 
 function listInvitation(passData, profileId, applicationList) {
@@ -357,10 +372,6 @@ function fetchUserProfile() {
             textCoinAmountToUnlockProfile.innerHTML = `Unlock this profile and view what's hidden behind the "****" symbol for just <b>${data.coin_amount_to_unlock_profile}</b> <i class="fas fa-coins mr-1"></i> token.`;
             textCurrentBalance.innerHTML = `Your Current Balance: <b>${data.employer_coin_balance}</b> <i class="fas fa-coins mr-1"></i> token`;
 
-            const emailFormTitle = document.getElementById('email-from-title');
-            emailFormTitle.innerHTML =
-              'Email <span class="badge badge-pill badge-success">Verified</span>';
-
             const progressContainer =
               document.getElementById('profile-progress');
             progressContainer.style.width = `${data.profile_details.progress_percentage}%`;
@@ -388,7 +399,7 @@ function fetchUserProfile() {
               document.getElementById('languages-container'),
               document.getElementById('text-other-information'),
               document.getElementById('text-last-updated'),
-              document.getElementById('text-resume-visibility'),
+              // document.getElementById('text-resume-visibility'),
             ];
 
             var my_full_name = '-';
@@ -408,7 +419,7 @@ function fetchUserProfile() {
             var my_skills = [];
             var my_languages = [];
             var my_last_updated = '';
-            var my_resume_visibility = '';
+            // var my_resume_visibility = '';
 
             my_full_name = data.profile_unlocked
               ? data.profile_details.full_name
@@ -572,10 +583,10 @@ function fetchUserProfile() {
 
             textElements[16].innerHTML = my_last_updated;
 
-            my_resume_visibility =
-              data.profile_details.resume_visibility_data.name;
+            // my_resume_visibility =
+            //   data.profile_details.resume_visibility_data.name;
 
-            textElements[17].innerHTML = my_resume_visibility;
+            // textElements[17].innerHTML = my_resume_visibility;
 
             for (let i = 0; i < textElements.length; i++) {
               if (
