@@ -1713,7 +1713,12 @@ function fetchMyEmployer() {
           'topup-modal-balance'
         );
 
-        profileUnlockBalance.innerHTML = data.coin_balance;
+        if (data.coin_balance > 1) {
+          profileUnlockBalance.innerHTML = `<b>${data.coin_balance}</b> <small>Tokens</small>`;
+        } else {
+          profileUnlockBalance.innerHTML = `<b>${data.coin_balance}</b> <small>Token</small>`;
+        }
+
         topupModalBalance.innerHTML = `Balance: <i class="fas fa-coins"></i>  ${data.coin_balance}`;
 
         populateVisibility(data?.visibility_list);
