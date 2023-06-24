@@ -26,6 +26,8 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+document.getElementById('version-text').innerHTML = `Gikijo Beta v1.0.1`;
+
 const typeName = {
   type_1: {
     id: 'type_1',
@@ -2906,9 +2908,9 @@ const status_list_options = {
   },
 };
 
-document
-  .getElementById('refresh-job-seeker-application')
-  .addEventListener('click', firstCall);
+document.getElementById('button-find-job').addEventListener('click', () => {
+  location.href = 'job-list';
+});
 
 function populateJobSeekerApplication(data) {
   const loadingCard = document.getElementById(
@@ -3089,10 +3091,6 @@ function populateJobSeekerApplication(data) {
     });
   }
 }
-
-document
-  .getElementById('refresh-job-seeker-invitation')
-  .addEventListener('click', firstCall);
 
 function populateJobSeekerInvitation(data) {
   const loadingCard = document.getElementById(
