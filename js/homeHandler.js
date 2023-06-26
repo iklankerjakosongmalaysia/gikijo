@@ -2159,7 +2159,7 @@ function fetchMyEmployer() {
         if (emptyDiv.length === 0) {
           emptyCard.classList.remove('hidden');
           parentTable.classList.add('hidden');
-          // $('#onboardingModal').modal('show');
+          $('#onboardingModal').modal('show');
         } else {
           emptyCard.classList.add('hidden');
           parentTable.classList.remove('hidden');
