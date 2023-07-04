@@ -64,7 +64,7 @@ function validateInput(input) {
     input.value = inputValue.replace(emailPattern, '');
     showToast(
       'alert-toast-container',
-      'Email addresses are not allowed.',
+      'Email address are not allowed.',
       'danger'
     );
   } else if (phonePattern.test(inputValue)) {
@@ -80,7 +80,7 @@ function validateInput(input) {
     input.value = inputValue.replace(urlPattern, '');
     showToast(
       'alert-toast-container',
-      'Website links are not allowed.',
+      'Website link are not allowed.',
       'danger'
     );
   }
