@@ -49,18 +49,40 @@ function validateInput(input) {
   // Regular expression pattern to match email addresses
   var emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/;
 
-  // Regular expression pattern remove number more than 5 digit
+  // Regular expression pattern to remove numbers with 7 or more digits
   var phonePattern = /\d{7,}/g;
+
+  // Regular expression pattern to match URLs
+  var urlPattern = /(http|https):\/\/[^\s]+/g;
 
   // Get the user input value
   var inputValue = input.value;
 
-  // Check if the input contains an email address or phone number pattern
-  if (emailPattern.test(inputValue) || phonePattern.test(inputValue)) {
-    // Clear the input value if a match is found
-    input.value = inputValue
-      .replace(emailPattern, '')
-      .replace(phonePattern, '');
+  // Check if the input contains an email address, phone number, or URL pattern
+  if (emailPattern.test(inputValue)) {
+    // Clear the input value if an email address is found
+    input.value = inputValue.replace(emailPattern, '');
+    showToast(
+      'alert-toast-container',
+      'Email addresses are not allowed.',
+      'danger'
+    );
+  } else if (phonePattern.test(inputValue)) {
+    // Clear the input value if a phone number with 7 or more digits is found
+    input.value = inputValue.replace(phonePattern, '');
+    showToast(
+      'alert-toast-container',
+      'Numbers with more than 7 digits are not allowed.',
+      'danger'
+    );
+  } else if (urlPattern.test(inputValue)) {
+    // Clear the input value if a URL is found
+    input.value = inputValue.replace(urlPattern, '');
+    showToast(
+      'alert-toast-container',
+      'Website links are not allowed.',
+      'danger'
+    );
   }
 }
 
