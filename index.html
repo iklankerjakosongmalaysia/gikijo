@@ -45,6 +45,7 @@
     <!-- My function -->
     <script src="js/apiHelper.js"></script>
     <script src="js/globalFunction.js"></script>
+    <script src="js/translation.js"></script>
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6981662240440614"
@@ -55,44 +56,43 @@
   <body>
     <!-- Topbar -->
     <nav
-      class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
-      id="topbar-not-auth"
-      style="display: none"
-    >
-      <div class="justify-content-between row" style="width: 100%">
-        <a href="index" class="ml-3">
-          <img src="img/gikijo_logo.png" alt="image" width="100" />
-        </a>
-        <div class="d-sm-inline-block mr-auto ml-md-3">
-          <div class="btn ml-3" id="topbar-job-list-btn-not-auth">
-            <b>Job List</b>
-          </div>
-        </div>
-        <div>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            id="topbar-post-job-btn"
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    </nav>
-    <nav
-      class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
-      id="topbar-with-auth"
-      style="display: none"
+      class="navbar navbar-expand navbar-light bg-white topbar static-top shadow"
     >
       <a href="index" class="ml-3">
         <img src="img/gikijo_logo.png" alt="image" width="100" />
       </a>
       <div class="d-sm-inline-block mr-auto ml-md-3">
-        <div class="btn ml-3" id="topbar-job-list-btn-with-auth">
+        <div class="btn-group ml-3" style="display: none">
+          <button
+            type="button"
+            class="btn btn-outline-primary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            data-lang-key="language_name"
+          >
+            English
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="changeLanguage('en')">English</a>
+            <a class="dropdown-item" onclick="changeLanguage('ml')">Malay</a>
+          </div>
+        </div>
+        <div class="btn ml-3" id="topbar-job-list-btn" data-lang-key="job_list">
           <b>Job List</b>
         </div>
       </div>
-      <ul class="navbar-nav ml-auto">
+      <div id="topbar-not-auth" style="display: none">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="topbar-login-btn"
+          data-lang-key="login"
+        >
+          Login
+        </button>
+      </div>
+      <ul class="navbar-nav ml-auto" id="topbar-with-auth">
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
           <a
@@ -119,19 +119,19 @@
             class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
             aria-labelledby="userDropdown"
           >
-            <a class="dropdown-item" href="home">
+            <a class="dropdown-item" href="home" data-lang-key="home">
               <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
               Home
             </a>
-            <a class="dropdown-item" href="profile">
+            <a class="dropdown-item" href="profile" data-lang-key="profile">
               <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
               Profile
             </a>
-            <a class="dropdown-item" href="job-list">
+            <a class="dropdown-item" href="job-list" data-lang-key="job_list">
               <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
               Job List
             </a>
-            <a class="dropdown-item" href="settings">
+            <a class="dropdown-item" href="settings" data-lang-key="settings">
               <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
               Settings
             </a>
@@ -140,6 +140,7 @@
               class="dropdown-item"
               data-toggle="modal"
               data-target="#logoutModal"
+              data-lang-key="logout"
             >
               <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
               Logout
@@ -148,7 +149,49 @@
         </li>
       </ul>
     </nav>
-    <!-- End of Topbar -->
+    <section
+      class="jumbotron text-center d-flex"
+      style="
+        background-color: #f2f6ff;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div class="container">
+        <h1
+          class="jumbotron-heading text-gray-900"
+          style="font-size: 3em; font-weight: 800"
+          data-lang-key="main_tagline"
+        >
+          Fresh Job Board, Easy Apply
+        </h1>
+        <p class="lead text-muted" data-lang-key="main_desc_tagline">
+          Introducing Gikijo, Malaysia's innovative job board platform.
+          Previously known as iklankerjakosongmalaysia (IKKM), we've rebranded
+          to enhance our services for the needs of job seekers and employers
+          throughout the country.
+        </p>
+        <p class="pt-3">
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg"
+            id="find-job-btn"
+            data-lang-key="find_job"
+          >
+            Find Job
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-lg"
+            id="post-job-btn"
+            data-lang-key="post_job"
+          >
+            Post Job
+          </button>
+        </p>
+      </div>
+    </section>
+
     <div class="container">
       <div class="row justify-content-center">
         <div class="col">
@@ -158,405 +201,627 @@
                 <h1
                   class="text-gray-900 mb-3"
                   style="font-size: 3em; font-weight: 800"
+                  data-lang-key="find_and_apply"
                 >
-                  Find Opportunities, Build Your Future
+                  Find and Apply for Jobs
+                  <strong class="text-primary">Seamlessly!</strong>
                 </h1>
-                <p class="lead fw-normal mb-5">
-                  Experience a straightforward and user-friendly platform that
-                  effortlessly connects employers and job seekers.
+                <p
+                  class="lead fw-normal mb-4"
+                  data-lang-key="with_our_user_friendly"
+                >
+                  With our user-friendly interface, you can easily explore job
+                  opportunities and apply for them seamlessly.
                 </p>
-                <div>
-                  <button
-                    type="submit"
-                    class="btn btn-primary btn-lg"
-                    id="find-job-btn"
-                  >
-                    Find Job
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary btn-lg"
-                    id="post-job-btn"
-                  >
-                    Post Job
-                  </button>
-                </div>
               </div>
             </div>
-            <div class="col-lg-5 align-items-center">
+            <div
+              class="col-lg-6 d-flex align-items-center justify-content-center"
+            >
+              <img src="img/home-ads-post.png" alt="image" style="width: 80%" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col">
+          <div class="row my-4">
+            <div
+              class="col-lg-6 d-flex align-items-center justify-content-center"
+            >
               <img
-                src="img/user_phone.png"
+                src="img/home-ads-resume.png"
                 alt="image"
-                style="width: 100%; height: 100%"
+                style="width: 50%"
+              />
+            </div>
+            <div class="col-lg">
+              <div class="p-5">
+                <h1
+                  class="text-gray-900 mb-3"
+                  style="font-size: 3em; font-weight: 800"
+                >
+                  Craft a Standout Resume that
+                  <strong class="text-primary">Wows!</strong>
+                </h1>
+                <p class="lead fw-normal mb-4">
+                  Create your resume and make changes whenever you want. Your
+                  special resume can be used to apply for new jobs in the future
+                  or to let employers find out how amazing you are!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section
+      class="jumbotron mb-0 mt-5 text-center d-flex"
+      style="
+        background-color: #f2f6ff;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div class="container">
+        <h1
+          class="jumbotron-heading text-gray-900"
+          style="font-size: 3em; font-weight: 800"
+        >
+          How It Works
+        </h1>
+
+        <div class="container mt-5">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <div class="col">
+                <img
+                  src="img/icon-edit-file.png"
+                  alt="image"
+                  style="width: 30%"
+                />
+                <h4 class="mt-3 text-gray-900">Build Your Resume</h4>
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="col">
+                <img
+                  src="img/icon-search-file.png"
+                  alt="image"
+                  style="width: 30%"
+                />
+                <h4 class="mt-3 text-gray-900">Find Jobs</h4>
+              </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+              <div class="col">
+                <img
+                  src="img/icon-check-box.png"
+                  alt="image"
+                  style="width: 30%"
+                />
+                <h4 class="mt-3 text-gray-900">Apply for Jobs</h4>
+              </div>
+            </div>
+          </div>
+          <p class="mt-3 lead text-muted" data-lang-key="start_posting_your">
+            Start today and take control of your career journey. With our
+            platform, you can easily create a standout resume, explore various
+            job options, and effortlessly apply to secure your dream job.
+          </p>
+          <p class="pt-3">
+            <button
+              type="button"
+              class="btn btn-primary btn-lg"
+              id="post-job-btn-3"
+              data-lang-key="get_started_today"
+            >
+              Get Started Today
+            </button>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <section class="mb-0 mt-5 text-center d-flex">
+        <div class="container">
+          <h1
+            class="jumbotron-heading text-gray-900"
+            style="font-size: 3em; font-weight: 800"
+          >
+            Are You an Employer?
+          </h1>
+          <p class="lead text-muted">
+            If you're an employer looking for a platform that offers a
+            refreshing experience to post your job openings, this is the perfect
+            place for you to consider. Give it a try and experience its
+            benefits.
+          </p>
+        </div>
+      </section>
+
+      <div class="row justify-content-center">
+        <div class="col">
+          <div class="row my-4">
+            <div class="col-lg">
+              <div class="p-5">
+                <h1
+                  class="text-gray-900 mb-3"
+                  style="font-size: 3em; font-weight: 800"
+                  data-lang-key="publish_and_share"
+                >
+                  Publish and Share Job Posts
+                  <strong class="text-primary">Super Easy!</strong>
+                </h1>
+                <p
+                  class="lead fw-normal mb-4"
+                  data-lang-key="simplify_the_process"
+                >
+                  Simplify the process of creating job posts and effortlessly
+                  share them on our rapidly growing Telegram channels.
+                </p>
+              </div>
+            </div>
+            <div
+              class="col-lg-6 d-flex align-items-center justify-content-center"
+            >
+              <img
+                src="img/home-ads-send.png"
+                alt="image"
+                style="width: 100%"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div class="border-bottom mt-4 mb-3">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4 mb-3">
-              <div class="d-flex">
-                <div class="pr-3">
-                  <i class="fas fa-rocket fa-3x"></i>
-                </div>
-                <div>
-                  <h4 class="mb-1 text-gray-900">Quick & Easy</h4>
-                  <p class="small mb-0">
-                    Our system allows you to post job ads in our Telegram
-                    channels with just a few clicks, saving you time and effort.
-                  </p>
-                </div>
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="d-flex">
+              <div class="pr-3">
+                <img
+                  src="img/icon-rocket.png"
+                  alt="image"
+                  style="width: 100%"
+                />
               </div>
-            </div>
-
-            <div class="col-md-4 mb-3">
-              <div class="d-flex">
-                <div class="pr-3">
-                  <i class="fas fa-handshake fa-3x"></i>
-                </div>
-                <div>
-                  <h4 class="mb-1 text-gray-900">Affordable</h4>
-                  <p class="small mb-0">
-                    Get your job ad posted at a low cost with our
-                    budget-friendly pricing options or choose to post for free!
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-4 mb-3">
-              <div class="d-flex">
-                <div class="pr-3">
-                  <i class="fas fa-clock fa-3x"></i>
-                </div>
-                <div>
-                  <h4 class="mb-1 text-gray-900">Post Anytime</h4>
-                  <p class="small mb-0">
-                    Reach a wider audience and attract more qualified candidates
-                    by posting job ads anytime you want.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Start Modal -->
-      <div
-        class="modal fade"
-        id="startNowModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                  <a
-                    class="nav-link active"
-                    id="login-tab"
-                    data-toggle="tab"
-                    href="#login"
-                    role="tab"
-                    aria-controls="login"
-                    aria-selected="true"
-                    >Login</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link"
-                    id="register-tab"
-                    data-toggle="tab"
-                    href="#register"
-                    role="tab"
-                    aria-controls="register"
-                    aria-selected="false"
-                    >Register</a
-                  >
-                </li>
-              </ul>
-              <div class="tab-content" id="myTabContent">
-                <div
-                  class="tab-pane fade show active"
-                  id="login"
-                  role="tabpanel"
-                  aria-labelledby="login-tab"
-                >
-                  <form id="login-form">
-                    <div class="form-group mt-3">
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="email"
-                        aria-describedby="emailHelp"
-                        placeholder=""
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label>Password</label>
-                      <input
-                        type="password"
-                        class="form-control form-control-user"
-                        id="password"
-                        placeholder=""
-                        required
-                      />
-                      <p
-                        class="text-right mt-3 text-primary"
-                        id="go-to-forgot-password-modal"
-                      >
-                        Forgot password?
-                      </p>
-                    </div>
-                    <button
-                      type="submit"
-                      class="btn btn-primary btn-user btn-block"
-                      id="submit-btn-login"
-                    >
-                      Login
-                    </button>
-                  </form>
-
-                  <div class="row mt-2 mb-2">
-                    <div class="col-5">
-                      <hr />
-                    </div>
-                    <div class="col-2 text-center">
-                      <span class="px-3 bg-white">or</span>
-                    </div>
-                    <div class="col-5">
-                      <hr />
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-12">
-                      <a
-                        class="btn btn-outline-dark btn-block"
-                        role="button"
-                        style="text-transform: none"
-                        id="button-continue-login-with-google"
-                      >
-                        <img
-                          width="20px"
-                          style="margin-bottom: 3px; margin-right: 5px"
-                          alt="Google sign-in"
-                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-                        />
-                        Continue with Google
-                      </a>
-                    </div>
-                  </div>
-
-                  <label class="text-center form-check-label small mt-3">
-                    By clicking on the "Login" or "Continue with Google" button,
-                    you are acknowledging and accepting our
-                    <a href="terms-privacy-policy.txt" target="_blank"
-                      >Terms and Privacy Policy.</a
-                    >
-                  </label>
-
-                  <p class="text-center mt-4" id="go-to-register-tab">
-                    Don't have an account?
-                    <strong class="text-primary">Register</strong>
-                  </p>
-                </div>
-                <div
-                  class="tab-pane fade"
-                  id="register"
-                  role="tabpanel"
-                  aria-labelledby="register-tab"
-                >
-                  <form id="register-form">
-                    <div class="form-group mt-3">
-                      <label>Username</label>
-                      <input
-                        maxlength="30"
-                        type="text"
-                        class="form-control"
-                        id="input-username-register"
-                        placeholder=""
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        class="form-control"
-                        id="input-email-register"
-                        aria-describedby="emailHelp"
-                        placeholder=""
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label>Password</label>
-                      <input
-                        type="password"
-                        class="form-control form-control-user"
-                        id="input-password-register"
-                        placeholder=""
-                        required
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label>Repeat Password</label>
-                      <input
-                        type="password"
-                        class="form-control form-control-user"
-                        id="input-repeat-password-register"
-                        placeholder=""
-                        required
-                      />
-                    </div>
-                    <!-- Confirmation -->
-
-                    <button
-                      type="submit"
-                      class="btn btn-primary btn-user btn-block"
-                      id="submit-btn-register"
-                    >
-                      Register
-                    </button>
-                  </form>
-
-                  <div class="row mt-2 mb-2">
-                    <div class="col-5">
-                      <hr />
-                    </div>
-                    <div class="col-2 text-center">
-                      <span class="px-3 bg-white">or</span>
-                    </div>
-                    <div class="col-5">
-                      <hr />
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-12">
-                      <a
-                        class="btn btn-outline-dark btn-block"
-                        role="button"
-                        style="text-transform: none"
-                        id="button-continue-signup-with-google"
-                      >
-                        <img
-                          width="20px"
-                          style="margin-bottom: 3px; margin-right: 5px"
-                          alt="Google sign-in"
-                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-                        />
-                        Continue with Google
-                      </a>
-                    </div>
-                  </div>
-
-                  <label class="text-center form-check-label small mt-3">
-                    By clicking on the "Register" or "Continue with Google"
-                    button, you are acknowledging and accepting our
-                    <a href="terms-privacy-policy.txt" target="_blank"
-                      >Terms and Privacy Policy.</a
-                    >
-                  </label>
-
-                  <p class="text-center mt-4" id="go-to-login-tab">
-                    Already have an account?
-                    <strong class="text-primary">Log In</strong>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Forgot Password Modal -->
-      <div
-        class="modal fade"
-        id="forgotPasswordModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <form id="forgot-password-form">
-                <div class="form-group mt-3">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email-forgot-password"
-                    aria-describedby="emailHelp"
-                    placeholder=""
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  class="btn btn-primary btn-user btn-block"
-                  id="submit-btn-forgot-password"
-                >
-                  Reset Password
-                </button>
-                <p class="text-center mt-4" id="go-to-login-modal">
-                  <strong class="text-primary">Back to Login</strong>
+              <div>
+                <h4 class="mb-1 text-gray-900" data-lang-key="quick_and_easy">
+                  Quick & Easy
+                </h4>
+                <p class="small mb-0" data-lang-key="share_your_job_post">
+                  Share your job post on our Telegram channels with just a few
+                  clicks, saving you time and effort.
                 </p>
-              </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <div class="d-flex">
+              <div class="pr-3">
+                <img
+                  src="img/icon-coin-stack.png"
+                  alt="image"
+                  style="width: 100%"
+                />
+              </div>
+              <div>
+                <h4 class="mb-1 text-gray-900" data-lang-key="affordable">
+                  Affordable
+                </h4>
+                <p class="small mb-0" data-lang-key="get_your_job_post">
+                  Get your job post published at a low cost with our
+                  budget-friendly pricing options or choose to publish for free!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <div class="d-flex">
+              <div class="pr-3">
+                <img src="img/icon-clock.png" alt="image" style="width: 100%" />
+              </div>
+              <div>
+                <h4 class="mb-1 text-gray-900" data-lang-key="post_anytime">
+                  Post Anytime
+                </h4>
+                <p class="small mb-0" data-lang-key="reach_a_wider_audience">
+                  Reach a wider audience and attract more qualified candidates
+                  by publish your job post anytime you want.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Reverify Modal -->
-      <div
-        class="modal fade"
-        id="reverifyModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-body">
-              <form id="reverify-form">
-                <div class="form-group mt-3">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email-reverify"
-                    aria-describedby="emailHelp"
-                    placeholder=""
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  class="btn btn-primary btn-user btn-block"
-                  id="submit-btn-reverify"
+    <section
+      class="jumbotron mb-0 mt-5 text-center d-flex"
+      style="
+        background-color: #f2f6ff;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div class="container">
+        <h1
+          class="jumbotron-heading text-gray-900"
+          style="font-size: 3em; font-weight: 800"
+          data-lang-key="ready_to_get"
+        >
+          Ready to get started?
+        </h1>
+        <p class="lead text-muted" data-lang-key="start_posting_your">
+          Don't miss this special chance to be among the first listings in our
+          job post list. Post your job today while the competition is still low
+          on our newly launched platform. This is your special opportunity to
+          stand out.
+        </p>
+        <p class="pt-3">
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            id="post-job-btn-2"
+            data-lang-key="get_started_today"
+          >
+            Get Started Today
+          </button>
+        </p>
+      </div>
+    </section>
+    <!-- Start Modal -->
+    <div
+      class="modal fade"
+      id="startNowModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  id="login-tab"
+                  data-toggle="tab"
+                  href="#login"
+                  role="tab"
+                  aria-controls="login"
+                  aria-selected="true"
+                  data-lang-key="login"
+                  >Login</a
                 >
-                  Resend Verification Link
-                </button>
-                <p class="text-center mt-4" id="reverify-go-to-login-modal">
-                  <strong class="text-primary">Back to Login</strong>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  id="register-tab"
+                  data-toggle="tab"
+                  href="#register"
+                  role="tab"
+                  aria-controls="register"
+                  aria-selected="false"
+                  data-lang-key="register"
+                  >Register</a
+                >
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div
+                class="tab-pane fade show active"
+                id="login"
+                role="tabpanel"
+                aria-labelledby="login-tab"
+              >
+                <form id="login-form">
+                  <div class="form-group mt-3">
+                    <label data-lang-key="email">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      aria-describedby="emailHelp"
+                      placeholder=""
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label data-lang-key="password">Password</label>
+                    <input
+                      type="password"
+                      class="form-control form-control-user"
+                      id="password"
+                      placeholder=""
+                      required
+                    />
+                    <p
+                      class="text-right mt-3 text-primary"
+                      id="go-to-forgot-password-modal"
+                      data-lang-key="forgot_password"
+                    >
+                      Forgot password?
+                    </p>
+                  </div>
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-user btn-block"
+                    id="submit-btn-login"
+                    data-lang-key="login"
+                  >
+                    Login
+                  </button>
+                </form>
+
+                <div class="row mt-2 mb-2">
+                  <div class="col-5">
+                    <hr />
+                  </div>
+                  <div class="col-2 text-center">
+                    <span class="px-3 bg-white" data-lang-key="or">or</span>
+                  </div>
+                  <div class="col-5">
+                    <hr />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <a
+                      class="btn btn-outline-dark btn-block"
+                      role="button"
+                      style="text-transform: none"
+                      id="button-continue-login-with-google"
+                    >
+                      <img
+                        width="20px"
+                        style="margin-bottom: 3px; margin-right: 5px"
+                        alt="Google sign-in"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                      />
+                      <span data-lang-key="continue_with_google"
+                        >Continue with Google</span
+                      >
+                    </a>
+                  </div>
+                </div>
+
+                <label
+                  class="text-center form-check-label small mt-3"
+                  data-lang-key="by_clicking_on_the_login"
+                >
+                  By clicking on the "Login" or "Continue with Google" button,
+                  you are acknowledging and accepting our
+                  <a href="terms-privacy-policy.txt" target="_blank"
+                    >Terms and Privacy Policy.</a
+                  >
+                </label>
+
+                <p
+                  class="text-center mt-4"
+                  id="go-to-register-tab"
+                  data-lang-key="dont_have_an_account"
+                >
+                  Don't have an account?
+                  <strong class="text-primary" data-lang-key="register"
+                    >Register</strong
+                  >
                 </p>
-              </form>
+              </div>
+              <div
+                class="tab-pane fade"
+                id="register"
+                role="tabpanel"
+                aria-labelledby="register-tab"
+              >
+                <form id="register-form">
+                  <div class="form-group mt-3">
+                    <label data-lang-key="username">Username</label>
+                    <input
+                      maxlength="30"
+                      type="text"
+                      class="form-control"
+                      id="input-username-register"
+                      placeholder=""
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label data-lang-key="email">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="input-email-register"
+                      aria-describedby="emailHelp"
+                      placeholder=""
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label data-lang-key="password">Password</label>
+                    <input
+                      type="password"
+                      class="form-control form-control-user"
+                      id="input-password-register"
+                      placeholder=""
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label data-lang-key="repeat_password"
+                      >Repeat Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control form-control-user"
+                      id="input-repeat-password-register"
+                      placeholder=""
+                      required
+                    />
+                  </div>
+                  <!-- Confirmation -->
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-user btn-block"
+                    id="submit-btn-register"
+                    data-lang-key="register"
+                  >
+                    Register
+                  </button>
+                </form>
+
+                <div class="row mt-2 mb-2">
+                  <div class="col-5">
+                    <hr />
+                  </div>
+                  <div class="col-2 text-center">
+                    <span class="px-3 bg-white" data-lang-key="or">or</span>
+                  </div>
+                  <div class="col-5">
+                    <hr />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12">
+                    <a
+                      class="btn btn-outline-dark btn-block"
+                      role="button"
+                      style="text-transform: none"
+                      id="button-continue-signup-with-google"
+                    >
+                      <img
+                        width="20px"
+                        style="margin-bottom: 3px; margin-right: 5px"
+                        alt="Google sign-in"
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                      />
+                      <span data-lang-key="continue_with_google"
+                        >Continue with Google</span
+                      >
+                    </a>
+                  </div>
+                </div>
+
+                <label
+                  class="text-center form-check-label small mt-3"
+                  data-lang-key="by_clicking_on_the_register"
+                >
+                  By clicking on the "Register" or "Continue with Google"
+                  button, you are acknowledging and accepting our
+                  <a href="terms-privacy-policy.txt" target="_blank"
+                    >Terms and Privacy Policy.</a
+                  >
+                </label>
+
+                <p
+                  class="text-center mt-4"
+                  id="go-to-login-tab"
+                  data-lang-key="already_have_an_account"
+                >
+                  Already have an account?
+                  <strong class="text-primary">Login</strong>
+                </p>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div
+      class="modal fade"
+      id="forgotPasswordModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form id="forgot-password-form">
+              <div class="form-group mt-3">
+                <label data-lang-key="email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email-forgot-password"
+                  aria-describedby="emailHelp"
+                  placeholder=""
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-user btn-block"
+                id="submit-btn-forgot-password"
+                data-lang-key="reset_password"
+              >
+                Reset Password
+              </button>
+              <p class="text-center mt-4" id="go-to-login-modal">
+                <strong class="text-primary" data-lang-key="back_to_login"
+                  >Back to Login</strong
+                >
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reverify Modal -->
+    <div
+      class="modal fade"
+      id="reverifyModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <form id="reverify-form">
+              <div class="form-group mt-3">
+                <label data-lang-key="email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email-reverify"
+                  aria-describedby="emailHelp"
+                  placeholder=""
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-user btn-block"
+                id="submit-btn-reverify"
+                data-lang-key="resend_verification_link"
+              >
+                Resend Verification Link
+              </button>
+              <p class="text-center mt-4" id="reverify-go-to-login-modal">
+                <strong class="text-primary" data-lang-key="back_to_login"
+                  >Back to Login</strong
+                >
+              </p>
+            </form>
           </div>
         </div>
       </div>
@@ -573,7 +838,13 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <h5
+              class="modal-title"
+              id="exampleModalLabel"
+              data-lang-key="ready_to_leave"
+            >
+              Ready to Leave?
+            </h5>
             <button
               class="close"
               type="button"
@@ -583,7 +854,7 @@
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" data-lang-key="select_logout_below">
             Select "Logout" below if you are ready to end your current session.
           </div>
           <div class="modal-footer">
@@ -591,10 +862,16 @@
               class="btn btn-secondary"
               type="button"
               data-dismiss="modal"
+              data-lang-key="cancel"
             >
               Cancel
             </button>
-            <a class="btn btn-primary" id="button-logout-yes">Logout</a>
+            <a
+              class="btn btn-primary"
+              id="button-logout-yes"
+              data-lang-key="logout"
+              >Logout</a
+            >
           </div>
         </div>
       </div>

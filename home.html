@@ -1180,6 +1180,7 @@
                                       id="input-create-job-title"
                                       placeholder="e.g. Internship for Business Studies"
                                       required
+                                      oninput="validateInput(this)"
                                     />
                                   </div>
                                   <div class="form-group">
@@ -1272,7 +1273,7 @@
                                       rows="3"
                                       placeholder=""
                                       required
-                                      onInput="handleInput(event)"
+                                      oninput="handleInput(event); validateInput(this);"
                                     ></textarea>
                                   </div>
                                   <div class="form-group">
@@ -1284,7 +1285,7 @@
                                       rows="3"
                                       placeholder=""
                                       required
-                                      onInput="handleInput(event)"
+                                      oninput="handleInput(event); validateInput(this);"
                                     ></textarea>
                                   </div>
                                   <div class="form-group">
@@ -1295,7 +1296,7 @@
                                       id="input-create-job-additional-info"
                                       rows="3"
                                       placeholder=""
-                                      onInput="handleInput(event)"
+                                      oninput="handleInput(event); validateInput(this);"
                                     ></textarea>
                                   </div>
                                   <div class="form-group">
@@ -1307,6 +1308,7 @@
                                       id="input-create-job-location"
                                       placeholder="e.g Shah Alam, Selangor"
                                       required
+                                      oninput="validateInput(this);"
                                     />
                                   </div>
                                   <div class="form-group">
@@ -1443,6 +1445,7 @@
                                   id="input-edit-job-title"
                                   placeholder="e.g. Internship for Business Studies"
                                   required
+                                  oninput="validateInput(this);"
                                 />
                               </div>
                               <div class="form-group">
@@ -1519,7 +1522,7 @@
                                   rows="3"
                                   placeholder=""
                                   required
-                                  onInput="handleInput(event)"
+                                  oninput="handleInput(event); validateInput(this);"
                                 ></textarea>
                               </div>
                               <div class="form-group">
@@ -1531,7 +1534,7 @@
                                   rows="3"
                                   placeholder=""
                                   required
-                                  onInput="handleInput(event)"
+                                  oninput="handleInput(event); validateInput(this);"
                                 ></textarea>
                               </div>
                               <div class="form-group">
@@ -1542,7 +1545,7 @@
                                   id="input-edit-job-additional-info"
                                   rows="3"
                                   placeholder=""
-                                  onInput="handleInput(event)"
+                                  oninput="handleInput(event); validateInput(this);"
                                 ></textarea>
                               </div>
                               <div class="form-group">
@@ -1554,6 +1557,7 @@
                                   id="input-edit-job-location"
                                   placeholder="e.g Shah Alam, Selangor"
                                   required
+                                  oninput="validateInput(this);"
                                 />
                               </div>
                               <div class="form-group">

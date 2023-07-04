@@ -4,6 +4,22 @@
 </div> */
 // showAlert("alert-login-container", "Error!", data.message, "danger", "my-login-alert");
 
+function changeLanguage(lang) {
+  var language = translations[lang];
+
+  if (language) {
+    var elements = document.querySelectorAll('[data-lang-key]');
+
+    elements.forEach(function (element) {
+      var key = element.getAttribute('data-lang-key');
+
+      if (key && language[key]) {
+        element.innerHTML = language[key];
+      }
+    });
+  }
+}
+
 function spinnerLoading(currentText) {
   return `<div class="d-flex" style="justify-content: center; align-items: center">
             <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -27,6 +43,25 @@ function handleInput(event) {
   }
 
   previousLength = newLength;
+}
+
+function validateInput(input) {
+  // Regular expression pattern to match email addresses
+  var emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/;
+
+  // Regular expression pattern remove number more than 5 digit
+  var phonePattern = /\d{7,}/g;
+
+  // Get the user input value
+  var inputValue = input.value;
+
+  // Check if the input contains an email address or phone number pattern
+  if (emailPattern.test(inputValue) || phonePattern.test(inputValue)) {
+    // Clear the input value if a match is found
+    input.value = inputValue
+      .replace(emailPattern, '')
+      .replace(phonePattern, '');
+  }
 }
 
 function scrollToTop() {

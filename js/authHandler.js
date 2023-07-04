@@ -4,7 +4,7 @@ const token = myData?.authToken;
 const topbarNotAuth = document.getElementById('topbar-not-auth');
 const topbarWithAuth = document.getElementById('topbar-with-auth');
 const topbarUsername = document.getElementById('topbar-username');
-const topBarPostJobButton = document.getElementById('topbar-post-job-btn');
+const topBarLoginButton = document.getElementById('topbar-login-btn');
 const logoutBtn = document.getElementById('button-logout-yes');
 logoutBtn.addEventListener('click', clearSession);
 
@@ -16,19 +16,13 @@ if (token) {
   topbarNotAuth.removeAttribute('style');
   topbarWithAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = '...';
-  topBarPostJobButton.addEventListener('click', function () {
+  topBarLoginButton.addEventListener('click', function () {
     $('#startNowModal').modal('show'); // only for index.html
   });
 }
 
 document
-  .getElementById('topbar-job-list-btn-not-auth')
-  .addEventListener('click', function () {
-    location.href = 'job-list';
-  });
-
-document
-  .getElementById('topbar-job-list-btn-with-auth')
+  .getElementById('topbar-job-list-btn')
   .addEventListener('click', function () {
     location.href = 'job-list';
   });
@@ -60,6 +54,26 @@ document.getElementById('post-job-btn').addEventListener('click', function () {
     $('#startNowModal').modal('show');
   }
 });
+
+document
+  .getElementById('post-job-btn-2')
+  .addEventListener('click', function () {
+    if (token) {
+      location.href = 'home';
+    } else {
+      $('#startNowModal').modal('show');
+    }
+  });
+
+document
+  .getElementById('post-job-btn-3')
+  .addEventListener('click', function () {
+    if (token) {
+      location.href = 'home';
+    } else {
+      $('#startNowModal').modal('show');
+    }
+  });
 
 document
   .getElementById('go-to-login-tab')

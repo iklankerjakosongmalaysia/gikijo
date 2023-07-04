@@ -281,6 +281,7 @@ function fetchPostDetails() {
         .then((data) => {
           if (data?.message) {
             showToast('alert-toast-container', data.message, 'danger');
+            populateOtherPost([]);
           } else {
             populateToJobDetails(data.post_data, data.is_applied);
             populateOtherPost(data.post_all);
@@ -288,6 +289,7 @@ function fetchPostDetails() {
         })
         .catch((error) => {
           console.error(error);
+          populateOtherPost([]);
         });
     } else {
       fetchUrl = `https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/post/not_login/${customId}`;
@@ -295,6 +297,7 @@ function fetchPostDetails() {
         .then((data) => {
           if (data?.message) {
             showToast('alert-toast-container', data.message, 'danger');
+            populateOtherPost([]);
           } else {
             populateToJobDetails(data.post_data, data.is_applied);
             populateOtherPost(data.post_all);
@@ -302,10 +305,12 @@ function fetchPostDetails() {
         })
         .catch((error) => {
           console.error(error);
+          populateOtherPost([]);
         });
     }
   } else {
     showToast('alert-toast-container', 'Post Id not found.', 'danger');
+    populateOtherPost([]);
   }
 }
 
