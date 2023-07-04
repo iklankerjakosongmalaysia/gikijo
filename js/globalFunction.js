@@ -50,7 +50,7 @@ function validateInput(input) {
   var emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/;
 
   // Regular expression pattern to remove numbers with 7 or more digits
-  var phonePattern = /\d{7,}/g;
+  var phonePattern = /\d{8,}/g;
 
   // Regular expression pattern to match URLs
   var urlPattern = /(http|https):\/\/[^\s]+/g;
