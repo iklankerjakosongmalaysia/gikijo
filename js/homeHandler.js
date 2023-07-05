@@ -26,16 +26,18 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
-document.getElementById('version-text').innerHTML = `Gikijo Beta v1.0.7`;
+document.getElementById('version-text').innerHTML = `Gikijo Beta v1.0.8`;
 
 const typeName = {
   type_1: {
     id: 'type_1',
     name: 'ViewUnlock',
+    info: '(Free Publish)',
   },
   type_2: {
     id: 'type_2',
     name: 'DirectView',
+    info: '',
   },
 };
 
@@ -267,6 +269,15 @@ document
   .getElementById('create-go-to-post-type-tab')
   .addEventListener('click', () => {
     document.querySelector('#my-paid-vs-free-slot-tab').click();
+  });
+
+document
+  .getElementById('shortcut-go-to-create-post-tab')
+  .addEventListener('click', () => {
+    document.querySelector('#my-job-tab').click();
+    setTimeout(() => {
+      $('#addJobModal').modal('show');
+    }, 1000);
   });
 
 document
@@ -1199,7 +1210,7 @@ var containerEditJobUrl = document.getElementById('container-edit-job-url');
 Object.entries(typeName).forEach(([key, option]) => {
   const optionElement = document.createElement('option');
   optionElement.value = option.id;
-  optionElement.text = option.name;
+  optionElement.text = `${option.name} ${option.info}`;
   slot_type_edit.appendChild(optionElement);
 });
 
@@ -1782,7 +1793,7 @@ function fetchMyEmployer() {
 
           if (item.is_free == true) {
             is_coin_based = true;
-            slotTypeIcon = `${typeName.type_1.name}`;
+            slotTypeIcon = `${typeName.type_1.name} ${typeName.type_1.info}`;
             activeDateString =
               item.timestamp_active &&
               new Date(item.timestamp_active).toLocaleString('en-US', format);
@@ -1790,7 +1801,7 @@ function fetchMyEmployer() {
               item.timestamp_expired &&
               new Date(item.timestamp_expired).toLocaleString('en-US', format);
           } else {
-            slotTypeIcon = `${typeName.type_2.name}`;
+            slotTypeIcon = `${typeName.type_2.name} ${typeName.type_2.info}`;
             activeDateString =
               item.timestamp_active &&
               new Date(item.timestamp_active).toLocaleString('en-US', format);
@@ -2204,7 +2215,7 @@ var containerCreateJobUrl = document.getElementById('container-create-job-url');
 Object.entries(typeName).forEach(([key, option]) => {
   const optionElement = document.createElement('option');
   optionElement.value = option.id;
-  optionElement.text = option.name;
+  optionElement.text = `${option.name} ${option.info}`;
   slot_type_create.appendChild(optionElement);
 });
 
