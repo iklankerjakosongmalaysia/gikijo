@@ -183,7 +183,7 @@ function populateToJobDetails(item, is_applied) {
   const jobListItem = document.getElementById('job-list-item');
   const listItem = jobListItem.getElementsByTagName('li');
 
-  listItem[0].innerHTML = `<i class="fas fa-building"></i> <a href="company-profile?custom_id=${item.company_data.id}">${item.company_data.name}</a>`;
+  listItem[0].innerHTML = `<i class="fas fa-building"></i> <a href="company-profile?custom_id=${item.company_data.custom_id}">${item.company_data.name}</a>`;
 
   listItem[1].innerHTML = `<i class="fas fa-tag"></i> ${item.type}`;
 
