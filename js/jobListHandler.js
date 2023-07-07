@@ -171,15 +171,18 @@ const inputMaxSalary = document.getElementById('input-job-max-salary');
 
 var postData = [];
 
-document
-  .getElementById('reset-filter-job-btn')
-  .addEventListener('click', function () {
-    inputLocation.value = '';
-    inputType.value = '';
-    inputMinSalary.value = '';
-    inputMaxSalary.value = '';
-    fetchPostList('', '');
-  });
+const resetFilterJobBtn = document.getElementById('reset-filter-job-btn');
+
+resetFilterJobBtn.addEventListener('click', function () {
+  inputLocation.value = '';
+  inputType.value = '';
+  inputMinSalary.value = '';
+  inputMaxSalary.value = '';
+
+  fetchPostList('', '');
+  let useBtn = resetFilterJobBtn;
+  useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
+});
 
 const submitFilterJobBtn = document.getElementById('submit-filter-job-btn');
 
@@ -188,11 +191,9 @@ document
   .addEventListener('submit', function (e) {
     e.preventDefault();
 
-    submitFilterJobBtn.disabled = true;
-    submitFilterJobBtn.innerHTML =
-      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
-
     fetchPostList(inputKeyword.value);
+    let useBtn = submitFilterJobBtn;
+    useBtn.innerHTML = spinnerLoading(useBtn.innerHTML);
   });
 
 const buttonRetryPostList = document.getElementById('button-retry-post-list');
@@ -222,6 +223,15 @@ buttonRetryPostList.addEventListener('click', function () {
 function fetchPostList(passKeyword, passPostId) {
   inputKeyword.value = passKeyword;
 
+  let defaultBtnText = submitFilterJobBtn.innerHTML;
+  let useBtn = submitFilterJobBtn;
+
+  let defaultBtn2Text = resetFilterJobBtn.innerHTML;
+  let useBtn2 = resetFilterJobBtn;
+
+  useBtn.disabled = true;
+  useBtn2.disabled = true;
+
   const options = {
     body: JSON.stringify({
       post_id: passPostId,
@@ -249,14 +259,18 @@ function fetchPostList(passKeyword, passPostId) {
         populateChannel();
       }
 
-      submitFilterJobBtn.disabled = false;
-      submitFilterJobBtn.innerHTML = 'Search';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
+      useBtn2.disabled = false;
+      useBtn2.innerHTML = defaultBtn2Text;
     })
     .catch((error) => {
       populateChannel();
       populateContent(postData);
-      submitFilterJobBtn.disabled = false;
-      submitFilterJobBtn.innerHTML = 'Search';
+      useBtn.disabled = false;
+      useBtn.innerHTML = defaultBtnText;
+      useBtn2.disabled = false;
+      useBtn2.innerHTML = defaultBtn2Text;
       console.error(error);
     });
 }
