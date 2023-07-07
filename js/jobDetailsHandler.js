@@ -1,6 +1,14 @@
 const myData = getSavedData('masterData');
 const token = myData?.authToken;
 
+document.getElementById('login-modal-container').innerHTML = shareLoginModal();
+document.getElementById('reverify-modal-container').innerHTML =
+  shareReverifyModal();
+document.getElementById('forgot-password-modal-container').innerHTML =
+  shareForgotPasswordModal();
+document.getElementById('logout-modal-container').innerHTML =
+  shareLogoutModal();
+
 const topbarNotAuth = document.getElementById('topbar-not-auth');
 const topbarWithAuth = document.getElementById('topbar-with-auth');
 const topbarUsername = document.getElementById('topbar-username');
@@ -17,7 +25,7 @@ if (token) {
   topbarWithAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = '...';
   topBarPostJobButton.addEventListener('click', function () {
-    location.href = 'index?login=true';
+    $('#startNowModal').modal('show');
   });
 }
 
@@ -219,14 +227,15 @@ function populateToJobDetails(item, is_applied) {
 
   const buttonCopyLink = document.createElement('button');
   buttonCopyLink.setAttribute('type', 'button');
-  buttonCopyLink.setAttribute('class', 'btn btn-outline-secondary mr-1');
+  buttonCopyLink.setAttribute('class', 'btn btn-outline-primary mr-1');
   buttonCopyLink.setAttribute('id', 'button-send-invite');
   buttonCopyLink.innerHTML = `<i class="fas fa-link"></i>`;
   buttonCopyLink.addEventListener('click', function () {
     navigator.clipboard
       .writeText(item.internal_apply_link)
       .then(() => {
-        buttonCopyLink.innerHTML = 'Link copied!';
+        showToast('alert-toast-container', 'Link copied!', 'success');
+        buttonCopyLink.setAttribute('class', 'btn btn-outline-secondary mr-1');
       })
       .catch((error) => {
         console.error('Failed to copy link: ', error);
@@ -261,7 +270,7 @@ function populateToJobDetails(item, is_applied) {
     } else {
       buttonApply.innerHTML = `Login to Apply`;
       buttonApply.addEventListener('click', () => {
-        window.open('index?postJob=true', '_self');
+        $('#startNowModal').modal('show');
       });
     }
   }
