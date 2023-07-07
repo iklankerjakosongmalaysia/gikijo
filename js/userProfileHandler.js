@@ -1,6 +1,14 @@
 const myData = getSavedData('masterData');
 const token = myData?.authToken;
 
+document.getElementById('login-modal-container').innerHTML = shareLoginModal();
+document.getElementById('reverify-modal-container').innerHTML =
+  shareReverifyModal();
+document.getElementById('forgot-password-modal-container').innerHTML =
+  shareForgotPasswordModal();
+document.getElementById('logout-modal-container').innerHTML =
+  shareLogoutModal();
+
 const topbarNotAuth = document.getElementById('topbar-not-auth');
 const topbarWithAuth = document.getElementById('topbar-with-auth');
 const topbarUsername = document.getElementById('topbar-username');
@@ -17,7 +25,7 @@ if (token) {
   topbarWithAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = '...';
   topBarPostJobButton.addEventListener('click', function () {
-    location.href = 'index?login=true';
+    $('#startNowModal').modal('show');
   });
 }
 
