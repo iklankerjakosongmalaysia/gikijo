@@ -26,7 +26,7 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
-document.getElementById('version-text').innerHTML = `Gikijo Beta v1.0.12`;
+document.getElementById('version-text').innerHTML = `Gikijo Beta v1.0.13`;
 
 const typeName = {
   type_1: {
