@@ -266,7 +266,7 @@ function shareLoginModal() {
         </div>
       </div>
     </div>
-  );`;
+  `;
 }
 
 function shareReverifyModal() {
@@ -312,7 +312,7 @@ function shareReverifyModal() {
         </div>
       </div>
     </div>
-  ;`;
+  `;
 }
 
 function shareForgotPasswordModal() {
@@ -358,7 +358,7 @@ function shareForgotPasswordModal() {
         </div>
       </div>
     </div>
-  );`;
+  `;
 }
 
 function shareLogoutModal() {
@@ -413,5 +413,5 @@ function shareLogoutModal() {
         </div>
       </div>
     </div>
-  );`;
+  `;
 }
