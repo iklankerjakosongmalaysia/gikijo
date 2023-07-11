@@ -71,27 +71,23 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-            data-lang-key="language_name"
           >
-            English
+            <span data-lang-key="language_name">English</span>
           </button>
           <div class="dropdown-menu">
             <a class="dropdown-item" onclick="changeLanguage('en')">English</a>
-            <a class="dropdown-item" onclick="changeLanguage('ml')">Malay</a>
+            <a class="dropdown-item" onclick="changeLanguage('ml')"
+              >Bahasa Melayu</a
+            >
           </div>
         </div>
-        <div class="btn ml-3" id="topbar-job-list-btn" data-lang-key="job_list">
-          <b>Job List</b>
+        <div class="btn ml-3" id="topbar-job-list-btn">
+          <b><span data-lang-key="job_list">Job List</span></b>
         </div>
       </div>
       <div id="topbar-not-auth" style="display: none">
-        <button
-          type="submit"
-          class="btn btn-primary"
-          id="topbar-login-btn"
-          data-lang-key="login"
-        >
-          Login
+        <button type="submit" class="btn btn-primary" id="topbar-login-btn">
+          <span data-lang-key="login">Login</span>
         </button>
       </div>
       <ul class="navbar-nav ml-auto" id="topbar-with-auth">
@@ -121,21 +117,21 @@
             class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
             aria-labelledby="userDropdown"
           >
-            <a class="dropdown-item" href="home" data-lang-key="home">
+            <a class="dropdown-item" href="home">
               <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
-              Home
+              <span data-lang-key="home">Home</span>
             </a>
-            <a class="dropdown-item" href="profile" data-lang-key="profile">
+            <a class="dropdown-item" href="profile">
               <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-              Profile
+              <span data-lang-key="profile">Profile</span>
             </a>
-            <a class="dropdown-item" href="job-list" data-lang-key="job_list">
+            <a class="dropdown-item" href="job-list">
               <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-              Job List
+              <span data-lang-key="job_list">Job List</span>
             </a>
-            <a class="dropdown-item" href="settings" data-lang-key="settings">
+            <a class="dropdown-item" href="settings">
               <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-              Settings
+              <span data-lang-key="settings">Settings</span>
             </a>
             <div class="dropdown-divider"></div>
             <a
@@ -145,12 +141,13 @@
               data-lang-key="logout"
             >
               <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-              Logout
+              <span data-lang-key="logout">Logout</span>
             </a>
           </div>
         </li>
       </ul>
     </nav>
+    <!-- End of Topbar -->
     <section
       class="jumbotron text-center d-flex"
       style="
@@ -163,32 +160,33 @@
         <h1
           class="jumbotron-heading text-gray-900"
           style="font-size: 3em; font-weight: 800"
-          data-lang-key="main_tagline"
         >
-          Fresh Job Board, Easy Apply
+          <span data-lang-key="fresh_job_board_easy"
+            >Fresh Job Board, Easy Apply</span
+          >
         </h1>
-        <p class="lead text-muted" data-lang-key="main_desc_tagline">
-          Introducing Gikijo, Malaysia's innovative job board platform.
-          Previously known as iklankerjakosongmalaysia (IKKM), we've rebranded
-          to enhance our services for the needs of job seekers and employers
-          throughout the country.
+        <p class="lead text-muted">
+          <span data-lang-key="introducing_gikijo">
+            Introducing Gikijo, Malaysia's innovative job board platform.
+            Previously known as iklankerjakosongmalaysia (IKKM), we've rebranded
+            to enhance our services for the needs of job seekers and employers
+            throughout the country.
+          </span>
         </p>
         <p class="pt-3">
           <button
             type="submit"
             class="btn btn-primary btn-lg"
             id="find-job-btn"
-            data-lang-key="find_job"
           >
-            Find Job
+            <span data-lang-key="find_job">Find Job</span>
           </button>
           <button
             type="button"
             class="btn btn-outline-primary btn-lg"
             id="post-job-btn"
-            data-lang-key="post_job"
           >
-            Post Job
+            <span data-lang-key="post_job">Post Job</span>
           </button>
         </p>
       </div>
@@ -203,17 +201,19 @@
                 <h1
                   class="text-gray-900 mb-3"
                   style="font-size: 3em; font-weight: 800"
-                  data-lang-key="find_and_apply"
                 >
-                  Find and Apply for Jobs
-                  <strong class="text-primary">Seamlessly!</strong>
+                  <span data-lang-key="find_and_apply"
+                    >Find and Apply for Jobs
+                  </span>
+                  <strong class="text-primary"
+                    ><span data-lang-key="seamlessly">Seamlessly!</span></strong
+                  >
                 </h1>
-                <p
-                  class="lead fw-normal mb-4"
-                  data-lang-key="with_our_user_friendly"
-                >
-                  With our user-friendly interface, you can easily explore job
-                  opportunities and apply for them seamlessly.
+                <p class="lead fw-normal mb-4">
+                  <span data-lang-key="with_our_user_friendly"
+                    >With our user-friendly interface, you can easily explore
+                    job opportunities and apply for them seamlessly.
+                  </span>
                 </p>
               </div>
             </div>
@@ -244,13 +244,20 @@
                   class="text-gray-900 mb-3"
                   style="font-size: 3em; font-weight: 800"
                 >
-                  Craft a Standout Resume that
-                  <strong class="text-primary">Wows!</strong>
+                  <span data-lang-key="craft_a_standout">
+                    Craft a Standout Resume that
+                  </span>
+                  <strong class="text-primary">
+                    <span data-lang-key="wow">Wows!</span>
+                  </strong>
                 </h1>
                 <p class="lead fw-normal mb-4">
-                  Create your resume and make changes whenever you want. Your
-                  special resume can be used to apply for new jobs in the future
-                  or to let employers find out how amazing you are!
+                  <span data-lang-key="create_your_resume_and"
+                    >Create your resume and make changes whenever you want. Your
+                    special resume can be used to apply for new jobs in the
+                    future or to let employers find out how amazing you
+                    are!</span
+                  >
                 </p>
               </div>
             </div>
@@ -272,7 +279,7 @@
           class="jumbotron-heading text-gray-900"
           style="font-size: 3em; font-weight: 800"
         >
-          How It Works
+          <span data-lang-key="how_it_works">How It Works</span>
         </h1>
 
         <div class="container mt-5">
@@ -284,7 +291,12 @@
                   alt="image"
                   style="width: 30%"
                 />
-                <h4 class="mt-3 text-gray-900">Build Your Resume</h4>
+
+                <h4 class="mt-3 text-gray-900">
+                  <span data-lang-key="build_your_resume"
+                    >Build Your Resume</span
+                  >
+                </h4>
               </div>
             </div>
 
@@ -295,7 +307,9 @@
                   alt="image"
                   style="width: 30%"
                 />
-                <h4 class="mt-3 text-gray-900">Find Jobs</h4>
+                <h4 class="mt-3 text-gray-900">
+                  <span data-lang-key="find_jobs">Find Jobs</span>
+                </h4>
               </div>
             </div>
 
@@ -306,23 +320,27 @@
                   alt="image"
                   style="width: 30%"
                 />
-                <h4 class="mt-3 text-gray-900">Apply for Jobs</h4>
+                <h4 class="mt-3 text-gray-900">
+                  <span data-lang-key="apply_for_jobs">Apply for Jobs</span>
+                </h4>
               </div>
             </div>
           </div>
           <p class="mt-3 lead text-muted" data-lang-key="start_posting_your">
-            Start today and take control of your career journey. With our
-            platform, you can easily create a standout resume, explore various
-            job options, and effortlessly apply to secure your dream job.
+            <span data-lang-key="start_today_and_take"
+              >Start today and take control of your career journey. With our
+              platform, you can easily create a standout resume, explore various
+              job options, and effortlessly apply to secure your dream
+              job.</span
+            >
           </p>
           <p class="pt-3">
             <button
               type="button"
               class="btn btn-primary btn-lg"
               id="post-job-btn-3"
-              data-lang-key="get_started_today"
             >
-              Get Started Today
+              <span data-lang-key="get_started_today">Get Started Today</span>
             </button>
           </p>
         </div>
@@ -336,13 +354,17 @@
             class="jumbotron-heading text-gray-900"
             style="font-size: 3em; font-weight: 800"
           >
-            Are You an Employer?
+            <span data-lang-key="are_you_an_employer"
+              >Are You an Employer?</span
+            >
           </h1>
           <p class="lead text-muted">
-            If you're an employer looking for a platform that offers a
-            refreshing experience to post your job openings, this is the perfect
-            place for you to consider. Give it a try and experience its
-            benefits.
+            <span data-lang-key="if_you_are_an_employer"
+              >If you're an employer looking for a platform that offers a
+              refreshing experience to post your job openings, this is the
+              perfect place for you to consider. Give it a try and experience
+              its benefits.</span
+            >
           </p>
         </div>
       </section>
@@ -355,17 +377,19 @@
                 <h1
                   class="text-gray-900 mb-3"
                   style="font-size: 3em; font-weight: 800"
-                  data-lang-key="publish_and_share"
                 >
-                  Publish and Share Job Posts
-                  <strong class="text-primary">Super Easy!</strong>
+                  <span data-lang-key="publish_and_share"
+                    >Publish and Share Job Posts</span
+                  >
+                  <strong class="text-primary"
+                    ><span data-lang-key="super_easy">Super Easy!</span>
+                  </strong>
                 </h1>
-                <p
-                  class="lead fw-normal mb-4"
-                  data-lang-key="simplify_the_process"
-                >
-                  Simplify the process of creating job posts and effortlessly
-                  share them on our rapidly growing Telegram channels.
+                <p class="lead fw-normal mb-4">
+                  <span data-lang-key="simplify_the_process"
+                    >Simplify the process of creating job posts and effortlessly
+                    share them on our rapidly growing Telegram channels.</span
+                  >
                 </p>
               </div>
             </div>
@@ -394,12 +418,14 @@
                 />
               </div>
               <div>
-                <h4 class="mb-1 text-gray-900" data-lang-key="quick_and_easy">
-                  Quick & Easy
+                <h4 class="mb-1 text-gray-900">
+                  <span data-lang-key="quick_and_easy">Quick & Easy</span>
                 </h4>
-                <p class="small mb-0" data-lang-key="share_your_job_post">
-                  Share your job post on our Telegram channels with just a few
-                  clicks, saving you time and effort.
+                <p class="small mb-0">
+                  <span data-lang-key="share_your_job_post"
+                    >Share your job post on our Telegram channels with just a
+                    few clicks, saving you time and effort.</span
+                  >
                 </p>
               </div>
             </div>
@@ -415,12 +441,15 @@
                 />
               </div>
               <div>
-                <h4 class="mb-1 text-gray-900" data-lang-key="affordable">
-                  Affordable
+                <h4 class="mb-1 text-gray-900">
+                  <span data-lang-key="affordable">Affordable</span>
                 </h4>
-                <p class="small mb-0" data-lang-key="get_your_job_post">
-                  Get your job post published at a low cost with our
-                  budget-friendly pricing options or choose to publish for free!
+                <p class="small mb-0">
+                  <span data-lang-key="get_your_job_post"
+                    >Get your job post published at a low cost with our
+                    budget-friendly pricing options or choose to publish for
+                    free!</span
+                  >
                 </p>
               </div>
             </div>
@@ -432,12 +461,14 @@
                 <img src="img/icon-clock.png" alt="image" style="width: 100%" />
               </div>
               <div>
-                <h4 class="mb-1 text-gray-900" data-lang-key="post_anytime">
-                  Post Anytime
+                <h4 class="mb-1 text-gray-900">
+                  <span data-lang-key="post_anytime">Post Anytime</span>
                 </h4>
-                <p class="small mb-0" data-lang-key="reach_a_wider_audience">
-                  Reach a wider audience and attract more qualified candidates
-                  by publish your job post anytime you want.
+                <p class="small mb-0">
+                  <span data-lang-key="reach_a_wider_audience"
+                    >Reach a wider audience and attract more qualified
+                    candidates by publish your job post anytime you want.</span
+                  >
                 </p>
               </div>
             </div>
@@ -458,24 +489,24 @@
         <h1
           class="jumbotron-heading text-gray-900"
           style="font-size: 3em; font-weight: 800"
-          data-lang-key="ready_to_get"
         >
-          Ready to get started?
+          <span data-lang-key="ready_to_get">Ready to get started?</span>
         </h1>
-        <p class="lead text-muted" data-lang-key="start_posting_your">
-          Don't miss this special chance to be among the first listings in our
-          job post list. Post your job today while the competition is still low
-          on our newly launched platform. This is your special opportunity to
-          stand out.
+        <p class="lead text-muted">
+          <span data-lang-key="don_not_miss_this"
+            >Don't miss this special chance to be among the first listings in
+            our job post list. Post your job today while the competition is
+            still low on our newly launched platform. This is your special
+            opportunity to stand out.</span
+          >
         </p>
         <p class="pt-3">
           <button
             type="button"
             class="btn btn-primary btn-lg"
             id="post-job-btn-2"
-            data-lang-key="get_started_today"
           >
-            Get Started Today
+            <span data-lang-key="get_started_today">Get Started Today</span>
           </button>
         </p>
       </div>

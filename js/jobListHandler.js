@@ -12,7 +12,7 @@ document.getElementById('logout-modal-container').innerHTML =
 const topbarNotAuth = document.getElementById('topbar-not-auth');
 const topbarWithAuth = document.getElementById('topbar-with-auth');
 const topbarUsername = document.getElementById('topbar-username');
-const topBarPostJobButton = document.getElementById('topbar-post-job-btn');
+const topBarLoginButton = document.getElementById('topbar-login-btn');
 const logoutBtn = document.getElementById('button-logout-yes');
 logoutBtn.addEventListener('click', clearSession);
 
@@ -24,22 +24,24 @@ if (token) {
   topbarNotAuth.removeAttribute('style');
   topbarWithAuth.setAttribute('style', 'display: none');
   topbarUsername.innerHTML = '...';
-  topBarPostJobButton.addEventListener('click', function () {
+  topBarLoginButton.addEventListener('click', function () {
     $('#startNowModal').modal('show');
   });
 }
 
 document
-  .getElementById('topbar-job-list-btn-not-auth')
+  .getElementById('topbar-job-list-btn')
   .addEventListener('click', function () {
     location.href = 'job-list';
   });
 
-document
-  .getElementById('topbar-job-list-btn-with-auth')
-  .addEventListener('click', function () {
-    location.href = 'job-list';
-  });
+$(document).ready(function () {
+  var urlParams = new URLSearchParams(window.location.search);
+  var login = urlParams.get('login');
+  if (login === 'true') {
+    $('#startNowModal').modal('show');
+  }
+});
 
 document
   .getElementById('button-empty-list-post-job')
@@ -92,11 +94,7 @@ function populateContent(passData) {
   listLoader.classList.add('hidden');
 
   const textTotalJOb = document.getElementById('text-total-job');
-  if (totalRecord.length > 0) {
-    textTotalJOb.innerText = `Showing ${totalRecord.length} jobs`;
-  } else {
-    textTotalJOb.innerText = `Showing ${totalRecord.length} job`;
-  }
+  textTotalJOb.innerText = ` ${totalRecord.length} `;
 
   if (totalRecord.length === 0) {
     listEmpty.classList.remove('hidden');
