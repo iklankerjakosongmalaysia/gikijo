@@ -135,6 +135,18 @@
           margin-top: 1rem;
         }
       }
+
+      .card-move {
+        transition: 0.3s transform cubic-bezier(0.155, 1.105, 0.295, 1.12),
+          0.3s box-shadow,
+          0.3s -webkit-transform cubic-bezier(0.155, 1.105, 0.295, 1.12);
+        cursor: pointer;
+      }
+      .card-move:hover {
+        transform: scale(1.01);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12),
+          0 4px 8px rgba(0, 0, 0, 0.06);
+      }
     </style>
   </head>
 
@@ -434,17 +446,18 @@
             </div>
             <div class="hidden" id="content-list-container">
               <div>
-                <div class="card mt-3" id="content-list-body">
+                <div class="card card-move mt-3" id="content-list-body">
                   <div class="card-body">
                     <div class="d-flex justify-content-between">
                       <div>
                         <h5 class="mb-0">
                           <strong class="card-title mb-0">
                             <span data-lang-key="title">Title</span></strong
-                          >
+                          ><br />
+                          <h8 style="font-size: 13px">...</h8>
                         </h5>
                       </div>
-                      <h8 style="font-size: 13px">...</h8>
+                      <i class="fas fa-chevron-right text-gray-600"></i>
                     </div>
                     <ul class="list-unstyled mt-3">
                       <li>...</li>
@@ -453,13 +466,13 @@
                       <li>...</li>
                     </ul>
                     <!-- <hr class="hr" /> -->
-                    <div class="row">
+                    <!-- <div class="row">
                       <div class="col text-right">
                         <button class="btn btn-primary" type="button">
                           <span data-lang-key="view">View</span>
                         </button>
                       </div>
-                    </div>
+                    </div> -->
                     <!-- <div id="summary">
                       <div>
                         <h5>Title</h5>

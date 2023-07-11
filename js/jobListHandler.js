@@ -64,7 +64,6 @@ function populateContent(passData) {
     const title = divs[0].getElementsByTagName('strong');
     const postedAt = divs[0].getElementsByTagName('h8');
     const listItem = divs[0].getElementsByTagName('li');
-    const applyButton = divs[0].getElementsByTagName('button');
 
     var created_at = new Date(item.created_at);
     var timeAgo = moment(created_at).fromNow(true);
@@ -84,7 +83,7 @@ function populateContent(passData) {
 
     listItem[3].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${item.location}`;
 
-    applyButton[0].addEventListener('click', function () {
+    divs[0].addEventListener('click', function () {
       window.open(item.internal_apply_link, '_self');
     });
 
