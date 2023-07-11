@@ -47,6 +47,7 @@
     <script src="js/apiHelper.js"></script>
     <script src="js/globalFunction.js"></script>
     <script src="js/shareComponent.js"></script>
+    <script src="js/translation.js"></script>
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6981662240440614"
@@ -140,44 +141,39 @@
   <body>
     <!-- Topbar -->
     <nav
-      class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
-      id="topbar-not-auth"
-      style="display: none"
-    >
-      <div class="justify-content-between row" style="width: 100%">
-        <a href="index" class="ml-3">
-          <img src="img/gikijo_logo.png" alt="image" width="100" />
-        </a>
-        <div class="d-sm-inline-block mr-auto ml-md-3">
-          <div class="btn ml-3" id="topbar-job-list-btn-not-auth">
-            <b>Job List</b>
-          </div>
-        </div>
-        <div>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            id="topbar-post-job-btn"
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    </nav>
-    <nav
-      class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
-      id="topbar-with-auth"
-      style="display: none"
+      class="navbar navbar-expand navbar-light bg-white topbar static-top shadow"
     >
       <a href="index" class="ml-3">
         <img src="img/gikijo_logo.png" alt="image" width="100" />
       </a>
       <div class="d-sm-inline-block mr-auto ml-md-3">
-        <div class="btn ml-3" id="topbar-job-list-btn-with-auth">
-          <b>Job List</b>
+        <div class="btn-group ml-3" style="display: none">
+          <button
+            type="button"
+            class="btn btn-outline-primary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span data-lang-key="language_name">English</span>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="changeLanguage('en')">English</a>
+            <a class="dropdown-item" onclick="changeLanguage('ml')"
+              >Bahasa Melayu</a
+            >
+          </div>
+        </div>
+        <div class="btn ml-3" id="topbar-job-list-btn">
+          <b><span data-lang-key="job_list">Job List</span></b>
         </div>
       </div>
-      <ul class="navbar-nav ml-auto">
+      <div id="topbar-not-auth" style="display: none">
+        <button type="submit" class="btn btn-primary" id="topbar-login-btn">
+          <span data-lang-key="login">Login</span>
+        </button>
+      </div>
+      <ul class="navbar-nav ml-auto" id="topbar-with-auth">
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
           <a
@@ -206,35 +202,35 @@
           >
             <a class="dropdown-item" href="home">
               <i class="fas fa-home fa-sm fa-fw mr-2 text-gray-400"></i>
-              Home
+              <span data-lang-key="home">Home</span>
             </a>
             <a class="dropdown-item" href="profile">
               <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-              Profile
+              <span data-lang-key="profile">Profile</span>
             </a>
             <a class="dropdown-item" href="job-list">
               <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-              Job List
+              <span data-lang-key="job_list">Job List</span>
             </a>
             <a class="dropdown-item" href="settings">
               <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-              Settings
+              <span data-lang-key="settings">Settings</span>
             </a>
             <div class="dropdown-divider"></div>
             <a
               class="dropdown-item"
               data-toggle="modal"
               data-target="#logoutModal"
+              data-lang-key="logout"
             >
               <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-              Logout
+              <span data-lang-key="logout">Logout</span>
             </a>
           </div>
         </li>
       </ul>
     </nav>
     <!-- End of Topbar -->
-
     <div class="container">
       <div class="row">
         <div class="col-lg-3">
@@ -244,15 +240,16 @@
               class="btn btn-primary show-filter-btn"
               id="toggle-filter-btn"
             >
-              <i class="fas fa-filter"></i> Show Filter
+              <i class="fas fa-filter"></i>
+              <span data-lang-key="show_filter">Show Filter</span>
             </button>
             <form id="filter-job-form" class="mt-3">
               <div class="flex-wrap">
-                <strong class="d-inline-block mb-2 text-primary"
-                  >Filter Jobs</strong
+                <strong class="d-inline-block mb-2 text-primary">
+                  <span data-lang-key="filter_job">Filter Jobs</span></strong
                 >
                 <div class="form-group">
-                  <label>Title</label>
+                  <label><span data-lang-key="title">Title</span></label>
                   <input
                     type="text"
                     class="form-control"
@@ -261,9 +258,11 @@
                   />
                 </div>
                 <div class="form-group">
-                  <label>Location</label>
+                  <label><span data-lang-key="location">Location</span></label>
                   <select class="custom-select" id="input-job-location">
-                    <option value="">Select Location</option>
+                    <option value="" data-lang-key="select_location">
+                      Select Location
+                    </option>
                     <option value="Johor">Johor</option>
                     <option value="Kedah">Kedah</option>
                     <option value="Kelantan">Kelantan</option>
@@ -283,9 +282,11 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label>Type</label>
+                  <label data-lang-key="type">Type</label>
                   <select class="custom-select" id="input-job-type">
-                    <option value="">Select Type</option>
+                    <option value="" data-lang-key="select_type">
+                      Select Type
+                    </option>
                     <option value="Full-time">Full-time</option>
                     <option value="Part-time">Part-time</option>
                     <option value="Contract">Contract</option>
@@ -296,7 +297,7 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label>Salary (MYR)</label>
+                  <label data-lang-key="salary_rm">Salary (MYR)</label>
                   <div class="form-row">
                     <div class="col">
                       <div class="input-group">
@@ -330,26 +331,30 @@
                     class="btn btn-primary btn-block"
                     id="submit-filter-job-btn"
                   >
-                    Search
+                    <span data-lang-key="search">Search</span>
                   </button>
                   <button
                     type="button"
                     class="btn btn-outline-secondary btn-block"
                     id="reset-filter-job-btn"
                   >
-                    Reset
+                    <span data-lang-key="reset">Reset</span>
                   </button>
                 </div>
               </div>
             </form>
             <hr />
             <strong class="d-inline-block mb-2 mt-2 text-primary"
-              >Explore other channels</strong
+              ><span data-lang-key="explore_other_channels"
+                >Explore other channels</span
+              ></strong
             >
 
             <div class="text-center p-5" id="channel-list-loader">
               <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+                <span class="sr-only" data-lang-key="loading_dot"
+                  >Loading...</span
+                >
               </div>
             </div>
 
@@ -358,9 +363,13 @@
                 <div class="empty-box-icon">
                   <i class="fas fa-exclamation-circle fa-2x"></i>
                 </div>
-                <h6 class="mt-2">No Channels Found</h6>
+                <h6 class="mt-2">
+                  <span data-lang-key="no_channels_found"
+                    >No Channels Found</span
+                  >
+                </h6>
                 <a href="#" id="refresh-channel-list" class="text-primary"
-                  >Refresh</a
+                  ><span data-lang-key="refresh">Refresh</span></a
                 >
               </div>
             </div>
@@ -376,15 +385,17 @@
           </div>
         </div>
         <div class="col-lg-9">
-          <strong
-            class="d-inline-block mb-2 mt-3 text-secondary"
-            id="text-total-job"
-            >...</strong
+          <strong class="d-inline-block mb-2 mt-3 text-secondary"
+            ><span data-lang-key="showing">Showing</span
+            ><span id="text-total-job"> 0 </span
+            ><span data-lang-key="jobs">jobs</span></strong
           >
           <div>
             <div class="text-center p-5" id="content-list-loader">
               <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+                <span class="sr-only" data-lang-key="loading_dot"
+                  >Loading...</span
+                >
               </div>
             </div>
             <div id="content-list-empty" class="hidden">
@@ -394,21 +405,28 @@
                     <div class="empty-box-icon">
                       <i class="fas fa-box-open fa-3x"></i>
                     </div>
-                    <h1 class="mt-4">Empty list</h1>
-                    <p>Sorry, we couldn't find any results at the moment.</p>
+                    <h1 class="mt-4">
+                      <span data-lang-key="empty_list">Empty list</span>
+                    </h1>
+                    <p>
+                      <span data-lang-key="sorry_we_could_not_find"
+                        >Sorry, we couldn't find any results at the
+                        moment.</span
+                      >
+                    </p>
                     <button
                       class="btn btn-outline-primary"
                       type="button"
                       id="button-empty-list-post-job"
                     >
-                      Post Job
+                      <span data-lang-key="post_job">Post Job</span>
                     </button>
                     <button
                       class="btn btn-outline-secondary"
                       type="button"
                       id="button-retry-post-list"
                     >
-                      Retry
+                      <span data-lang-key="retry">Retry</span>
                     </button>
                   </div>
                 </div>
@@ -421,7 +439,9 @@
                     <div class="d-flex justify-content-between">
                       <div>
                         <h5 class="mb-0">
-                          <strong class="card-title mb-0">Title</strong>
+                          <strong class="card-title mb-0">
+                            <span data-lang-key="title">Title</span></strong
+                          >
                         </h5>
                       </div>
                       <h8 style="font-size: 13px">...</h8>
@@ -436,7 +456,7 @@
                     <div class="row">
                       <div class="col text-right">
                         <button class="btn btn-primary" type="button">
-                          View
+                          <span data-lang-key="view">View</span>
                         </button>
                       </div>
                     </div>

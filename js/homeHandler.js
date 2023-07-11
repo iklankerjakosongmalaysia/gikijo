@@ -26,7 +26,7 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
-document.getElementById('version-text').innerHTML = `Gikijo Beta v1.0.13`;
+document.getElementById('version-text').innerHTML = `Gikijo Beta v1.1.0`;
 
 const typeName = {
   type_1: {
@@ -212,18 +212,18 @@ if (myData.userData.role_id === 1) {
       content: 'my-job',
     },
     {
-      id: 'admin-tab',
-      title: 'Jobs (admin)',
-      content: 'admin',
-    },
-    {
       id: 'admin-user-tab',
-      title: 'Users (admin)',
+      title: 'All User (admin)',
       content: 'admin-user',
     },
     {
+      id: 'admin-post-tab',
+      title: 'All Post (admin)',
+      content: 'admin-post',
+    },
+    {
       id: 'admin-feedback-tab',
-      title: 'Feedbacks (admin)',
+      title: 'All Feedback (admin)',
       content: 'admin-feedback',
     }
   );
@@ -2340,470 +2340,272 @@ document
     }
   });
 
-const expiredBtn = document.getElementById('expired-slot-btn');
-expiredBtn.addEventListener('click', expiredJob);
+function populateToAllUserTable(tableData) {
+  const tableLoader = document.getElementById('all-user-table-loader');
 
-function expiredJob() {
-  expiredBtn.disabled = true;
-  expiredBtn.innerHTML = loadingText;
+  // Check if the DataTable instance exists
+  if ($.fn.DataTable.isDataTable('#all-user-table')) {
+    // If the DataTable instance exists, clear and destroy it
+    $('#all-user-table').DataTable().clear().destroy();
+  }
 
-  const options = {
-    body: JSON.stringify({
-      job_id: adminOpenJobId,
-    }),
-  };
+  $('#all-user-table').DataTable({
+    data: tableData,
+    columns: [
+      {
+        title: '<small>Id</small>',
+        data: 'id',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Created at</small>',
+        data: 'created_at',
+        render: function (data, type, row, meta) {
+          let tempCreatedDate = new Date(data);
+          let createdDate = tempCreatedDate.toLocaleString('en-US', format);
+          return `<small>${createdDate}</small>`;
+        },
+      },
+      {
+        title: '<small>Username</small>',
+        data: 'username',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      // {
+      //   title: '<small>Email</small>',
+      //   data: 'email',
+      //   render: function (data, type, row, meta) {
+      //     return `<small>${data}</small>`;
+      //   },
+      // },
+      {
+        title: '<small>Company Name</small>',
+        data: 'id',
+        render: function (data, type, row, meta) {
+          let companyName = row?.company_of_user_data?.name
+            ? row.company_of_user_data.name
+            : '-';
+          return `<small>${companyName}</small>`;
+        },
+      },
+      {
+        title: '<small>Status</small>',
+        data: 'verify',
+        render: function (data, type, row, meta) {
+          let badge = ``;
 
-  fetchAPI(
-    'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7:v1/admin/job/expired',
-    'PUT',
-    token,
-    options
-  )
-    .then((data) => {
-      if (data?.message) {
-        showToast('alert-toast-container', data.message, 'danger');
-        expiredBtn.disabled = false;
-        expiredBtn.innerHTML = 'Expired Slot';
-      } else {
-        // delay of 2 seconds before calling fetchMyEmployer
-        setTimeout(() => {
-          fetchAdminMaster();
-          $('#actionModal').modal('hide');
-          expiredBtn.disabled = false;
-          expiredBtn.innerHTML = 'Expired Slot';
-        }, 2000);
-      }
-    })
-    .catch((error) => {
-      $('#actionModal').modal('hide');
-      expiredBtn.disabled = false;
-      expiredBtn.innerHTML = 'Expired Slot';
-    });
-}
+          if (data) {
+            badge = `<span class="badge badge-pill badge-success">Verified</span>`;
+          } else {
+            badge = `<span class="badge badge-pill badge-warning">Not Verified</span>`;
+          }
 
-const undoExpiredBtn = document.getElementById('undo-expired-slot-btn');
-undoExpiredBtn.addEventListener('click', undoExpiredJob);
-
-function undoExpiredJob() {
-  undoExpiredBtn.disabled = true;
-  undoExpiredBtn.innerHTML = loadingText;
-
-  const options = {
-    body: JSON.stringify({
-      job_id: adminOpenJobId,
-    }),
-  };
-
-  fetchAPI(
-    'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/job/undo/expired',
-    'PUT',
-    token,
-    options
-  )
-    .then((data) => {
-      if (data?.message) {
-        showToast('alert-toast-container', data.message, 'danger');
-        undoExpiredBtn.disabled = false;
-        undoExpiredBtn.innerHTML = 'Undo Expiry';
-      } else {
-        // delay of 2 seconds before calling fetchMyEmployer
-        setTimeout(() => {
-          fetchAdminMaster();
-          $('#actionModal').modal('hide');
-          undoExpiredBtn.disabled = false;
-          undoExpiredBtn.innerHTML = 'Undo Expiry';
-        }, 2000);
-      }
-    })
-    .catch((error) => {
-      $('#actionModal').modal('hide');
-      undoExpiredBtn.disabled = false;
-      undoExpiredBtn.innerHTML = 'Undo Expiry';
-    });
-}
-
-const blockBtn = document.getElementById('block-slot-btn');
-blockBtn.addEventListener('click', blockSlot);
-
-function blockSlot() {
-  blockBtn.disabled = true;
-  blockBtn.innerHTML = loadingText;
-
-  const options = {
-    body: JSON.stringify({
-      job_id: adminOpenJobId,
-    }),
-  };
-
-  fetchAPI(
-    'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/job/block',
-    'PUT',
-    token,
-    options
-  )
-    .then((data) => {
-      if (data?.message) {
-        showToast('alert-toast-container', data.message, 'danger');
-        blockBtn.disabled = false;
-        blockBtn.innerHTML = 'Block Slot';
-      } else {
-        // delay of 2 seconds before calling fetchMyEmployer
-        setTimeout(() => {
-          fetchAdminMaster();
-          $('#actionModal').modal('hide');
-          blockBtn.disabled = false;
-          blockBtn.innerHTML = 'Block Slot';
-        }, 2000);
-      }
-    })
-    .catch((error) => {
-      $('#actionModal').modal('hide');
-      blockBtn.disabled = false;
-      blockBtn.innerHTML = 'Block Slot';
-    });
-}
-
-const unblockBtn = document.getElementById('unblock-slot-btn');
-unblockBtn.addEventListener('click', unBlockSlot);
-
-function unBlockSlot() {
-  unblockBtn.disabled = true;
-  unblockBtn.innerHTML = loadingText;
-
-  const options = {
-    body: JSON.stringify({
-      job_id: adminOpenJobId,
-    }),
-  };
-
-  fetchAPI(
-    'https://x8ki-letl-twmt.n7.xano.io/api:P5dHgbq7/admin/job/unblock',
-    'PUT',
-    token,
-    options
-  )
-    .then((data) => {
-      if (data?.message) {
-        showToast('alert-toast-container', data.message, 'danger');
-        unblockBtn.disabled = false;
-        unblockBtn.innerHTML = 'Unblock Slot';
-      } else {
-        // delay of 2 seconds before calling fetchMyEmployer
-        setTimeout(() => {
-          fetchAdminMaster();
-          $('#actionModal').modal('hide');
-          unblockBtn.disabled = false;
-          unblockBtn.innerHTML = 'Unblock Slot';
-        }, 2000);
-      }
-    })
-    .catch((error) => {
-      $('#actionModal').modal('hide');
-      unblockBtn.disabled = false;
-      unblockBtn.innerHTML = 'Unblock Slot';
-    });
-}
-
-function populateToAdminAllJobs(data) {
-  var job_list = data.job;
-  var post_list = data.post;
-
-  post_list.map((item1) => {
-    job_list.map((item2, index) => {
-      if (item1.job_id == item2.id) {
-        if (job_list[index].postData) {
-          job_list[index].postData.push(item1);
-        } else {
-          job_list[index].postData = [item1];
-        }
-      }
-    });
+          return `<small>${badge}</small>`;
+        },
+      },
+      {
+        title: '<small>Role</small>',
+        data: 'id',
+        render: function (data, type, row, meta) {
+          let roleData = row.role_data?.title ? row.role_data.title : '-';
+          return `<small>${roleData}</small>`;
+        },
+      },
+    ],
+    lengthChange: false,
+    drawCallback: function () {
+      tableLoader.style.display = 'none';
+    },
   });
-
-  const loadingAdminAllJobCard = document.getElementById(
-    'admin-all-job-card-loading'
-  );
-  const emptyCard = document.getElementById('admin-all-job-card-empty');
-  const parentTable = document.getElementById('admin-all-job-table-parent');
-  const tableBody = document.getElementById('admin-all-job-table-body');
-  // Clear the table before appending the new data
-  while (tableBody.firstChild) {
-    tableBody.removeChild(tableBody.firstChild);
-  }
-
-  adminJobListState = job_list;
-  var totalRecord = [];
-
-  job_list.forEach((item) => {
-    let isPaid_isFree = false;
-    let badge = '';
-
-    let active_date = '-';
-    let expired_date = '-';
-    let day_visibility = '-';
-
-    let version_type = '-';
-
-    if (item?.payment_info?.payment_status == 'paid') {
-      isPaid_isFree = true;
-      version_type = 'Plus';
-    }
-    if (item.is_free == true) {
-      isPaid_isFree = true;
-      version_type = 'Free';
-    }
-
-    if (item.timestamp_active && item.timestamp_expired) {
-      let activeDate = new Date(item.timestamp_active);
-      let expiredDate = new Date(item.timestamp_expired);
-
-      active_date = activeDate.toLocaleString('en-US', format);
-      expired_date = expiredDate.toLocaleString('en-US', format);
-      if (item?.payment_info?.payment_status == 'paid') {
-        day_visibility = item.payment_info.day_visibility;
-      } else {
-        day_visibility = 0;
-      }
-    } else {
-      active_date = '-';
-      expired_date = '-';
-      day_visibility = '-';
-    }
-
-    if (isPaid_isFree === false) {
-    } else if (isPaid_isFree === true && item.status_id === 1) {
-      badge = `<span class="badge badge-pill badge-success">Active</span>`;
-    } else if (isPaid_isFree === true && item.status_id === 2) {
-      badge = `<span class="badge badge-pill badge-success">Active</span>`;
-    } else if (isPaid_isFree === true && item.status_id === 3) {
-      badge = `<span class="badge badge-pill badge-secondary">Expired</span>`;
-    } else if (isPaid_isFree === true && item.status_id === 4) {
-      badge = `<span class="badge badge-pill badge-dark">Blocked</span>`;
-    }
-
-    let row = document.createElement('tr');
-    let jobId = document.createElement('td');
-    jobId.innerText = item.custom_id;
-    let jobTitle = document.createElement('td');
-    jobTitle.innerText = item.title;
-    let companyName = document.createElement('td');
-    companyName.innerText = item.company_name;
-    let postedAt = document.createElement('td');
-    postedAt.innerText = active_date;
-    let expiredAt = document.createElement('td');
-    expiredAt.innerText = expired_date;
-    let days = document.createElement('td');
-    days.innerText = day_visibility;
-    let version = document.createElement('td');
-    version.innerHTML = version_type;
-
-    let button = document.createElement('button');
-
-    if (item.timestamp_active && item.timestamp_expired) {
-      let expiredDate = new Date(item.timestamp_expired);
-
-      // Get the current date and time
-      let currentDate = new Date();
-
-      // Compare the two dates
-      if (
-        expiredDate.getTime() < currentDate.getTime() &&
-        item.status_id !== 3
-      ) {
-        badge = `<span class="badge badge-pill badge-warning">Action needed</span>`;
-        button.classList.add('btn', 'btn-primary');
-      } else {
-        button.classList.add('btn', 'btn-secondary');
-      }
-    } else {
-      button.classList.add('btn', 'btn-secondary');
-    }
-
-    button.setAttribute('type', 'button');
-    button.setAttribute('data-telegram', JSON.stringify(item.telegram));
-
-    if (item?.postData) {
-      button.innerHTML = `View All <span class="badge badge-light">${item.postData.length}</span>`;
-    } else {
-      button.innerHTML = `View All <span class="badge badge-light">0</span>`;
-    }
-
-    button.onclick = function () {
-      $('#actionModal').modal('show');
-      adminOpenJobId = item.id;
-      adminFilterJob();
-    };
-
-    let status = document.createElement('td');
-    status.innerHTML = badge;
-
-    let action = document.createElement('td');
-    action.appendChild(button);
-
-    row.appendChild(jobId);
-    row.appendChild(jobTitle);
-    row.appendChild(companyName);
-    row.appendChild(postedAt);
-    row.appendChild(expiredAt);
-    row.appendChild(days);
-    row.appendChild(status);
-    row.appendChild(version);
-    row.appendChild(action);
-    totalRecord.push(item);
-    document.getElementById('admin-all-job-table-body').appendChild(row);
-  });
-
-  loadingAdminAllJobCard.classList.add('hidden');
-
-  if (totalRecord.length === 0) {
-    emptyCard.classList.remove('hidden');
-    parentTable.classList.add('hidden');
-  } else {
-    emptyCard.classList.add('hidden');
-    parentTable.classList.remove('hidden');
-  }
 }
 
-function populateToAdminAllUsers(data) {
-  const loadingAdminAllJobCard = document.getElementById(
-    'admin-all-user-card-loading'
-  );
-  const emptyCard = document.getElementById('admin-all-user-card-empty');
-  const parentTable = document.getElementById('admin-all-user-table-parent');
-  const tableBody = document.getElementById('admin-all-user-table-body');
-  // Clear the table before appending the new data
-  while (tableBody.firstChild) {
-    tableBody.removeChild(tableBody.firstChild);
+function populateToAllPostTable(tableData) {
+  const tableLoader = document.getElementById('all-post-table-loader');
+
+  // Check if the DataTable instance exists
+  if ($.fn.DataTable.isDataTable('#all-post-table')) {
+    // If the DataTable instance exists, clear and destroy it
+    $('#all-post-table').DataTable().clear().destroy();
   }
 
-  var totalRecord = [];
-
-  data.forEach((item) => {
-    let badge = ``;
-
-    if (item.verify) {
-      badge = `<span class="badge badge-pill badge-success">Verified</span>`;
-    } else {
-      badge = `<span class="badge badge-pill badge-warning">Not Verified</span>`;
-    }
-
-    let row = document.createElement('tr');
-
-    let userId = document.createElement('td');
-    userId.innerText = item.id;
-
-    let tempCreatedDate = new Date(item.created_at);
-    createdDate = tempCreatedDate.toLocaleString('en-US', format);
-    let createdDate_Td = document.createElement('td');
-    createdDate_Td.innerText = createdDate;
-
-    let username = document.createElement('td');
-    username.innerText = item.username;
-
-    let email = document.createElement('td');
-    email.innerText = item.email;
-
-    let companyName = document.createElement('td');
-    companyName.innerText = item.company_name ? item.company_name : '-';
-
-    let verify = document.createElement('td');
-    verify.innerHTML = badge;
-
-    let role = document.createElement('td');
-    role.innerText = item.role_data?.title;
-
-    let lastPosted_Td = document.createElement('td');
-
-    if (item.timestamp_last_posted) {
-      let tempLastPosted = new Date(item.timestamp_last_posted);
-      lastPosted = tempLastPosted.toLocaleString('en-US', format);
-      lastPosted_Td.innerText = lastPosted;
-    } else {
-      lastPosted_Td.innerText = '-';
-    }
-
-    row.appendChild(userId);
-    row.appendChild(createdDate_Td);
-    row.appendChild(username);
-    row.appendChild(email);
-    row.appendChild(companyName);
-    row.appendChild(verify);
-    row.appendChild(role);
-    row.appendChild(lastPosted_Td);
-
-    totalRecord.push(item);
-    document.getElementById('admin-all-user-table-body').appendChild(row);
+  $('#all-post-table').DataTable({
+    data: tableData,
+    columns: [
+      {
+        title: '<small>Id</small>',
+        data: 'id',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Created at</small>',
+        data: 'created_at',
+        render: function (data, type, row, meta) {
+          let tempCreatedDate = new Date(data);
+          let createdDate = tempCreatedDate.toLocaleString('en-US', format);
+          return `<small>${createdDate}</small>`;
+        },
+      },
+      {
+        title: '<small>Custom Id</small>',
+        data: 'custom_id',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Username</small>',
+        data: 'username',
+        render: function (data, type, row, meta) {
+          let userData = row?.user_data?.username
+            ? row.user_data.username
+            : '-';
+          return `<small>${userData}</small>`;
+        },
+      },
+      {
+        title: '<small>Company Name</small>',
+        data: 'id',
+        render: function (data, type, row, meta) {
+          let companyName = row?.company_of_user_data?.name
+            ? row.company_of_user_data.name
+            : '-';
+          return `<small>${companyName}</small>`;
+        },
+      },
+      {
+        title: '<small>Title</small>',
+        data: 'title',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Day Visibility</small>',
+        data: 'day_visibility',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Free</small>',
+        data: 'is_free',
+        render: function (data, type, row, meta) {
+          let isFreeData = '';
+          if (data) {
+            isFreeData = 'ViewUnlock';
+          } else {
+            isFreeData = 'DirectView';
+          }
+          return `<small>${isFreeData}</small>`;
+        },
+      },
+      {
+        title: '<small>Status</small>',
+        data: 'status_data',
+        render: function (data, type, row, meta) {
+          let statusData = row?.status_data ? row.status_data.type : '-';
+          return `<small>${statusData}</small>`;
+        },
+      },
+      {
+        title: '<small>Active</small>',
+        data: 'is_active',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Published</small>',
+        data: 'is_published',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+    ],
+    lengthChange: false,
+    drawCallback: function () {
+      tableLoader.style.display = 'none';
+    },
   });
-
-  loadingAdminAllJobCard.classList.add('hidden');
-
-  if (totalRecord.length === 0) {
-    emptyCard.classList.remove('hidden');
-    parentTable.classList.add('hidden');
-  } else {
-    emptyCard.classList.add('hidden');
-    parentTable.classList.remove('hidden');
-  }
 }
 
-function populateToAdminAllFeedbacks(data) {
-  const loadingAdminAllJobCard = document.getElementById(
-    'admin-all-feedback-card-loading'
-  );
-  const emptyCard = document.getElementById('admin-all-feedback-card-empty');
-  const parentTable = document.getElementById(
-    'admin-all-feedback-table-parent'
-  );
-  const tableBody = document.getElementById('admin-all-feedback-table-body');
-  // Clear the table before appending the new data
-  while (tableBody.firstChild) {
-    tableBody.removeChild(tableBody.firstChild);
+function populateToAllFeedbackTable(tableData) {
+  const tableLoader = document.getElementById('all-feedback-table-loader');
+
+  // Check if the DataTable instance exists
+  if ($.fn.DataTable.isDataTable('#all-feedback-table')) {
+    // If the DataTable instance exists, clear and destroy it
+    $('#all-feedback-table').DataTable().clear().destroy();
   }
 
-  var totalRecord = [];
-
-  data.forEach((item) => {
-    let row = document.createElement('tr');
-    let type = document.createElement('td');
-    type.innerText = item.type;
-    let title = document.createElement('td');
-    title.innerText = item.title;
-    let description = document.createElement('td');
-    description.innerText = item.description;
-    let username = document.createElement('td');
-    let email = document.createElement('td');
-
-    if (item?.user_data) {
-      username.innerText = item.user_data.username;
-      email.innerText = item.user_data.email;
-    } else {
-      username.innerText = '-';
-      email.innerText = '-';
-    }
-
-    let createdAt = document.createElement('td');
-    let newCreatedAt = new Date(item.created_at);
-    createdAt.innerText = newCreatedAt.toLocaleString('en-US', format);
-
-    row.appendChild(type);
-    row.appendChild(title);
-    row.appendChild(description);
-    row.appendChild(username);
-    row.appendChild(email);
-    row.appendChild(createdAt);
-    totalRecord.push(item);
-    document.getElementById('admin-all-feedback-table-body').appendChild(row);
+  $('#all-feedback-table').DataTable({
+    data: tableData,
+    columns: [
+      {
+        title: '<small>Id</small>',
+        data: 'id',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Created at</small>',
+        data: 'created_at',
+        render: function (data, type, row, meta) {
+          let tempCreatedDate = new Date(data);
+          let createdDate = tempCreatedDate.toLocaleString('en-US', format);
+          return `<small>${createdDate}</small>`;
+        },
+      },
+      {
+        title: '<small>Type</small>',
+        data: 'type',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Title</small>',
+        data: 'title',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Description</small>',
+        data: 'description',
+        render: function (data, type, row, meta) {
+          return `<small>${data}</small>`;
+        },
+      },
+      {
+        title: '<small>Username</small>',
+        data: 'id',
+        render: function (data, type, row, meta) {
+          let usernameData = row?.user_data ? row.user_data.username : '-';
+          return `<small>${usernameData}</small>`;
+        },
+      },
+      // {
+      //   title: '<small>Email</small>',
+      //   data: 'id',
+      //   render: function (data, type, row, meta) {
+      //     let emailData = row?.user_data ? row.user_data.email : '-';
+      //     return `<small>${emailData}</small>`;
+      //   },
+      // },
+    ],
+    lengthChange: false,
+    drawCallback: function () {
+      tableLoader.style.display = 'none';
+    },
   });
-
-  loadingAdminAllJobCard.classList.add('hidden');
-
-  if (totalRecord.length === 0) {
-    emptyCard.classList.remove('hidden');
-    parentTable.classList.add('hidden');
-  } else {
-    emptyCard.classList.add('hidden');
-    parentTable.classList.remove('hidden');
-  }
 }
 
 function fetchAdminMaster() {
@@ -2817,9 +2619,9 @@ function fetchAdminMaster() {
         if (data?.message) {
           showToast('alert-toast-container', data.message, 'danger');
         } else {
-          populateToAdminAllJobs(data);
-          populateToAdminAllUsers(data.user);
-          populateToAdminAllFeedbacks(data.feedback);
+          populateToAllUserTable(data.user_list);
+          populateToAllPostTable(data.post_list);
+          populateToAllFeedbackTable(data.feedback_list);
         }
       })
       .catch((error) => {
@@ -3221,8 +3023,13 @@ function firstCall() {
   if (myData.userData.role_id === 3) {
     fetchMyJobSeeker();
   } else {
-    fetchMyEmployer();
-    fetchAdminMaster();
+    if (myData.userData.role_id === 2) {
+      fetchMyEmployer();
+    }
+    if (myData.userData.role_id === 1) {
+      fetchMyEmployer();
+      fetchAdminMaster();
+    }
   }
 }
 
@@ -3233,7 +3040,7 @@ function handleVisibilityChange() {
 
     tabSwitchCounter++;
 
-    if (tabSwitchCounter >= 5) {
+    if (tabSwitchCounter >= 3) {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     }
   }
